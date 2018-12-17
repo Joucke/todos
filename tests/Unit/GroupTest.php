@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Group;
+use App\TaskList;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -48,5 +49,20 @@ class GroupTest extends TestCase
 		$group->save();
 
 		$this->assertTrue($group->fresh()->owner->is($john));
+	}
+
+	/** @test */
+	public function it_can_have_many_task_lists()
+	{
+		$group = factory(Group::class)->create();
+
+		$holidays = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+		]);
+		$home = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+		]);
+
+		$this->assertCount(2, $group->fresh()->task_lists);
 	}
 }
