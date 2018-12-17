@@ -36,4 +36,17 @@ class GroupTest extends TestCase
 			$this->assertContains($jane->id, $users);
 		});
 	}
+
+	/** @test */
+	public function it_has_an_owner()
+	{
+		$john = factory(User::class)->create();
+		$group = factory(Group::class)->create();
+
+		$group->users()->attach($john);
+		$group->owner_id = $john->id;
+		$group->save();
+
+		$this->assertTrue($group->fresh()->owner->is($john));
+	}
 }

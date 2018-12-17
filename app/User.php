@@ -32,4 +32,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Group::class);
     }
+
+    public function owned_groups()
+    {
+        return $this->hasMany(Group::class, 'owner_id');
+    }
 }

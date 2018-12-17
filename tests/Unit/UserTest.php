@@ -54,4 +54,16 @@ class UserTest extends TestCase
 			$this->assertContains($work->id, $groups);
 		});
 	}
+
+	/** @test */
+	public function a_user_can_own_groups()
+	{
+		$user = factory(User::class)->create();
+		$work = factory(Group::class)->create(['owner_id' => $user->id]);
+
+		$user->groups()->attach($work);
+
+		$this->assertTrue($work->owner->is($user));
+		$this->assertContains($work->id, $user->owned_groups->pluck('id'));
+	}
 }
