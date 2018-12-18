@@ -11,8 +11,6 @@ use Tests\TestCase;
 
 class GroupTest extends TestCase
 {
-	use RefreshDatabase;
-
 	/** @test */
 	public function these_fields_are_fillable()
 	{

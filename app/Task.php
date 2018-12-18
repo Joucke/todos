@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TaskList extends Model
+class Task extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,16 +13,12 @@ class TaskList extends Model
      */
     protected $fillable = [
         'title',
-        'group_id',
+        'task_list_id',
+        'interval',
     ];
 
-    public function group()
+    public function task_list()
     {
-    	return $this->belongsTo(Group::class);
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
+    	return $this->belongsTo(TaskList::class);
     }
 }

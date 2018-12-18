@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Group;
+use App\Task;
 use App\TaskList;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -10,8 +11,6 @@ use Tests\TestCase;
 
 class TaskListTest extends TestCase
 {
-	use RefreshDatabase;
-
 	/** @test */
 	public function these_fields_are_fillable()
 	{
@@ -33,5 +32,19 @@ class TaskListTest extends TestCase
 	    ]);
 
 	    $this->assertTrue($list->group->is($group));
+	}
+
+	/** @test */
+	public function it_has_many_tasks()
+	{
+	    $list = factory(TaskList::class)->create();
+	    $goToStore = factory(Task::class)->create(['task_list_id' => $list->id]);
+	    $cleanHouse = factory(Task::class)->create(['task_list_id' => $list->id]);
+
+	    tap($list->fresh(), function ($list) use ($goToStore, $cleanHouse) {
+		    $this->assertCount(2, $list->tasks);
+	    	$this->assertContains($goToStore->id, $list->tasks->pluck('id'));
+	    	$this->assertContains($cleanHouse->id, $list->tasks->pluck('id'));
+	    });
 	}
 }

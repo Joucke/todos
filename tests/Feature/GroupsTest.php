@@ -10,8 +10,6 @@ use Tests\TestCase;
 
 class GroupsTest extends TestCase
 {
-	use RefreshDatabase;
-
 	public function setUp()
 	{
 		parent::setUp();
