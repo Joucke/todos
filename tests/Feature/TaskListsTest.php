@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Group;
+use App\Task;
 use App\TaskList;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,8 +12,6 @@ use Tests\TestCase;
 
 class TaskListsTest extends TestCase
 {
-	use RefreshDatabase;
-
 	public function setUp()
 	{
 		parent::setUp();
@@ -119,6 +118,27 @@ class TaskListsTest extends TestCase
 			->assertViewIs('task_lists.show')
 			->assertViewHas('task_list', function ($task_list) use ($list) {
 				return $task_list->is($list);
+			});
+	}
+
+	/** @test */
+	public function it_shows_tasks_for_a_task_list()
+	{
+		$group = $this->createGroup($this->user);
+		$jane = factory(User::class)->create();
+		$group->users()->attach($jane);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+		$task = factory(Task::class)->create(['task_list_id' => $list->id]);
+
+		$this->actingAs($jane)
+			->get('/task_lists/'.$list->id)
+			->assertOk()
+			->assertViewIs('task_lists.show')
+			->assertViewHas('task_list', function ($task_list) use ($list) {
+				return $task_list->is($list);
+			})
+			->assertViewHas('task_list', function ($task_list) use ($task) {
+				return $task_list->tasks->contains('id', $task->id);
 			});
 	}
 

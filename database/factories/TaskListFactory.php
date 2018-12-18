@@ -1,5 +1,6 @@
 <?php
 
+use App\Group;
 use Faker\Generator as Faker;
 
 $factory->define(App\TaskList::class, function (Faker $faker) {
