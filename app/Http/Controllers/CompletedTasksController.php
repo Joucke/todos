@@ -12,10 +12,10 @@ class CompletedTasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+    // public function index()
+    // {
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -26,12 +26,15 @@ class CompletedTasksController extends Controller
     public function store(Request $request, Task $task)
     {
         try {
-            $scheduled = $task->scheduled_tasks()->incomplete()->firstOrFail();
+            $scheduled = $task->scheduled_tasks()->incompleted()->firstOrFail();
         }
         catch (\Exception $e) {
-            dump($e);
+            $scheduled = $task->schedule(0);
         }
         $scheduled->complete();
+        $task->schedule();
+
+        return redirect(route('task_lists.tasks.index', ['task_list' => $task->task_list_id]));
     }
 
     /**
@@ -40,10 +43,10 @@ class CompletedTasksController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
-    {
-        //
-    }
+    // public function show(Task $task)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -51,10 +54,10 @@ class CompletedTasksController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function edit(Task $task)
-    {
-        //
-    }
+    // public function edit(Task $task)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -63,10 +66,10 @@ class CompletedTasksController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
-    {
-        //
-    }
+    // public function update(Request $request, Task $task)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -74,8 +77,8 @@ class CompletedTasksController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
-    {
-        //
-    }
+    // public function destroy(Task $task)
+    // {
+    //     //
+    // }
 }

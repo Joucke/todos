@@ -22,11 +22,12 @@ class Task extends Model
     	return $this->belongsTo(TaskList::class);
     }
 
-    public function schedule()
+    public function schedule(int $interval = null)
     {
+        $interval = $interval ?? $this->interval;
         return ScheduledTask::create([
             'task_id' => $this->id,
-            'scheduled_at' => now()->addDays($this->interval),
+            'scheduled_at' => now()->addDays($interval),
         ]);
     }
 

@@ -16,6 +16,10 @@ class ScheduledTask extends Model
         'scheduled_at',
     ];
 
+    protected $dates = [
+        'completed_at',
+    ];
+
     public function task()
     {
     	return $this->belongsTo(Task::class);
@@ -27,8 +31,13 @@ class ScheduledTask extends Model
     	$this->save();
     }
 
-    public function scopeIncomplete($query)
+    public function scopeIncompleted($query)
     {
-    	return $query->whereNull('completed_at');
+        return $query->whereNull('completed_at');
+    }
+
+    public function scopeCompleted($query)
+    {
+    	return $query->whereNotNull('completed_at');
     }
 }

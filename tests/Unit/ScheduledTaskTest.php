@@ -24,6 +24,15 @@ class ScheduledTaskTest extends TestCase
 	}
 
 	/** @test */
+	public function it_casts_dates()
+	{
+	    $scheduled = factory(Task::class)->create()->schedule();
+	    $scheduled->complete();
+
+	    $this->assertInstanceOf(Carbon::class, $scheduled->fresh()->completed_at);
+	}
+
+	/** @test */
 	public function it_belongs_to_a_task()
 	{
 	    $task = factory(Task::class)->create();
@@ -44,15 +53,28 @@ class ScheduledTaskTest extends TestCase
 	}
 
 	/** @test */
-	public function it_scopes_on_incomplete()
+	public function it_scopes_on_incompleted()
 	{
 	    $task = factory(Task::class)->create();
 	    $scheduled = factory(ScheduledTask::class)->create(['task_id' => $task->id]);
 
-	    $this->assertTrue(ScheduledTask::incomplete()->get()->contains('id', $scheduled->id));
-	    
+	    $this->assertTrue(ScheduledTask::incompleted()->get()->contains('id', $scheduled->id));
+
 	    $scheduled->complete();
 
-	    $this->assertFalse(ScheduledTask::incomplete()->get()->contains('id', $scheduled->id));
+	    $this->assertFalse(ScheduledTask::incompleted()->get()->contains('id', $scheduled->id));
+	}
+
+	/** @test */
+	public function it_scopes_on_completed()
+	{
+	    $task = factory(Task::class)->create();
+	    $scheduled = factory(ScheduledTask::class)->create(['task_id' => $task->id]);
+
+	    $this->assertFalse(ScheduledTask::completed()->get()->contains('id', $scheduled->id));
+
+	    $scheduled->complete();
+
+	    $this->assertTrue(ScheduledTask::completed()->get()->contains('id', $scheduled->id));
 	}
 }

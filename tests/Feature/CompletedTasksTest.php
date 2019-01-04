@@ -24,46 +24,54 @@ class CompletedTasksTest extends TestCase
 	/** @test */
 	public function a_scheduled_task_can_be_completed()
 	{
-		// provided we have a task that was scheduled
 		$task = factory(Task::class)->create(['task_list_id' => $this->list->id]);
 		$scheduled = $task->schedule();
 
-		// when we post to /tasks/1/completed_tasks
 		$this->actingAs($this->user)
 			->withoutExceptionHandling()
 			->post('/tasks/'.$task->id.'/completed_tasks')
 			->assertRedirect('/task_lists/'.$task->task_list_id.'/tasks');
 
-		// then the scheduled_task is completed
 		$this->assertEquals(now()->format('Y-m-d H:i:s'), $scheduled->fresh()->completed_at->format('Y-m-d H:i:s'));
 	}
 
 	/** @test */
 	public function an_unscheduled_task_can_be_completed()
 	{
-		// provided we have a task
+		$task = factory(Task::class)->create(['task_list_id' => $this->list->id]);
+		$this->assertCount(0, $task->scheduled_tasks);
 
-		// when we post to /tasks/1/completed_tasks
+		$this->actingAs($this->user)
+			->withoutExceptionHandling()
+			->post('/tasks/'.$task->id.'/completed_tasks')
+			->assertRedirect('/task_lists/'.$task->task_list_id.'/tasks');
 
-		// then a scheduled task is created with interval 0
-		// and the scheduled task is completed
+		$this->assertCount(1, $task->fresh()->scheduled_tasks()->completed()->get());
+
+		$this->assertEquals(now()->format('Y-m-d H:i:s'), $task->fresh()->scheduled_tasks->first()->completed_at->format('Y-m-d H:i:s'));
 	}
 
 	/** @test */
 	public function completing_a_task_schedules_the_task_again()
 	{
-		// provided we have a task
+		$task = factory(Task::class)->create(['task_list_id' => $this->list->id]);
+		$scheduled = $task->schedule();
+		$this->assertCount(0, $task->scheduled_tasks()->completed()->get());
+		$this->assertCount(1, $task->scheduled_tasks()->incompleted()->get());
+		$this->assertTrue($task->scheduled_tasks()->incompleted()->get()->contains('id', $scheduled->id));
 
-		// when we post to /tasks/1/completed_tasks
+		$this->actingAs($this->user)
+			->withoutExceptionHandling()
+			->post('/tasks/'.$task->id.'/completed_tasks')
+			->assertRedirect('/task_lists/'.$task->task_list_id.'/tasks');
 
-		// then the scheduled_task is completed
-		// then an incompleted scheduled_task is created
-	}
+		$this->assertEquals(now()->format('Y-m-d H:i:s'), $scheduled->fresh()->completed_at->format('Y-m-d H:i:s'));
+		$this->assertCount(1, $task->scheduled_tasks()->completed()->get());
+		$this->assertTrue($task->scheduled_tasks()->completed()->get()->contains('id', $scheduled->id));
 
-	/** @test */
-	public function it_lists_completed_tasks()
-	{
-	    $this->markTestIncomplete();
+		$this->assertCount(1, $task->scheduled_tasks()->incompleted()->get());
+		$this->assertFalse($task->scheduled_tasks()->incompleted()->get()->contains('id', $scheduled->id));
+
 	}
 
 	protected function createGroup(User $owner, array $overrides = [], User $member = null)

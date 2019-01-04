@@ -47,6 +47,17 @@ class TaskTest extends TestCase
 	}
 
 	/** @test */
+	public function it_can_schedule_a_task_on_an_interval()
+	{
+		$interval = 1;
+	    $task = factory(Task::class)->create(['interval' => $interval]);
+	    $scheduled = $task->schedule(2);
+
+	    $this->assertInstanceOf(ScheduledTask::class, $scheduled);
+	    $this->assertEquals(now()->addDays(2)->format("Y-m-d H:i:s"), $scheduled->scheduled_at->format("Y-m-d H:i:s"));
+	}
+
+	/** @test */
 	public function it_has_many_scheduled_tasks()
 	{
 	    $task = factory(Task::class)->create();
