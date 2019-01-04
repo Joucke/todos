@@ -22,3 +22,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('groups', GroupsController::class)->middleware('auth');
 Route::resource('task_lists', TaskListsController::class)->middleware('auth');
 Route::resource('task_lists.tasks', TasksController::class)->middleware('auth');
+Route::resource('tasks.completed_tasks', CompletedTasksController::class)->middleware('auth');

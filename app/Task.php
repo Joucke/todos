@@ -21,4 +21,17 @@ class Task extends Model
     {
     	return $this->belongsTo(TaskList::class);
     }
+
+    public function schedule()
+    {
+        return ScheduledTask::create([
+            'task_id' => $this->id,
+            'scheduled_at' => now()->addDays($this->interval),
+        ]);
+    }
+
+    public function scheduled_tasks()
+    {
+        return $this->hasMany(ScheduledTask::class);
+    }
 }
