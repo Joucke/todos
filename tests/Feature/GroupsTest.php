@@ -192,6 +192,21 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
+	public function a_group_owner_can_see_all_users()
+	{
+		$group = factory(Group::class)->create(['owner_id' => $this->user->id]);
+
+		$jane = factory(User::class)->create();
+
+		$group->users()->attach($this->user);
+
+		$this->actingAs($this->user)
+			->get('/groups/'.$group->id)
+			->assertViewIs('groups.show')
+			->assertViewHas('users', User::all());
+	}
+
+	/** @test */
 	public function a_group_owner_can_add_a_member_to_a_group()
 	{
 		$john = $this->user;
@@ -222,5 +237,19 @@ class GroupsTest extends TestCase
 			->assertForbidden();
 
 		$this->assertFalse($group->fresh()->users->contains('id', $jack->id));
+	}
+
+	/** @test */
+	public function a_group_owner_can_invite_a_user_to_a_group()
+	{
+	    $this->markTestIncomplete();
+	    // this is a more privacy safe way of adding users to groups.
+	    // let the admin input an email address
+	    // if the address exists as a user, send the user an invite to join the group
+	    // if the address does not exist, invite the user to join, and prepare an invite to join the group
+
+	    // this will replace @a_group_owner_can_add_a_member_to_a_group and should get a new test for @a_group_member_cannot_add_another_member_to_a_group
+
+	    // upon implementation, the pulldown targeted in @a_group_owner_can_see_all_users should also be removed.
 	}
 }

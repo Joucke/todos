@@ -8,6 +8,7 @@
 		@endforeach
 	</ul>
 	@can('update', $task_list)
+		<a href="{{ route('task_lists.tasks.create', $task_list) }}">Add task to list</a>
 		<a href="{{ route('task_lists.edit', $task_list) }}">Edit task list</a>
 	@endcan
 	@can ('delete', $task_list)
