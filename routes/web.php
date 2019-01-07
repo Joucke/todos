@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/dashboard', 'Dashboard')->name('dashboard');
 
     Route::resource('groups', GroupsController::class)->middleware('auth');
     Route::resource('task_lists', TaskListsController::class)->middleware('auth');
