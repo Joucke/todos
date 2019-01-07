@@ -69,7 +69,6 @@ class GroupsTest extends TestCase
 	/** @test */
 	public function a_user_becomes_owner_on_creating_a_group()
 	{
-		$this->withoutExceptionHandling();
 		$this->actingAs($this->user)
 			->post('/groups', [
 				'title' => 'foobar',
@@ -195,6 +194,33 @@ class GroupsTest extends TestCase
 	/** @test */
 	public function a_group_owner_can_add_a_member_to_a_group()
 	{
-	    $this->markTestIncomplete();
+		$john = $this->user;
+		$jane = factory(User::class)->create();
+	    $group = factory(Group::class)->create(['owner_id' => $john->id]);
+
+	    $this->actingAs($john)
+	    	->post('groups/'.$group->id.'/users', [
+	    		'user_id' => $jane->id,
+	    	])
+	    	->assertRedirect('groups/'.$group->id);
+
+	    $this->assertTrue($group->fresh()->users->contains('id', $jane->id));
+	}
+
+	/** @test */
+	public function a_group_member_cannot_add_another_member_to_a_group()
+	{
+		$john = $this->user;
+		[$jane, $jack] = factory(User::class, 2)->create();
+		$group = factory(Group::class)->create(['owner_id' => $john->id]);
+		$group->users()->attach($jane);
+
+		$this->actingAs($jane)
+			->post('groups/'.$group->id.'/users', [
+				'user_id' => $jack->id,
+			])
+			->assertForbidden();
+
+		$this->assertFalse($group->fresh()->users->contains('id', $jack->id));
 	}
 }
