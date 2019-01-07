@@ -1,11 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-	<h1>Groups</h1>
-	<ul>
-		@foreach ($groups as $group)
-			<li><a href="{{ route('groups.show', $group) }}">{{ $group->title }}</a></li>
-		@endforeach
-	</ul>
-	<a href="{{ route('groups.create') }}">Create group</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Groups') }}</div>
+
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                	<ul>
+                		@foreach ($groups as $group)
+                			<li><a href="{{ route('groups.show', $group) }}">{{ $group->title }}</a></li>
+                		@endforeach
+                	</ul>
+                	<a href="{{ route('groups.create') }}">Create group</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

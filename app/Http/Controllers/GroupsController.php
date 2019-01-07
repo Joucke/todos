@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +59,9 @@ class GroupsController extends Controller
         $this->authorize('view', $group);
 
         $group->load('users');
+        if (auth()->user()->can('update', $group)) {
+            return view('groups.show')->withGroup($group)->withUsers(User::all());
+        }
         return view('groups.show')->withGroup($group);
     }
 
@@ -84,7 +88,7 @@ class GroupsController extends Controller
     public function update(Request $request, Group $group)
     {
         $this->authorize('update', $group);
-        
+
         $group->update(
             $request->validate([
                 'title' => 'required',
@@ -103,7 +107,7 @@ class GroupsController extends Controller
     public function destroy(Group $group)
     {
         $this->authorize('update', $group);
-        
+
         $group->users()->sync([]);
         $group->delete();
 
