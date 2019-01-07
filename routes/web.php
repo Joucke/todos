@@ -20,8 +20,9 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', 'Dashboard')->name('dashboard');
 
-    Route::resource('groups', GroupsController::class)->middleware('auth');
-    Route::resource('task_lists', TaskListsController::class)->middleware('auth');
-    Route::resource('task_lists.tasks', TasksController::class)->middleware('auth');
-    Route::resource('tasks.completed_tasks', CompletedTasksController::class)->middleware('auth');
+    Route::resource('groups', GroupsController::class);
+    Route::resource('task_lists', TaskListsController::class);
+    Route::resource('task_lists.tasks', TasksController::class);
+    Route::resource('tasks.completed_tasks', CompletedTasksController::class);
+    Route::resource('groups.users', GroupUsersController::class);
 });
