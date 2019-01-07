@@ -191,4 +191,10 @@ class GroupsTest extends TestCase
 
 		$this->assertEquals($groupCount, $this->user->fresh()->owned_groups->count());
 	}
+
+	/** @test */
+	public function a_group_owner_can_add_a_member_to_a_group()
+	{
+	    $this->markTestIncomplete();
+	}
 }
