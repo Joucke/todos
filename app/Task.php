@@ -35,4 +35,9 @@ class Task extends Model
     {
         return $this->hasMany(ScheduledTask::class);
     }
+
+    public function incompleted_scheduled_tasks()
+    {
+        return $this->hasMany(ScheduledTask::class)->whereNull('completed_at');
+    }
 }

@@ -67,4 +67,18 @@ class TaskTest extends TestCase
 	    $this->assertTrue($task->scheduled_tasks->contains('id', $today->id));
 	    $this->assertTrue($task->scheduled_tasks->contains('id', $tomorrow->id));
 	}
+
+	/** @test */
+	public function it_has_many_incompleted_scheduled_tasks()
+	{
+	    $task = factory(Task::class)->create();
+	    $completed = factory(ScheduledTask::class)->create(['task_id' => $task->id, 'scheduled_at' => now()]);
+	    $incompleted = factory(ScheduledTask::class)->create(['task_id' => $task->id, 'scheduled_at' => now()->addDay()]);
+	    $completed->complete();
+
+	    tap($task->fresh(), function ($task) use ($completed, $incompleted) {
+		    $this->assertFalse($task->incompleted_scheduled_tasks->contains('id', $completed->id));
+		    $this->assertTrue($task->incompleted_scheduled_tasks->contains('id', $incompleted->id));
+	    });
+	}
 }

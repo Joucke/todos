@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\ScheduledTask;
+use App\Task;
+use App\TaskList;
 use Illuminate\Http\Request;
 
 class Dashboard extends Controller
@@ -14,6 +17,10 @@ class Dashboard extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('dashboard');
+        $groups = auth()->user()->groups()
+            ->has('task_lists.tasks.incompleted_scheduled_tasks')
+            ->with('task_lists.tasks.incompleted_scheduled_tasks')
+            ->get();
+        return view('dashboard', compact('groups'));
     }
 }

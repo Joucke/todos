@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    {{ $groups }}
                 </div>
             </div>
         </div>
