@@ -18,11 +18,13 @@
                         <div>
                             <h2>{{ $group->title }}</h2>
                             @foreach ($group->tasks as $task)
-                                <div>
-                                    <h3>{{ $task->title }}</h3>
-                                    <p>{{ $task->task_list->title }}</p>
-                                    <p>{{ __('Scheduled for') }}: {{ $task->incompleted_scheduled_tasks->first() ? $task->incompleted_scheduled_tasks->first()->scheduled_at->diffForHumans() : __('Unknown') }}</p>
-                                </div>
+                                @if ($task->incompleted_scheduled_tasks->count())
+                                    <div>
+                                        <h3>{{ $task->title }}</h3>
+                                        <p>{{ $task->task_list->title }}</p>
+                                        <p>{{ __('Scheduled for') }}: {{ $task->incompleted_scheduled_tasks->first()->scheduled_at->diffForHumans() }}</p>
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                     @endforeach
@@ -31,11 +33,13 @@
                         <div>
                             <h2>{{ $group->title }}</h2>
                             @foreach ($group->tasks as $task)
-                                <div>
-                                    <h3>{{ $task->title }}</h3>
-                                    <p>{{ $task->task_list->title }}</p>
-                                    <p>{{ __('Interval') }}: {{ $task->interval }}</p>
-                                </div>
+                                @if (!$task->incompleted_scheduled_tasks->count())
+                                    <div>
+                                        <h3>{{ $task->title }}</h3>
+                                        <p>{{ $task->task_list->title }}</p>
+                                        <p>{{ __('Interval') }}: {{ $task->interval }}</p>
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                     @endforeach
