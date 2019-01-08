@@ -1,47 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
+    @foreach ($groups['scheduled'] as $group)
+        {{-- TODO: design tabs (on the side on lg:xxx) --}}
+        <div>
+            <h1>{{ $group->title }}</h1>
+            <div class="flex flex-wrap md:-mx-2">
+                @foreach ($group->tasks as $task)
+                    @if ($task->incompleted_scheduled_tasks->count())
+                        <clickable-card
+                            :task-data="{{ $task }}"
+                            click-action="{{ route('tasks.completed_tasks.store', $task) }}">
+                        </clickable-card>
                     @endif
-
-                    @foreach ($groups['scheduled'] as $group)
-                        <div>
-                            <h2>{{ $group->title }}</h2>
-                            @foreach ($group->tasks as $task)
-                                <div>
-                                    <h3>{{ $task->title }}</h3>
-                                    <p>{{ $task->task_list->title }}</p>
-                                    <p>{{ __('Scheduled for') }}: {{ $task->incompleted_scheduled_tasks->first() ? $task->incompleted_scheduled_tasks->first()->scheduled_at->diffForHumans() : __('Unknown') }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endforeach
-
-                    @foreach ($groups['unscheduled'] as $group)
-                        <div>
-                            <h2>{{ $group->title }}</h2>
-                            @foreach ($group->tasks as $task)
-                                <div>
-                                    <h3>{{ $task->title }}</h3>
-                                    <p>{{ $task->task_list->title }}</p>
-                                    <p>{{ __('Interval') }}: {{ $task->interval }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endforeach
-                </div>
+                @endforeach
             </div>
         </div>
-    </div>
-</div>
+    @endforeach
+
+    @foreach ($groups['unscheduled'] as $group)
+        <div>
+            <h1>{{ $group->title }}</h1>
+            <div class="flex flex-wrap md:-mx-2">
+                @foreach ($group->tasks as $task)
+                    @if (!$task->incompleted_scheduled_tasks->count())
+                        <clickable-card
+                            :task-data="{{ $task }}"
+                            click-action="{{ route('tasks.completed_tasks.store', $task) }}">
+                        </clickable-card>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    @endforeach
+
 @endsection
