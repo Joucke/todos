@@ -20,15 +20,16 @@ class ScheduledTaskTest extends TestCase
 	    ]);
 
 	    $this->assertEquals(1, $scheduled->task_id);
-	    $this->assertEquals($when, $scheduled->scheduled_at);
+	    $this->assertEquals($when->format('Y-m-d H:i:s'), $scheduled->scheduled_at->format('Y-m-d H:i:s'));
 	}
 
 	/** @test */
 	public function it_casts_dates()
 	{
 	    $scheduled = factory(Task::class)->create()->schedule();
-	    $scheduled->complete();
+	    $this->assertInstanceOf(Carbon::class, $scheduled->fresh()->scheduled_at);
 
+	    $scheduled->complete();
 	    $this->assertInstanceOf(Carbon::class, $scheduled->fresh()->completed_at);
 	}
 

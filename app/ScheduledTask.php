@@ -17,6 +17,7 @@ class ScheduledTask extends Model
     ];
 
     protected $dates = [
+        'scheduled_at',
         'completed_at',
     ];
 

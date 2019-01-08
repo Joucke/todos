@@ -14,7 +14,31 @@
                         </div>
                     @endif
 
-                    {{ $groups }}
+                    @foreach ($groups['scheduled'] as $group)
+                        <div>
+                            <h2>{{ $group->title }}</h2>
+                            @foreach ($group->tasks as $task)
+                                <div>
+                                    <h3>{{ $task->title }}</h3>
+                                    <p>{{ $task->task_list->title }}</p>
+                                    <p>{{ __('Scheduled for') }}: {{ $task->incompleted_scheduled_tasks->first()->scheduled_at->diffForHumans() }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+
+                    @foreach ($groups['unscheduled'] as $group)
+                        <div>
+                            <h2>{{ $group->title }}</h2>
+                            @foreach ($group->tasks as $task)
+                                <div>
+                                    <h3>{{ $task->title }}</h3>
+                                    <p>{{ $task->task_list->title }}</p>
+                                    <p>{{ __('Interval') }}: {{ $task->interval }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

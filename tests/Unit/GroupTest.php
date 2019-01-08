@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Group;
+use App\Task;
 use App\TaskList;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -62,5 +63,24 @@ class GroupTest extends TestCase
 		]);
 
 		$this->assertCount(2, $group->fresh()->task_lists);
+	}
+
+	/** @test */
+	public function it_can_have_many_tasks_through_task_lists()
+	{
+		$group = factory(Group::class)->create();
+
+		$holidays = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+		]);
+		$home = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+		]);
+		$holidays->tasks()->create(factory(Task::class)->raw());
+		$holidays->tasks()->create(factory(Task::class)->raw());
+		$home->tasks()->create(factory(Task::class)->raw());
+		$home->tasks()->create(factory(Task::class)->raw());
+
+		$this->assertCount(4, $group->fresh()->tasks);
 	}
 }

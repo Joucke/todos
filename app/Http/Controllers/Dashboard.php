@@ -17,10 +17,17 @@ class Dashboard extends Controller
      */
     public function __invoke(Request $request)
     {
-        $groups = auth()->user()->groups()
-            ->has('task_lists.tasks.incompleted_scheduled_tasks')
-            ->with('task_lists.tasks.incompleted_scheduled_tasks')
-            ->get();
+        $groups = collect([
+            'scheduled' => auth()->user()->groups()
+                ->has('tasks.incompleted_scheduled_tasks')
+                ->with(['tasks.incompleted_scheduled_tasks', 'tasks.task_list'])
+                ->get(),
+            'unscheduled' => auth()->user()->groups()
+                ->whereHas('tasks', function ($query) {
+                    $query->doesntHave('scheduled_tasks');
+                })->with('tasks.task_list')
+                ->get(),
+        ]);
         return view('dashboard', compact('groups'));
     }
 }
