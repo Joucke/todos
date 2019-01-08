@@ -35,18 +35,50 @@ class DashboardTest extends TestCase
             ->get('/dashboard')
             ->assertViewIs('dashboard')
             ->assertViewHas('groups', function ($groups) use ($task) {
-                return $groups->contains('id', $task->task_list->group_id);
+                return $groups['scheduled']->contains('id', $task->task_list->group_id);
             })
             ->assertViewHas('groups', function ($groups) use ($completed) {
-                $scheduled = $groups->first()->task_lists->first()->tasks->first()->incompleted_scheduled_tasks;
+                $scheduled = $groups['scheduled']->first()->tasks->first()->incompleted_scheduled_tasks;
                 return !$scheduled->contains('id', $completed->id);
             })
             ->assertViewHas('groups', function ($groups) use ($incompleted) {
-                $scheduled = $groups->first()->task_lists->first()->tasks->first()->incompleted_scheduled_tasks;
+                $scheduled = $groups['scheduled']->first()->tasks->first()->incompleted_scheduled_tasks;
                 return $scheduled->contains('id', $incompleted->id);
             })
             ->assertViewHas('groups', function ($groups) use ($non_task) {
-                return !$groups->contains('id', $non_task->task_list->group_id);
+                return !$groups['scheduled']->contains('id', $non_task->task_list->group_id);
             });
+    }
+
+    /** @test */
+    public function it_lists_unscheduled_tasks_for_users()
+    {
+        $user = factory(User::class)->create();
+        $unscheduled = factory(Task::class)->create();
+        $unscheduled->task_list->group->users()->attach($user);
+        $non_task = factory(Task::class)->create();
+
+        $this->actingAs($user)
+            ->withoutExceptionHandling()
+            ->get('/dashboard')
+            ->assertViewIs('dashboard')
+            ->assertViewHas('groups', function ($groups) use ($unscheduled) {
+                return $groups['unscheduled']->contains('id', $unscheduled->task_list->group_id);
+            })
+            ->assertViewHas('groups', function ($groups) use ($non_task) {
+                return !$groups['unscheduled']->contains('id', $non_task->task_list->group_id);
+            });
+    }
+
+    /** @test */
+    public function it_sorts_scheduled_tasks_by_scheduled_at()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
+    public function it_sorts_unscheduled_tasks_by_interval_then_created_at()
+    {
+        $this->markTestIncomplete();
     }
 }
