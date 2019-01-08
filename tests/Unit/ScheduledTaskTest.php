@@ -20,7 +20,7 @@ class ScheduledTaskTest extends TestCase
 	    ]);
 
 	    $this->assertEquals(1, $scheduled->task_id);
-	    $this->assertEquals($when, $scheduled->scheduled_at);
+	    $this->assertEquals($when->format('Y-m-d H:i:s'), $scheduled->scheduled_at->format('Y-m-d H:i:s'));
 	}
 
 	/** @test */
