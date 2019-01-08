@@ -27,8 +27,9 @@ class ScheduledTaskTest extends TestCase
 	public function it_casts_dates()
 	{
 	    $scheduled = factory(Task::class)->create()->schedule();
-	    $scheduled->complete();
+	    $this->assertInstanceOf(Carbon::class, $scheduled->fresh()->scheduled_at);
 
+	    $scheduled->complete();
 	    $this->assertInstanceOf(Carbon::class, $scheduled->fresh()->completed_at);
 	}
 
