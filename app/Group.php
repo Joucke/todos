@@ -29,4 +29,9 @@ class Group extends Model
     {
         return $this->hasMany(TaskList::class);
     }
+
+    public function tasks()
+    {
+        return $this->hasManyThrough(Task::class, TaskList::class);
+    }
 }
