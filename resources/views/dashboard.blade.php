@@ -21,7 +21,7 @@
                                 <div>
                                     <h3>{{ $task->title }}</h3>
                                     <p>{{ $task->task_list->title }}</p>
-                                    <p>{{ __('Scheduled for') }}: {{ $task->incompleted_scheduled_tasks->first()->scheduled_at->diffForHumans() }}</p>
+                                    <p>{{ __('Scheduled for') }}: {{ $task->incompleted_scheduled_tasks->first() ? $task->incompleted_scheduled_tasks->first()->scheduled_at->diffForHumans() : __('Unknown') }}</p>
                                 </div>
                             @endforeach
                         </div>
