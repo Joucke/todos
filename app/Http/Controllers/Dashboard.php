@@ -25,7 +25,8 @@ class Dashboard extends Controller
             'unscheduled' => auth()->user()->groups()
                 ->whereHas('tasks', function ($query) {
                     $query->doesntHave('scheduled_tasks');
-                })->with('tasks.task_list')
+                })
+                ->with(['tasks.incompleted_scheduled_tasks', 'tasks.task_list'])
                 ->get(),
         ]);
         return view('dashboard', compact('groups'));

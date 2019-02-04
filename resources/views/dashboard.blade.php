@@ -19,6 +19,7 @@
         </div>
     @endforeach
 
+
     @foreach ($groups['unscheduled'] as $group)
         <div>
             <h1>{{ $group->title }}</h1>
