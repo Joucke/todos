@@ -7,7 +7,7 @@
         <div class="flex flex-col mb-4">
             <label class="" for="interval">{{ t('tasks.interval') }}:</label>
             <div class="flex flex-wrap -mx-2">
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -18,7 +18,7 @@
                         >
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -29,7 +29,7 @@
                         >
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -40,7 +40,7 @@
                         >
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -51,7 +51,7 @@
                         >
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -62,7 +62,7 @@
                         >
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -73,7 +73,7 @@
                         >
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -107,7 +107,7 @@
                         </div>
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
@@ -131,7 +131,7 @@
                         </div>
                     </radio-card>
                 </div>
-                <div class="w-1/3 p-2">
+                <div class="w-full md:w-1/2 lg:w-1/3 p-2">
                     <radio-card
                         @click="setInterval"
                         selected="blue"
