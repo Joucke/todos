@@ -23,12 +23,12 @@
         <nav class="flex border-b-2 border-blue-dark bg-white shadow fixed pin-t pin-x z-100 h-16 items-center">
             <div class="container relative mx-auto">
                 <div class="flex items-center -mx-6">
-                    <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6 lg:pr-8">
+                    <div class="lg:w-1/4 xl:w-1/5 px-6 lg:pr-8">
                         <a class="" href="{{ url('/') }}">
                             {{ config('app.name', 'Laravel') }}
                         </a>
                     </div>
-                    <div class="flex flex-grow justify-between items-center lg:w-3/4 xl:w-4/5">
+                    <div class="flex flex-grow justify-between items-center lg:w-3/4 xl:w-4/5 px-6">
                         {{-- TODO: nav toggler, collapsable menu --}}
                         @guest
                             <a class="" href="{{ route('login') }}">{{ __('Login') }}</a>

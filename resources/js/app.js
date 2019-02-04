@@ -8,6 +8,16 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+const Lang = require('lang.js');
+import translations from '../../public/js/messages.js';
+
+const lang = new Lang();
+lang.setLocale('nl');
+lang.setMessages(translations);
+
+Vue.filter('trans', (...args) => {
+    return lang.get(...args);
+});
 
 /**
  * The following block of code may be used to automatically register your
@@ -22,7 +32,7 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('clickable-card', require('./components/ClickableCard.vue').default);
-
+Vue.component('create-task-form', require('./components/CreateTaskForm.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
