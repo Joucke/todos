@@ -60,15 +60,3 @@
  * @import "utilities/background-patterns";
  * @import "utilities/skew-transforms";
  */
-
-.radio-checked-bg-blue-lighter {
-    &:has(input[type=radio]:checked) {
-        @apply bg-blue-lighter;
-    }
-}
-
-.checkbox-checked-border-b-4 {
-    &:has(input[type=checkbox]:checked) {
-        @apply .border-b-4
-    }
-}

@@ -9,11 +9,6 @@
 <script>
 export default {
     props: ['name', 'value', 'checked', 'title', 'selected'],
-    data () {
-        return {
-            //
-        };
-    },
     computed: {
         classes () {
             return this.checked ? [`border-${this.selected}`, `bg-${this.selected}-lightest`] : '';

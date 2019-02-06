@@ -51,9 +51,25 @@ class TasksController extends Controller
         $taskList->tasks()->create($request->validate([
             'title' => 'required',
             'interval' => 'required',
+            'days' => 'nullable',
+            'days.mon' => 'boolean',
+            'days.tue' => 'boolean',
+            'days.wed' => 'boolean',
+            'days.thu' => 'boolean',
+            'days.fri' => 'boolean',
+            'days.sat' => 'boolean',
+            'days.sun' => 'boolean',
+            'data' => 'nullable',
+            'data.interval' => 'integer|in:77,88,99',
+            'optional' => 'nullable|boolean',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date',
         ]));
 
-        return redirect(route('task_lists.tasks.index', $taskList));
+        return [
+            'status' => 200,
+            'redirect' => route('task_lists.tasks.index', $taskList),
+        ];
     }
 
     /**
