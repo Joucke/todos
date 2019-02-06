@@ -60,7 +60,7 @@ class TasksController extends Controller
             'days.sat' => 'boolean',
             'days.sun' => 'boolean',
             'data' => 'nullable',
-            'data.interval' => 'integer|in:77,88,99',
+            'data.interval' => 'integer',
             'optional' => 'nullable|boolean',
             'starts_at' => 'nullable|date',
             'ends_at' => 'nullable|date',
