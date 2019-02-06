@@ -67,8 +67,8 @@
                         @click="setInterval"
                         selected="blue"
                         name="interval"
-                        value="61"
-                        :checked="task.interval === 61"
+                        value="60"
+                        :checked="task.interval === 60"
                         :title="t('tasks.other_month')"
                         >
                     </radio-card>
@@ -162,11 +162,11 @@
             <div class="flex w-full" v-if="task.period">
                 <p class="flex flex-col w-1/2">
                     <label for="mb-1">{{ t('tasks.start') }}</label>
-                    <input class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="period" v-model="task.startDate">
+                    <input class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="period" v-model="task.starts_at">
                 </p>
                 <p class="flex flex-col w-1/2">
                     <label for="mb-1">{{ t('tasks.end') }}</label>
-                    <input class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="period" v-model="task.endDate">
+                    <input class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="period" v-model="task.ends_at">
                 </p>
             </div>
         </div>
@@ -177,7 +177,11 @@
             </label>
         </div>
         <p class="">
-            <input class="bg-blue hover:bg-blue-dark text-white no-underline py-2 px-4 rounded" type="submit" :value="t('tasks.add')">
+            <input class="bg-blue hover:bg-blue-dark text-white no-underline py-2 px-4 rounded"
+                type="submit"
+                :value="t('tasks.add')"
+                @click.prevent="createTask"
+                >
         </p>
     </div>
 </template>
@@ -191,7 +195,7 @@ export default {
         RadioCard,
         vueSlider,
     },
-    props: ['target'],
+    props: ['action'],
     data () {
         return {
             task: {
@@ -209,15 +213,47 @@ export default {
                 weeks: 3,
                 months: 3,
                 period: false,
+                starts_at: window.moment().format('YYYY-MM-DD'),
+                ends_at: window.moment().add(6, 'months').format('YYYY-MM-DD'),
+                optional: false,
             }
         };
     },
     methods: {
-        createTasks () {
-            console.log(this.task);
+        createTask () {
+            let task = {
+                title: this.task.title,
+                interval: this.interval(),
+                starts_at: this.task.period ? this.task.starts_at : null,
+                ends_at: this.task.period ? this.task.ends_at : null,
+                days: this.task.interval === 77 ? this.task.days : null,
+                optional: this.task.optional,
+                data: {
+                    interval: this.task.interval,
+                },
+            };
+            axios.post(this.action, task)
+                .then(({data}) => {
+                    location.href = data.redirect;
+                });
         },
-        t (key) {
-            return this.$options.filters.trans(key);
+        interval () {
+            switch (this.task.interval) {
+                case 99:
+                    // every x months
+                    return 30 * this.task.months;
+                    break;
+                case 88:
+                    // every x weeks
+                    return 7 * this.task.weeks;
+                    break;
+                case 77:
+                    // weekly on multiple days
+                    return 7;
+                    break;
+                default:
+                    return this.task.interval;
+            }
         },
         refreshSliders () {
             this.$nextTick(() => {
@@ -228,6 +264,9 @@ export default {
         setInterval (value) {
             this.task.interval = parseInt(value);
             this.refreshSliders();
+        },
+        t (key) {
+            return this.$options.filters.trans(key);
         },
         toggle (day) {
             this.task.days[day] = !this.task.days[day];

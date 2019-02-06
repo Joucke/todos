@@ -73,15 +73,6 @@ class TasksTest extends TestCase
 			->get('/task_lists/'.$this->list->id.'/tasks/create')
 			->assertOk();
 
-		$taskCount = Task::count();
-		$this->actingAs($jane)
-			->post('/task_lists/'.$this->list->id.'/tasks', [
-				'title' => 'foobar',
-				'interval' => 1,
-			])
-			->assertRedirect('/task_lists/'.$this->list->id.'/tasks');
-		$this->assertEquals($taskCount + 1, Task::count());
-
 		$this->actingAs($this->user)
 			->get('/task_lists/'.$this->list->id.'/tasks/create')
 			->assertOk()
@@ -90,13 +81,269 @@ class TasksTest extends TestCase
 				return $task_list->is($this->list);
 			});
 
+		$taskCount = Task::count();
+		$this->actingAs($jane)
+			->post('/task_lists/'.$this->list->id.'/tasks', [
+				'title' => 'foobar',
+				'interval' => 1,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
 		$this->actingAs($this->user)
 			->post('/task_lists/'.$this->list->id.'/tasks', [
 				'title' => 'foobar',
 				'interval' => 1,
 			])
-			->assertRedirect('/task_lists/'.$this->list->id.'/tasks');
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
 		$this->assertEquals($taskCount + 2, Task::count());
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_daily()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 1,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$this->assertDatabaseHas('tasks', $attributes);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_every_other_day()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 2,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$this->assertDatabaseHas('tasks', $attributes);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_weekly()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 7,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$this->assertDatabaseHas('tasks', $attributes);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_every_other_week()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 14,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$this->assertDatabaseHas('tasks', $attributes);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_monthly()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 30,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$this->assertDatabaseHas('tasks', $attributes);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_every_other_month()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 60,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$this->assertDatabaseHas('tasks', $attributes);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_every_week_on_mondays_and_thursdays()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 7,
+				'days' => [
+					'mon' => true,
+					'tue' => false,
+					'wed' => false,
+					'thu' => true,
+					'fri' => false,
+					'sat' => false,
+					'sun' => false,
+				],
+				'data' => [
+					'interval' => 77,
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$task = Task::latest()->first();
+		$this->assertEquals('foobar', $task->title);
+		$this->assertEquals(7, $task->interval);
+		$this->assertEquals(['interval' => 77], $task->data);
+		$this->assertEquals([
+			'mon' => true,
+			'tue' => false,
+			'wed' => false,
+			'thu' => true,
+			'fri' => false,
+			'sat' => false,
+			'sun' => false,
+		], $task->days);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_every_4_weeks()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 28,
+				'data' => [
+					'interval' => 88,
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$task = Task::latest()->first();
+		$this->assertEquals('foobar', $task->title);
+		$this->assertEquals(28, $task->interval);
+		$this->assertEquals(['interval' => 88], $task->data);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_every_4_months()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 120,
+				'data' => [
+					'interval' => 99,
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$task = Task::latest()->first();
+		$this->assertEquals('foobar', $task->title);
+		$this->assertEquals(120, $task->interval);
+		$this->assertEquals(['interval' => 99], $task->data);
+	}
+
+	/** @test */
+	public function a_created_task_can_be_repeated_between_dates()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 7,
+				'starts_at' => '2010-01-01',
+				'ends_at' => '2020-01-01',
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$task = Task::latest()->first();
+		$this->assertEquals('foobar', $task->title);
+		$this->assertEquals(7, $task->interval);
+	    $this->assertEquals('2010-01-01', $task->starts_at->format('Y-m-d'));
+	    $this->assertEquals('2020-01-01', $task->ends_at->format('Y-m-d'));
+	}
+
+	/** @test */
+	public function a_created_task_can_be_optional()
+	{
+		$taskCount = Task::count();
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 7,
+				'optional' => true,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+			]);
+		$this->assertEquals($taskCount + 1, Task::count());
+
+		$this->assertDatabaseHas('tasks', $attributes);
 	}
 
 	/** @test */
@@ -214,7 +461,7 @@ class TasksTest extends TestCase
 		$this->assertEquals($taskCount - 1, Task::count());
 
 		$task = $this->list->tasks()->create(factory(Task::class)->raw());
-		
+
 		$taskCount = Task::count();
 		$this->actingAs($this->user)
 			->delete('/task_lists/'.$this->list->id.'/tasks/'.$task->id)
