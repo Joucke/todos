@@ -22,19 +22,9 @@ class TasksTest extends TestCase
 	}
 
 	/** @test */
-	public function guests_cannot_see_tasks()
-	{
-		$this->get('/task_lists/'.$this->list->id.'/tasks')
-			->assertRedirect('login');
-
-		$this->actingAs($this->user)
-			->get('/task_lists/'.$this->list->id.'/tasks')
-			->assertOk();
-	}
-
-	/** @test */
 	public function it_lists_all_tasks_for_current_list()
 	{
+		$this->markTestIncomplete('should be on TaskListsTest@show');
 		$this->actingAs($this->user)
 			->get('/task_lists/'.$this->list->id.'/tasks')
 			->assertViewIs('tasks.index')
@@ -89,7 +79,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -100,7 +90,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 2, Task::count());
 	}
@@ -116,7 +106,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -134,7 +124,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -152,7 +142,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -170,7 +160,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -188,7 +178,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -206,7 +196,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -236,7 +226,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -269,7 +259,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -293,7 +283,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -316,7 +306,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -339,7 +329,7 @@ class TasksTest extends TestCase
 			])
 			->assertJson([
 				'status' => 200,
-				'redirect' => url('/task_lists/'.$this->list->id.'/tasks'),
+				'redirect' => url('/task_lists/'.$this->list->id),
 			]);
 		$this->assertEquals($taskCount + 1, Task::count());
 
@@ -405,7 +395,7 @@ class TasksTest extends TestCase
 				'title' => 'foobar',
 				'interval' => 1,
 			])
-			->assertRedirect('/task_lists/'.$this->list->id.'/tasks');
+			->assertRedirect('/task_lists/'.$this->list->id);
 		tap($task->fresh(), function ($task) {
 			$this->assertEquals('foobar', $task->title);
 			$this->assertEquals(1, $task->interval);
@@ -427,7 +417,7 @@ class TasksTest extends TestCase
 				'title' => 'barbaz',
 				'interval' => 4,
 			])
-			->assertRedirect('/task_lists/'.$this->list->id.'/tasks');
+			->assertRedirect('/task_lists/'.$this->list->id);
 		tap($task->fresh(), function ($task) {
 			$this->assertEquals('barbaz', $task->title);
 			$this->assertEquals(4, $task->interval);
@@ -457,7 +447,7 @@ class TasksTest extends TestCase
 		$taskCount = Task::count();
 		$this->actingAs($jane)
 			->delete('/task_lists/'.$this->list->id.'/tasks/'.$task->id)
-			->assertRedirect('/task_lists/'.$this->list->id.'/tasks');
+			->assertRedirect('/task_lists/'.$this->list->id);
 		$this->assertEquals($taskCount - 1, Task::count());
 
 		$task = $this->list->tasks()->create(factory(Task::class)->raw());
@@ -465,7 +455,7 @@ class TasksTest extends TestCase
 		$taskCount = Task::count();
 		$this->actingAs($this->user)
 			->delete('/task_lists/'.$this->list->id.'/tasks/'.$task->id)
-			->assertRedirect('/task_lists/'.$this->list->id.'/tasks');
+			->assertRedirect('/task_lists/'.$this->list->id);
 		$this->assertEquals($taskCount - 1, Task::count());
 	}
 
