@@ -21,8 +21,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', 'Dashboard')->name('dashboard');
 
     Route::resource('groups', GroupsController::class);
-    Route::resource('task_lists', TaskListsController::class);
-    Route::resource('task_lists.tasks', TasksController::class);
+    Route::resource('groups.task_lists', TaskListsController::class, ['only' => ['create', 'store']]);
+    Route::resource('task_lists', TaskListsController::class, ['except' => ['create', 'store', 'index']]);
+    Route::resource('task_lists.tasks', TasksController::class, ['except' => 'index']);
     Route::resource('tasks.completed_tasks', CompletedTasksController::class);
     Route::resource('groups.users', GroupUsersController::class);
 });

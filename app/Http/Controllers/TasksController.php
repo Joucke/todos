@@ -9,21 +9,6 @@ use Illuminate\Http\Request;
 class TasksController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @param  \App\TaskList  $taskList
-     * @return \Illuminate\Http\Response
-     */
-    public function index(TaskList $taskList)
-    {
-        $this->authorize('view', $taskList);
-        $taskList->load('tasks');
-        return view('tasks.index', [
-            'task_list' => $taskList,
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @param  \App\TaskList  $taskList
@@ -68,7 +53,7 @@ class TasksController extends Controller
 
         return [
             'status' => 200,
-            'redirect' => route('task_lists.tasks.index', $taskList),
+            'redirect' => route('task_lists.show', $taskList),
         ];
     }
 
@@ -122,7 +107,7 @@ class TasksController extends Controller
             'title' => 'required',
             'interval' => 'required',
         ]));
-        return redirect(route('task_lists.tasks.index', ['task_list' => $taskList]));
+        return redirect(route('task_lists.show', ['task_list' => $taskList]));
     }
 
     /**
@@ -138,6 +123,6 @@ class TasksController extends Controller
 
         $task->delete();
 
-        return redirect(route('task_lists.tasks.index', ['task_list' => $taskList]));
+        return redirect(route('task_lists.show', ['task_list' => $taskList]));
     }
 }

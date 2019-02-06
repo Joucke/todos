@@ -10,27 +10,15 @@ use Illuminate\Validation\UnauthorizedException;
 class TaskListsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $groups = auth()->user()->groups->pluck('id');
-        $task_lists = TaskList::whereIn('group_id', $groups)->get();
-        return view('task_lists.index')->with(compact('task_lists'));
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Group $group)
     {
-        return view('task_lists.create')->with([
-            'groups' => auth()->user()->groups,
-        ]);
+        $this->authorize('view', $group);
+
+        return view('task_lists.create')->withGroup($group);
     }
 
     /**
@@ -39,17 +27,15 @@ class TaskListsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Group $group, Request $request)
     {
-        $group = Group::findOrFail($request->input('group_id'));
-        abort_unless($group->users->contains('id', auth()->id()), 403);
+        $this->authorize('view', $group);
 
-        TaskList::create($request->validate([
-            'group_id' => 'required',
+        $group->task_lists()->create($request->validate([
             'title' => 'required',
         ]));
 
-        return redirect(route('task_lists.index'));
+        return redirect(route('groups.show', $group));
     }
 
     /**
@@ -93,11 +79,10 @@ class TaskListsController extends Controller
         $this->authorize('update', $taskList);
 
         $taskList->update($request->validate([
-            'group_id' => 'required',
             'title' => 'required',
         ]));
 
-        return redirect(route('task_lists.index'));
+        return redirect(route('groups.show', $taskList->group_id));
     }
 
     /**
@@ -111,7 +96,7 @@ class TaskListsController extends Controller
         $this->authorize('delete', $taskList);
 
         $taskList->delete();
-        
-        return redirect(route('task_lists.index'));
+
+        return redirect(route('groups.show', $taskList->group_id));
     }
 }

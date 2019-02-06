@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Todo\'s') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -25,25 +25,25 @@
                 <div class="flex items-center -mx-6">
                     <div class="lg:w-1/4 xl:w-1/5 px-6 lg:pr-8">
                         <a class="" href="{{ url('/') }}">
-                            {{ config('app.name', 'Laravel') }}
+                            {{ config('app.name') }}
                         </a>
                     </div>
                     <div class="flex flex-grow justify-between items-center lg:w-3/4 xl:w-4/5 px-6">
                         {{-- TODO: nav toggler, collapsable menu --}}
                         @guest
-                            <a class="" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <a class="" href="{{ route('login') }}">{{ __('auth.login') }}</a>
                             @if (Route::has('register'))
-                                <a class="" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <a class="" href="{{ route('register') }}">{{ __('auth.register') }}</a>
                             @endif
                         @else
-                            <a class="" href="{{ route('groups.index') }}">{{ __('Groups') }}</a>
+                            <a class="" href="{{ route('groups.index') }}">{{ __('groups.groups') }}</a>
                             {{-- TODO: click on user name to toggle pulldown w/ logout in it --}}
                             <p>{{ Auth::user()->name }}</p>
                             <div class="hidden">
                                 <a class="" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                        document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    {{ __('auth.logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
