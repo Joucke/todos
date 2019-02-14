@@ -7,8 +7,12 @@
 <div class="py-4">
     <div class="card-container">
         <div class="card-padding-full mb-4">
-        	<create-task-form class="card bg-white" action="{{ route('task_lists.tasks.store', $task_list) }}"></create-task-form>
-            {{-- TODO: improve style of checkboxes for period, optional --}}
+        	<task-form
+                class="card bg-white"
+                :task-data="{title:'',interval:1,data:{}}"
+                action="{{ route('task_lists.tasks.store', $task_list) }}"
+                >
+            </task-form>
         </div>
     </div>
 </div>
