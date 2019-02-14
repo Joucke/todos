@@ -30,9 +30,8 @@ Vue.filter('trans', (...args) => {
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('clickable-card', require('./components/ClickableCard.vue').default);
-Vue.component('create-task-form', require('./components/CreateTaskForm.vue').default);
+Vue.component('task-form', require('./components/TaskForm.vue').default);
+Vue.component('task-card', require('./components/TaskCard.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
