@@ -20,41 +20,6 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
-	public function guests_cannot_see_task_lists()
-	{
-		$this->get('/task_lists')
-			->assertRedirect('login');
-
-		$this->actingAs($this->user)
-			->get('/task_lists')
-			->assertOk();
-	}
-
-	/** @test */
-	public function it_lists_all_task_lists_for_current_user()
-	{
-		$group = $this->createGroup($this->user, ['title' => 'foobar']);
-		$group->task_lists()->create(['title' => 'barbaz']);
-		$group->task_lists()->create(['title' => 'bazfoo']);
-
-		$otherGroup = factory(Group::class)->create();
-		$otherGroup->task_lists()->create(['title' => 'foobaz']);
-
-		$this->actingAs($this->user)
-			->get('/task_lists')
-			->assertViewIs('task_lists.index')
-			->assertViewHas('task_lists', function ($task_lists) {
-				return $task_lists->pluck('title')->contains('barbaz');
-			})
-			->assertViewHas('task_lists', function ($task_lists) {
-				return $task_lists->pluck('title')->contains('bazfoo');
-			})
-			->assertViewHas('task_lists', function ($task_lists) {
-				return !$task_lists->pluck('title')->contains('foobaz');
-			});
-	}
-
-	/** @test */
 	public function it_can_be_created_by_any_group_member()
 	{
 		$group = $this->createGroup($this->user);
@@ -62,31 +27,27 @@ class TaskListsTest extends TestCase
 		$group->users()->attach($jane);
 
 		$this->actingAs($jane)
-			->get('/task_lists/create')
+			->get('/groups/'.$group->id.'/task_lists/create')
 			->assertOk();
 
 		$this->actingAs($jane)
-			->post('/task_lists', [
+			->post('/groups/'.$group->id.'/task_lists', [
 				'title' => 'foobar',
-				'group_id' => $group->id,
 			])
-			->assertRedirect('/task_lists');
+			->assertRedirect('/groups/'.$group->id);
 
 		$this->actingAs($this->user)
-			->get('/task_lists/create')
+			->get('/groups/'.$group->id.'/task_lists/create')
 			->assertOk()
 			->assertViewIs('task_lists.create')
-			->assertViewHas('groups', function ($groups) {
-				return $groups->pluck('id') == $this->user->groups->pluck('id');
-			});
+			->assertViewHas('group', $group);
 
 		$listCount = TaskList::count();
 		$this->actingAs($this->user)
-			->post('/task_lists', [
+			->post('/groups/'.$group->id.'/task_lists', [
 				'title' => 'foobar',
-				'group_id' => $group->id,
 			])
-			->assertRedirect('/task_lists');
+			->assertRedirect('/groups/'.$group->id);
 		$this->assertEquals($listCount + 1, TaskList::count());
 	}
 
@@ -97,9 +58,12 @@ class TaskListsTest extends TestCase
 		$jane = factory(User::class)->create();
 
 		$this->actingAs($jane)
-			->post('/task_lists', [
+			->get('/groups/'.$group->id.'/task_lists/create')
+			->assertForbidden();
+
+		$this->actingAs($jane)
+			->post('/groups/'.$group->id.'/task_lists', [
 				'title' => 'foobar',
-				'group_id' => $group->id,
 			])
 			->assertForbidden();
 	}
@@ -176,9 +140,8 @@ class TaskListsTest extends TestCase
 		$this->actingAs($this->user)
 			->patch('/task_lists/'.$list->id, [
 				'title' => 'foobar',
-				'group_id' => $group->id,
 			])
-			->assertRedirect('/task_lists');
+			->assertRedirect('/groups/'.$group->id);
 		$this->assertEquals($listCount, TaskList::count());
 		$this->assertEquals('foobar', $list->fresh()->title);
 	}
@@ -201,7 +164,7 @@ class TaskListsTest extends TestCase
 		$listCount = TaskList::count();
 		$this->actingAs($this->user)
 			->delete('/task_lists/'.$list->id)
-			->assertRedirect('/task_lists');
+			->assertRedirect('/groups/'.$group->id);
 		$this->assertEquals($listCount - 1, TaskList::count());
 	}
 

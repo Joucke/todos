@@ -9,21 +9,6 @@ use Illuminate\Http\Request;
 class TasksController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @param  \App\TaskList  $taskList
-     * @return \Illuminate\Http\Response
-     */
-    public function index(TaskList $taskList)
-    {
-        $this->authorize('view', $taskList);
-        $taskList->load('tasks');
-        return view('tasks.index', [
-            'task_list' => $taskList,
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @param  \App\TaskList  $taskList
@@ -61,14 +46,14 @@ class TasksController extends Controller
             'days.sun' => 'boolean',
             'data' => 'nullable',
             'data.interval' => 'integer',
-            'optional' => 'nullable|boolean',
             'starts_at' => 'nullable|date',
             'ends_at' => 'nullable|date',
+            'optional' => 'nullable|boolean',
         ]));
 
         return [
             'status' => 200,
-            'redirect' => route('task_lists.tasks.index', $taskList),
+            'redirect' => route('task_lists.show', $taskList),
         ];
     }
 
@@ -82,6 +67,8 @@ class TasksController extends Controller
     public function show(TaskList $taskList, Task $task)
     {
         $this->authorize('view', $taskList);
+
+        $task->load('task_list');
 
         return view('tasks.show')->with([
             'task' => $task,
@@ -121,8 +108,25 @@ class TasksController extends Controller
         $task->update($request->validate([
             'title' => 'required',
             'interval' => 'required',
+            'days' => 'nullable',
+            'days.mon' => 'boolean',
+            'days.tue' => 'boolean',
+            'days.wed' => 'boolean',
+            'days.thu' => 'boolean',
+            'days.fri' => 'boolean',
+            'days.sat' => 'boolean',
+            'days.sun' => 'boolean',
+            'data' => 'nullable',
+            'data.interval' => 'integer',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date',
+            'optional' => 'nullable|boolean',
         ]));
-        return redirect(route('task_lists.tasks.index', ['task_list' => $taskList]));
+
+        return [
+            'status' => 200,
+            'redirect' => route('task_lists.tasks.show', compact('taskList', 'task')),
+        ];
     }
 
     /**
@@ -138,6 +142,6 @@ class TasksController extends Controller
 
         $task->delete();
 
-        return redirect(route('task_lists.tasks.index', ['task_list' => $taskList]));
+        return redirect(route('task_lists.show', ['task_list' => $taskList]));
     }
 }

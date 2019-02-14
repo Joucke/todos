@@ -958,6 +958,14 @@ module.exports = {
       // center: true,
       // padding: '1rem',
     }),
+    function ({ addUtilities, addComponents, e, prefix, config }) {
+        const newUtils = {};
+        for (color in config('colors')) {
+            newUtils['svg.primary-'+color+' .primary'] = {fill: config('colors.'+color)}
+            newUtils['svg.secondary-'+color+' .secondary'] = {fill: config('colors.'+color)}
+        }
+        addUtilities(newUtils);
+    },
   ],
 
 

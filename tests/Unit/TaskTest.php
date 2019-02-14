@@ -55,6 +55,25 @@ class TaskTest extends TestCase
 	}
 
 	/** @test */
+	public function it_casts_optional_to_boolean()
+	{
+	    $task = factory(Task::class)->create(['optional' => 1]);
+
+	    $this->assertTrue($task->fresh()->optional);
+	}
+
+	/** @test */
+	public function it_appends_an_url()
+	{
+	    $task = factory(Task::class)->create();
+
+	    $taskArray = $task->toArray();
+
+	    $this->assertTrue(array_key_exists('url', $taskArray));
+	    $this->assertEquals(route('tasks.completed_tasks.store', $task), $taskArray['url']);
+	}
+
+	/** @test */
 	public function it_casts_days_and_data_to_an_array()
 	{
 	    $task = factory(Task::class)->create([

@@ -6,13 +6,15 @@
         {{-- TODO: design tabs (on the side on lg:xxx) --}}
         <div>
             <h1>{{ $group->title }}</h1>
-            <div class="flex flex-wrap md:-mx-2">
+            <div class="card-container">
                 @foreach ($group->tasks as $task)
                     @if ($task->incompleted_scheduled_tasks->count())
-                        <clickable-card
+                        <task-card
+                            :show-title="true"
                             :task-data="{{ $task }}"
-                            click-action="{{ route('tasks.completed_tasks.store', $task) }}">
-                        </clickable-card>
+                            :clickable="true"
+                            >
+                        </task-card>
                     @endif
                 @endforeach
             </div>
@@ -23,13 +25,15 @@
     @foreach ($groups['unscheduled'] as $group)
         <div>
             <h1>{{ $group->title }}</h1>
-            <div class="flex flex-wrap md:-mx-2">
+            <div class="card-container">
                 @foreach ($group->tasks as $task)
                     @if (!$task->incompleted_scheduled_tasks->count())
-                        <clickable-card
+                        <task-card
+                            :show-title="true"
                             :task-data="{{ $task }}"
-                            click-action="{{ route('tasks.completed_tasks.store', $task) }}">
-                        </clickable-card>
+                            :clickable="true"
+                            >
+                        </task-card>
                     @endif
                 @endforeach
             </div>

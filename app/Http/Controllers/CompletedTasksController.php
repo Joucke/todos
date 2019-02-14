@@ -34,7 +34,7 @@ class CompletedTasksController extends Controller
         $scheduled->complete();
         $task->schedule();
 
-        return redirect(route('task_lists.tasks.index', ['task_list' => $task->task_list_id]));
+        return redirect(route('task_lists.show', ['task_list' => $task->task_list_id]));
     }
 
     /**

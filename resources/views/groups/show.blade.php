@@ -1,60 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>{{ $group->title }}</h1>
-
-<div class="flex flex-wrap md:-mx-2">
-    <div class="w-full md:w-1/2 p-2">
-        <div class="rounded bg-white shadow-md">
-        	<div class="bg-grey-lighter border-b border-grey rounded-t py-2 px-4 font-semibold">{{ __('Task Lists') }}</div>
-
-        	<div class="pt-2 pb-4 px-4">
-        		<ul class="list-reset pb-4 leading-normal">
-        			@foreach ($group->task_lists as $list)
-        				<li><a href="{{ route('task_lists.show', ['task_list' => $list]) }}">{{ $list->title }}</a></li>
-        			@endforeach
-        		</ul>
-        		<a class="bg-blue hover:bg-blue-dark text-white no-underline py-2 px-4 rounded" href="{{ route('task_lists.create') }}">{{ __('add task list') }}</a>
-        	</div>
-        </div>
+<header class="flex justify-between items-center">
+    <h1 class="page-header">{{ $group->title }}</h1>
+    <div class="flex">
+        @can ('update', $group)
+            <a class="button button-blue button-secondary button-xs" href="{{ route('groups.edit', $group) }}">
+                {{ __('groups.edit') }}
+            </a>
+        @endcan
+        @can ('delete', $group)
+            <form class="flex ml-2" action="{{ route('groups.destroy', $group) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <input class="button button-red button-secondary button-xs" type="submit" value="{{ __('groups.delete') }}">
+            </form>
+        @endcan
     </div>
+</header>
+<div class="py-4">
+    <div class="card-container">
+        <div class="card-padding mb-4">
+            <div class="card">
+                <div class="card-header bg-grey-lighter border-b">
+                    <p class="font-semibold">{{ __('task_lists.task_lists') }}</p>
+                    <a class="button button-blue button-secondary button-xs" href="{{ route('groups.task_lists.create', $group) }}">{{ __('task_lists.create') }}</a>
+                </div>
 
-    <div class="w-full md:w-1/2 p-2">
-        <div class="rounded bg-white shadow-md">
-        	<div class="bg-grey-lighter border-b border-grey rounded-t py-2 px-4 font-semibold">{{ __('Group members') }}</div>
+                <div class="card-body bg-white">
+                    <ul class="list-reset leading-normal">
+                        @foreach ($group->task_lists as $list)
+                            <li>
+                                <a href="{{ route('task_lists.show', ['task_list' => $list]) }}">{{ $list->title }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-        	<div class="pt-2 pb-4 px-4">
-        		<ul class="list-reset pb-4 leading-normal">
-        			@foreach ($group->users as $user)
-        				<li>{{ $user->name }}</li>
-        			@endforeach
-        		</ul>
-        		@can ('update', $group)
-        			<form action="{{ route('groups.users.store', compact('group')) }}" method="POST">
-        				{{ csrf_field() }}
-        				{{-- TODO: replace this with a simple input field for email, to be sent w/ json to invite a user --}}
-        				<select name="user_id">
-        					@foreach ($users as $user)
-        						@if (!$group->users->contains('id', $user->id))
-        							<option value="{{ $user->id }}">{{ $user->name }}</option>
-        						@endif
-        					@endforeach
-        				</select>
-        				<input class="bg-blue hover:bg-blue-dark text-white no-underline py-2 px-4 rounded" type="submit" value="{{ __('add user') }}">
-        			</form>
-        		@endcan
-        	</div>
+        <div class="card-padding mb-4">
+            <div class="card">
+                <div class="card-header bg-grey-lighter border-b">
+                    <p class="font-semibold">{{ __('groups.members') }}</p>
+                    <a class="button button-blue button-secondary button-xs" href="#">{{ __('groups.invite') }}</a>
+                </div>
+
+                <div class="card-body bg-white">
+                    <ul class="list-reset leading-normal">
+                        @foreach ($group->users as $user)
+                            <li>
+                                <a href="#{{-- TODO: route('users.show', $user) --}}">{{ $user->name }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-@can ('update', $group)
-	<a href="{{ route('groups.edit', $group) }}">Edit group</a>
-@endcan
-@can ('delete', $group)
-	<form class="inline" action="{{ route('groups.destroy', $group) }}" method="POST">
-		{{ csrf_field() }}
-		{{ method_field('DELETE') }}
-		<input type="submit" value="Delete group">
-	</form>
-@endcan
+
 @endsection

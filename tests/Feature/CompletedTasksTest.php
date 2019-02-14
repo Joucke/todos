@@ -30,7 +30,7 @@ class CompletedTasksTest extends TestCase
 		$this->actingAs($this->user)
 			->withoutExceptionHandling()
 			->post('/tasks/'.$task->id.'/completed_tasks')
-			->assertRedirect('/task_lists/'.$task->task_list_id.'/tasks');
+			->assertRedirect('/task_lists/'.$task->task_list_id);
 
 		$this->assertEquals(now()->format('Y-m-d H:i:s'), $scheduled->fresh()->completed_at->format('Y-m-d H:i:s'));
 	}
@@ -44,7 +44,7 @@ class CompletedTasksTest extends TestCase
 		$this->actingAs($this->user)
 			->withoutExceptionHandling()
 			->post('/tasks/'.$task->id.'/completed_tasks')
-			->assertRedirect('/task_lists/'.$task->task_list_id.'/tasks');
+			->assertRedirect('/task_lists/'.$task->task_list_id);
 
 		$this->assertCount(1, $task->fresh()->scheduled_tasks()->completed()->get());
 
@@ -63,7 +63,7 @@ class CompletedTasksTest extends TestCase
 		$this->actingAs($this->user)
 			->withoutExceptionHandling()
 			->post('/tasks/'.$task->id.'/completed_tasks')
-			->assertRedirect('/task_lists/'.$task->task_list_id.'/tasks');
+			->assertRedirect('/task_lists/'.$task->task_list_id);
 
 		$this->assertEquals(now()->format('Y-m-d H:i:s'), $scheduled->fresh()->completed_at->format('Y-m-d H:i:s'));
 		$this->assertCount(1, $task->scheduled_tasks()->completed()->get());

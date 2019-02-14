@@ -1,10 +1,14 @@
 <?php
 
 return [
+    'tasks' => 'Taken',
     'create' => 'Taak toevoegen',
+    'edit' => 'Taak bewerken',
+    'update' => 'Taak bijwerken',
+    'delete' => 'Taak verwijderen',
     'title' => 'Titel',
     'placeholders' => [
-        'title' => 'Voer de titel van de taak in',
+        'title' => 'Titel van de taak',
     ],
     'interval' => 'Frequentie',
     'daily' => 'Dagelijks',

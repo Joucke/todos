@@ -26,12 +26,22 @@ class Task extends Model
     protected $casts = [
         'days' => 'array',
         'data' => 'array',
+        'optional' => 'boolean',
     ];
 
     protected $dates = [
         'starts_at',
         'ends_at',
     ];
+
+    protected $appends = [
+        'url',
+    ];
+
+    protected function getUrlAttribute()
+    {
+        return route('tasks.completed_tasks.store', $this);
+    }
 
     public function task_list()
     {

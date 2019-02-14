@@ -1,5 +1,5 @@
 <template>
-    <label class="block border rounded py-3 px-4" :class="classes" :for="id" @click="select">
+    <label class="block border rounded py-3 px-4 cursor-pointer" :class="classes" :for="id" @click="select">
         <input type="radio" class="hidden" :name="name" :id="id" :value="value">
         <p class="">{{ title }}</p>
         <slot></slot>
