@@ -11,8 +11,8 @@
         @endcan
         @can ('delete', $task_list)
             <form class="flex ml-2" action="{{ route('task_lists.destroy', $task_list) }}" method="POST">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
+                @csrf
+                @method('DELETE')
                 <input class="button button-red button-secondary button-xs" type="submit" value="{{ __('task_lists.delete') }}">
             </form>
         @endcan

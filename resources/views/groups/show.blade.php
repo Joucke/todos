@@ -11,8 +11,8 @@
         @endcan
         @can ('delete', $group)
             <form class="flex ml-2" action="{{ route('groups.destroy', $group) }}" method="POST">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
+                @csrf
+                @method('DELETE')
                 <input class="button button-red button-secondary button-xs" type="submit" value="{{ __('groups.delete') }}">
             </form>
         @endcan

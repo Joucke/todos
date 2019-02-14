@@ -1,12 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-	<h1>Edit a Task</h1>
-	<form action="{{ route('task_lists.tasks.update', compact('task_list', 'task')) }}" method="POST">
-		{{ csrf_field() }}
-		{{ method_field('PATCH') }}
-		<input type="text" name="title" value="{{ old('title', $task->title) }}">
-		<input type="number" name="interval" value="{{ old('interval', $task->interval) }}">
-		<input type="submit" value="Update Task">
-	</form>
+<header class="flex justify-between items-center">
+	<h1 class="page-header">{{ __('tasks.edit') }}</h1>
+</header>
+<div class="py-4">
+    <div class="card-container">
+        <div class="card-padding-full mb-4">
+            <task-form
+                class="card bg-white"
+                :task-data="{{ $task }}"
+                action="{{ route('task_lists.tasks.update', compact('task_list', 'task')) }}"
+                method="patch"
+                >
+            </task-form>
+        </div>
+    </div>
+</div>
 @endsection
