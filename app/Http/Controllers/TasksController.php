@@ -46,9 +46,9 @@ class TasksController extends Controller
             'days.sun' => 'boolean',
             'data' => 'nullable',
             'data.interval' => 'integer',
-            'optional' => 'nullable|boolean',
             'starts_at' => 'nullable|date',
             'ends_at' => 'nullable|date',
+            'optional' => 'nullable|boolean',
         ]));
 
         return [
@@ -67,6 +67,8 @@ class TasksController extends Controller
     public function show(TaskList $taskList, Task $task)
     {
         $this->authorize('view', $taskList);
+
+        $task->load('task_list');
 
         return view('tasks.show')->with([
             'task' => $task,
@@ -106,8 +108,25 @@ class TasksController extends Controller
         $task->update($request->validate([
             'title' => 'required',
             'interval' => 'required',
+            'days' => 'nullable',
+            'days.mon' => 'boolean',
+            'days.tue' => 'boolean',
+            'days.wed' => 'boolean',
+            'days.thu' => 'boolean',
+            'days.fri' => 'boolean',
+            'days.sat' => 'boolean',
+            'days.sun' => 'boolean',
+            'data' => 'nullable',
+            'data.interval' => 'integer',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date',
+            'optional' => 'nullable|boolean',
         ]));
-        return redirect(route('task_lists.show', ['task_list' => $taskList]));
+
+        return [
+            'status' => 200,
+            'redirect' => route('task_lists.tasks.show', compact('taskList', 'task')),
+        ];
     }
 
     /**

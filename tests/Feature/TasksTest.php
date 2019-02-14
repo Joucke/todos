@@ -22,18 +22,6 @@ class TasksTest extends TestCase
 	}
 
 	/** @test */
-	public function it_lists_all_tasks_for_current_list()
-	{
-		$this->markTestIncomplete('should be on TaskListsTest@show');
-		$this->actingAs($this->user)
-			->get('/task_lists/'.$this->list->id.'/tasks')
-			->assertViewIs('tasks.index')
-			->assertViewHas('task_list', function ($task_list) {
-				return $task_list->is($this->list);
-			});
-	}
-
-	/** @test */
 	public function it_cannot_be_created_by_non_members()
 	{
 		$jane = factory(User::class)->create();
@@ -255,6 +243,7 @@ class TasksTest extends TestCase
 				'interval' => 28,
 				'data' => [
 					'interval' => 88,
+					'weeks' => 4,
 				],
 			])
 			->assertJson([
@@ -266,7 +255,7 @@ class TasksTest extends TestCase
 		$task = Task::latest()->first();
 		$this->assertEquals('foobar', $task->title);
 		$this->assertEquals(28, $task->interval);
-		$this->assertEquals(['interval' => 88], $task->data);
+		$this->assertEquals(['interval' => 88, 'weeks' => 4], $task->data);
 	}
 
 	/** @test */
@@ -279,6 +268,7 @@ class TasksTest extends TestCase
 				'interval' => 120,
 				'data' => [
 					'interval' => 99,
+					'months' => 4,
 				],
 			])
 			->assertJson([
@@ -290,7 +280,7 @@ class TasksTest extends TestCase
 		$task = Task::latest()->first();
 		$this->assertEquals('foobar', $task->title);
 		$this->assertEquals(120, $task->interval);
-		$this->assertEquals(['interval' => 99], $task->data);
+		$this->assertEquals(['interval' => 99, 'months' => 4], $task->data);
 	}
 
 	/** @test */
@@ -395,7 +385,10 @@ class TasksTest extends TestCase
 				'title' => 'foobar',
 				'interval' => 1,
 			])
-			->assertRedirect('/task_lists/'.$this->list->id);
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
 		tap($task->fresh(), function ($task) {
 			$this->assertEquals('foobar', $task->title);
 			$this->assertEquals(1, $task->interval);
@@ -417,10 +410,292 @@ class TasksTest extends TestCase
 				'title' => 'barbaz',
 				'interval' => 4,
 			])
-			->assertRedirect('/task_lists/'.$this->list->id);
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
 		tap($task->fresh(), function ($task) {
 			$this->assertEquals('barbaz', $task->title);
 			$this->assertEquals(4, $task->interval);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_daily()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 1,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(1, $task->interval);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_every_other_day()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 2,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(2, $task->interval);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_weekly()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 7,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(7, $task->interval);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_every_other_week()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 14,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(14, $task->interval);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_monthly()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 30,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(30, $task->interval);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_every_other_month()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 60,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(60, $task->interval);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_every_week_on_mondays_and_thursdays()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 7,
+				'days' => [
+					'mon' => true,
+					'tue' => false,
+					'wed' => false,
+					'thu' => true,
+					'fri' => false,
+					'sat' => false,
+					'sun' => false,
+				],
+				'data' => [
+					'interval' => 77,
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(7, $task->interval);
+			$this->assertEquals(['interval' => 77], $task->data);
+			$this->assertEquals([
+				'mon' => true,
+				'tue' => false,
+				'wed' => false,
+				'thu' => true,
+				'fri' => false,
+				'sat' => false,
+				'sun' => false,
+			], $task->days);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_every_4_weeks()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 28,
+				'data' => [
+					'interval' => 88,
+					'weeks' => 4,
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(28, $task->interval);
+			$this->assertEquals(['interval' => 88, 'weeks' => 4], $task->data);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_every_4_months()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 120,
+				'data' => [
+					'interval' => 99,
+					'months' => 4,
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(120, $task->interval);
+			$this->assertEquals(['interval' => 99, 'months' => 4], $task->data);
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_repeated_between_dates()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 7,
+				'starts_at' => '2010-01-01',
+				'ends_at' => '2020-01-01',
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertEquals(7, $task->interval);
+		    $this->assertEquals('2010-01-01', $task->starts_at->format('Y-m-d'));
+		    $this->assertEquals('2020-01-01', $task->ends_at->format('Y-m-d'));
+		});
+	}
+
+	/** @test */
+	public function it_can_be_updated_to_be_optional()
+	{
+		$task = $this->list->tasks()->create(factory(Task::class)->raw([
+			'title' => 'foobar',
+			'interval' => 0,
+		]));
+
+		$this->actingAs($this->user)
+			->patch('/task_lists/'.$this->list->id.'/tasks/'.$task->id, [
+				'title' => 'foobar',
+				'interval' => 7,
+				'optional' => true,
+			])
+			->assertJson([
+				'status' => 200,
+				'redirect' => url('/task_lists/'.$this->list->id.'/tasks/'.$task->id),
+			]);
+		tap($task->fresh(), function ($task) {
+			$this->assertTrue($task->optional);
 		});
 	}
 
