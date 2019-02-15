@@ -17,7 +17,7 @@ class Dashboard extends Controller
      */
     public function __invoke(Request $request)
     {
-        $groups = collect([
+        $my_groups = collect([
             'scheduled' => auth()->user()->groups()
                 ->has('tasks.incompleted_scheduled_tasks')
                 ->with(['tasks.incompleted_scheduled_tasks', 'tasks.task_list'])
@@ -29,6 +29,6 @@ class Dashboard extends Controller
                 ->with(['tasks.incompleted_scheduled_tasks', 'tasks.task_list'])
                 ->get(),
         ]);
-        return view('dashboard', compact('groups'));
+        return view('dashboard', compact('my_groups'));
     }
 }
