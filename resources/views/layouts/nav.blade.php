@@ -36,7 +36,7 @@
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="flex button hover:bg-blue-darker hover:underline rounded-t-none text-white w-full">{{ __('auth.logout') }}</button>
+                        <button class="flex button hover:bg-blue-darker hover:underline rounded-t-none text-white w-full py-3">{{ __('auth.logout') }}</button>
                     </form>
                 </pull-down>
             @endguest
