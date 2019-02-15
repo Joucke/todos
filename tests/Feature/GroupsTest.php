@@ -18,19 +18,9 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function only_signed_in_users_can_list_groups()
-	{
-	    $this->get('/groups')
-	    	->assertRedirect('/login');
-
-	    $this->actingAs($this->user)
-	    	->get('/groups')
-	    	->assertOk();
-	}
-
-	/** @test */
 	public function it_lists_all_groups_for_current_user()
 	{
+		$this->markTestIncomplete('should be a dashboard test');
 		$this->user = factory(User::class)->create();
 		$jane = factory(User::class)->create();
 
@@ -41,7 +31,7 @@ class GroupsTest extends TestCase
 		$jane->groups()->attach($work);
 
 	    $this->actingAs($this->user)
-	    	->get('/groups')
+	    	->get('/dashboard')
 	    	->assertOk()
 	    	->assertViewHas('groups', function($groups) use ($family, $work) {
 	    		return $groups->pluck('id')->contains($family->id) &&
@@ -58,11 +48,12 @@ class GroupsTest extends TestCase
 			->assertViewIs('groups.create');
 
 		$groupCount = $this->user->owned_groups->count();
-		$this->actingAs($this->user)
+		$response = $this->actingAs($this->user)
 			->post('/groups', [
 				'title' => 'foobar',
-			])
-			->assertRedirect('/groups');
+			]);
+		$group = Group::latest()->first();
+		$response->assertRedirect('/groups/'.$group->id);
 		$this->assertEquals($groupCount + 1, $this->user->fresh()->owned_groups->count());
 	}
 
@@ -72,10 +63,9 @@ class GroupsTest extends TestCase
 		$this->actingAs($this->user)
 			->post('/groups', [
 				'title' => 'foobar',
-			])
-			->assertRedirect('/groups');
+			]);
 
-		$this->assertTrue(Group::first()->owner->is($this->user));
+		$this->assertTrue(Group::latest()->first()->owner->is($this->user));
 	}
 
 	/** @test */
@@ -131,7 +121,7 @@ class GroupsTest extends TestCase
 
 		$this->actingAs($this->user)
 			->patch('/groups/'.$group->id, ['title' => 'foobar'])
-			->assertRedirect('/groups');
+			->assertRedirect('/groups/'.$group->id);
 
 		$this->assertEquals('foobar', $group->fresh()->title);
 	}
@@ -167,7 +157,7 @@ class GroupsTest extends TestCase
 		$groupCount = $this->user->owned_groups->count();
 		$this->actingAs($this->user)
 			->delete('/groups/'.$group->id)
-			->assertRedirect('/groups');
+			->assertRedirect('/dashboard');
 
 		$this->assertEquals($groupCount - 1, $this->user->fresh()->owned_groups->count());
 	}

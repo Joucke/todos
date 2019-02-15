@@ -19,46 +19,13 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="h-full">
-    <div id="app" class="bg-blue-lightest h-full">
-        <nav class="flex border-b-2 border-blue-dark bg-white shadow fixed pin-t pin-x z-100 h-16 items-center">
-            <div class="container relative mx-auto">
-                <div class="flex items-center -mx-6">
-                    <div class="lg:w-1/4 xl:w-1/5 px-6 lg:pr-8">
-                        {{-- TODO: make this link go to dashboard when logged in --}}
-                        <a class="" href="{{ auth()->check() ? route('dashboard') : url('/') }}">
-                            {{ config('app.name') }}
-                        </a>
-                    </div>
-                    <div class="flex flex-grow justify-between items-center lg:w-3/4 xl:w-4/5 px-6">
-                        {{-- TODO: nav toggler, collapsable menu --}}
-                        @guest
-                            <a class="" href="{{ route('login') }}">{{ __('auth.login') }}</a>
-                            @if (Route::has('register'))
-                                <a class="" href="{{ route('register') }}">{{ __('auth.register') }}</a>
-                            @endif
-                        @else
-                            <a class="" href="{{ route('groups.index') }}">{{ __('groups.groups') }}</a>
-                            {{-- TODO: click on user name to toggle pulldown w/ logout in it --}}
-                            <p>{{ Auth::user()->name }}</p>
-                            <div class="hidden">
-                                <a class="" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                       document.getElementById('logout-form').submit();">
-                                    {{ __('auth.logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            </div>
-                        @endguest
-                    </div>
-                </div>
-            </div>
+    <div id="app" class="min-h-full">
+        <nav class="flex border-b-2 border-blue-darker bg-blue-dark text-white fixed pin-t pin-x z-100 h-16 items-center px-2 sm:px-0">
+            @include ('layouts.nav')
         </nav>
 
-        <main class="mt-16">
-            <div class="mx-auto container py-4">
+        <main class="pt-16">
+            <div class="mx-auto container py-4 px-2 sm:px-0">
                 {{-- TODO: design an alert --}}
                 @if (session('status'))
                     <div class="alert alert-success" role="alert">

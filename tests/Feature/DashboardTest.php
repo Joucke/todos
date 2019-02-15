@@ -34,18 +34,18 @@ class DashboardTest extends TestCase
         $this->actingAs($user)
             ->get('/dashboard')
             ->assertViewIs('dashboard')
-            ->assertViewHas('groups', function ($groups) use ($task) {
+            ->assertViewHas('my_groups', function ($groups) use ($task) {
                 return $groups['scheduled']->contains('id', $task->task_list->group_id);
             })
-            ->assertViewHas('groups', function ($groups) use ($completed) {
+            ->assertViewHas('my_groups', function ($groups) use ($completed) {
                 $scheduled = $groups['scheduled']->first()->tasks->first()->incompleted_scheduled_tasks;
                 return !$scheduled->contains('id', $completed->id);
             })
-            ->assertViewHas('groups', function ($groups) use ($incompleted) {
+            ->assertViewHas('my_groups', function ($groups) use ($incompleted) {
                 $scheduled = $groups['scheduled']->first()->tasks->first()->incompleted_scheduled_tasks;
                 return $scheduled->contains('id', $incompleted->id);
             })
-            ->assertViewHas('groups', function ($groups) use ($non_task) {
+            ->assertViewHas('my_groups', function ($groups) use ($non_task) {
                 return !$groups['scheduled']->contains('id', $non_task->task_list->group_id);
             });
     }
@@ -62,10 +62,10 @@ class DashboardTest extends TestCase
             ->withoutExceptionHandling()
             ->get('/dashboard')
             ->assertViewIs('dashboard')
-            ->assertViewHas('groups', function ($groups) use ($unscheduled) {
+            ->assertViewHas('my_groups', function ($groups) use ($unscheduled) {
                 return $groups['unscheduled']->contains('id', $unscheduled->task_list->group_id);
             })
-            ->assertViewHas('groups', function ($groups) use ($non_task) {
+            ->assertViewHas('my_groups', function ($groups) use ($non_task) {
                 return !$groups['unscheduled']->contains('id', $non_task->task_list->group_id);
             });
     }
