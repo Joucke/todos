@@ -24,7 +24,8 @@
             <div class="container relative mx-auto">
                 <div class="flex items-center -mx-6">
                     <div class="lg:w-1/4 xl:w-1/5 px-6 lg:pr-8">
-                        <a class="" href="{{ url('/') }}">
+                        {{-- TODO: make this link go to dashboard when logged in --}}
+                        <a class="" href="{{ auth()->check() ? route('dashboard') : url('/') }}">
                             {{ config('app.name') }}
                         </a>
                     </div>
