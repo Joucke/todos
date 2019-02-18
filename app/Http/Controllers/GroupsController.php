@@ -50,6 +50,7 @@ class GroupsController extends Controller
         $this->authorize('view', $group);
 
         $group->load('users');
+        $group->load('task_lists.tasks');
         if (auth()->user()->can('update', $group)) {
             return view('groups.show')->withGroup($group)->withUsers(User::all());
         }
