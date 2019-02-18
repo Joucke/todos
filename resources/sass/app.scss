@@ -135,6 +135,13 @@
     }
 }
 
+.alert {
+    @apply py-3 px-3 border rounded mb-4;
+    &.alert-success {
+        @apply border-green-darker bg-green-lightest text-green-darker;
+    }
+}
+
 /**
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.

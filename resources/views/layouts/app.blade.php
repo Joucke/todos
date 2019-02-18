@@ -26,7 +26,6 @@
 
         <main class="pt-16 lg:pt-0 lg:flex lg:flex-grow lg:px-4">
             <div class="mx-auto container py-4 px-2 sm:px-0">
-                {{-- TODO: design an alert --}}
                 @if (session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
