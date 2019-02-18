@@ -10,18 +10,6 @@ use Illuminate\Validation\UnauthorizedException;
 class TaskListsController extends Controller
 {
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Group $group)
-    {
-        $this->authorize('view', $group);
-
-        return view('task_lists.create')->withGroup($group);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -35,7 +23,8 @@ class TaskListsController extends Controller
             'title' => 'required',
         ]));
 
-        return redirect(route('groups.show', $group));
+        return redirect(route('groups.show', $group))
+            ->with('status', __('task_lists.statuses.created'));
     }
 
     /**
@@ -82,7 +71,8 @@ class TaskListsController extends Controller
             'title' => 'required',
         ]));
 
-        return redirect(route('groups.show', $taskList->group_id));
+        return redirect(route('groups.show', $taskList->group_id))
+            ->with('status', __('task_lists.statuses.updated'));
     }
 
     /**
@@ -97,6 +87,7 @@ class TaskListsController extends Controller
 
         $taskList->delete();
 
-        return redirect(route('groups.show', $taskList->group_id));
+        return redirect(route('groups.show', $taskList->group_id))
+            ->with('status', __('task_lists.statuses.deleted'));
     }
 }

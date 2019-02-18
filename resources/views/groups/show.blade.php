@@ -25,7 +25,6 @@
             <div class="card">
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('task_lists.task_lists') }}</p>
-                    <a class="button button-blue button-secondary button-xs" href="{{ route('groups.task_lists.create', $group) }}">{{ __('task_lists.create') }}</a>
                 </div>
 
                 <div class="card-body bg-white">
@@ -67,6 +66,26 @@
                     </ul>
                 </div>
             </div>
+        </div>
+
+        <div class="card-padding mb-4 lg:w-1/2">
+            <form action="{{ route('groups.task_lists.store', $group) }}" method="POST" class="card bg-white">
+                <div class="card-header bg-grey-lighter border-b">
+                    <p class="font-semibold">{{ __('task_lists.create') }}</p>
+                </div>
+                @csrf
+                <div class="card-body flex flex-col">
+                    <input
+                        class="border rounded py-2 px-2"
+                        placeholder="{{ __('task_lists.placeholders.title') }}"
+                        type="text"
+                        name="title"
+                        value="{{ old('title') }}">
+                </div>
+                <div class="card-footer">
+                    <input class="button button-blue w-full rounded-t-none" type="submit" value="{{ __('task_lists.add') }}">
+                </div>
+            </form>
         </div>
     </div>
 </div>
