@@ -196,21 +196,6 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function a_group_owner_can_see_all_users()
-	{
-		$group = factory(Group::class)->create(['owner_id' => $this->user->id]);
-
-		$jane = factory(User::class)->create();
-
-		$group->users()->attach($this->user);
-
-		$this->actingAs($this->user)
-			->get('/groups/'.$group->id)
-			->assertViewIs('groups.show')
-			->assertViewHas('users', User::all());
-	}
-
-	/** @test */
 	public function a_group_owner_can_add_a_member_to_a_group()
 	{
 		$john = $this->user;
