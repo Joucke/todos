@@ -26,4 +26,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('task_lists.tasks', TasksController::class, ['except' => 'index']);
     Route::resource('tasks.completed_tasks', CompletedTasksController::class);
     Route::resource('groups.users', GroupUsersController::class);
+    Route::get('/users/{user}', 'UsersController@show')->name('users.show');
 });
