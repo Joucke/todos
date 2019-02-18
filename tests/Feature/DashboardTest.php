@@ -19,6 +19,40 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
+    public function it_lists_all_groups_for_current_user()
+    {
+        $this->markTestIncomplete('should be a dashboard test');
+        $this->user = factory(User::class)->create();
+        $jane = factory(User::class)->create();
+
+        $family = factory(Group::class)->create();
+        $work = factory(Group::class)->create();
+
+        $this->user->groups()->attach($family);
+        $jane->groups()->attach($work);
+
+        $this->actingAs($this->user)
+            ->get('/dashboard')
+            ->assertOk()
+            ->assertViewHas('groups', function($groups) use ($family, $work) {
+                return $groups->pluck('id')->contains($family->id) &&
+                    !$groups->pluck('id')->contains($work->id);
+            });
+    }
+
+    /** @test */
+    public function it_lists_tasks_ordered_by_scheduled_at()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
+    public function it_has_tabs_to_switch_between_groups()
+    {
+        $this->markTestIncomplete('Write Dusk test for this');
+    }
+
+    /** @test */
     public function it_lists_incompleted_scheduled_tasks_for_users()
     {
         $user = factory(User::class)->create();
