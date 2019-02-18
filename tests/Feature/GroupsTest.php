@@ -18,28 +18,6 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function it_lists_all_groups_for_current_user()
-	{
-		$this->markTestIncomplete('should be a dashboard test');
-		$this->user = factory(User::class)->create();
-		$jane = factory(User::class)->create();
-
-		$family = factory(Group::class)->create();
-		$work = factory(Group::class)->create();
-
-		$this->user->groups()->attach($family);
-		$jane->groups()->attach($work);
-
-	    $this->actingAs($this->user)
-	    	->get('/dashboard')
-	    	->assertOk()
-	    	->assertViewHas('groups', function($groups) use ($family, $work) {
-	    		return $groups->pluck('id')->contains($family->id) &&
-	    			!$groups->pluck('id')->contains($work->id);
-	    	});
-	}
-
-	/** @test */
 	public function a_group_can_be_created()
 	{
 		$this->actingAs($this->user)
@@ -55,6 +33,16 @@ class GroupsTest extends TestCase
 		$group = Group::latest()->first();
 		$response->assertRedirect('/groups/'.$group->id);
 		$this->assertEquals($groupCount + 1, $this->user->fresh()->owned_groups->count());
+	}
+
+	/** @test */
+	public function it_displays_a_flash_message_after_creating_a_group()
+	{
+		$response = $this->actingAs($this->user)
+			->post('/groups', [
+				'title' => 'foobar',
+			])
+			->assertSessionHas('status', __('groups.statuses.created'));
 	}
 
 	/** @test */
@@ -127,6 +115,19 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
+	public function it_displays_a_flash_message_after_updating_a_group()
+	{
+		$group = factory(Group::class)->create([
+			'owner_id' => $this->user->id,
+			'title' => 'barbaz'
+		]);
+
+		$response = $this->actingAs($this->user)
+			->patch('/groups/'.$group->id, ['title' => 'foobar'])
+			->assertSessionHas('status', __('groups.statuses.updated'));
+	}
+
+	/** @test */
 	public function a_group_member_cannot_edit_a_group()
 	{
 		$group = factory(Group::class)->create([
@@ -160,6 +161,19 @@ class GroupsTest extends TestCase
 			->assertRedirect('/dashboard');
 
 		$this->assertEquals($groupCount - 1, $this->user->fresh()->owned_groups->count());
+	}
+
+	/** @test */
+	public function it_displays_a_flash_message_after_deleting_a_group()
+	{
+		$group = factory(Group::class)->create([
+			'owner_id' => $this->user->id,
+			'title' => 'barbaz'
+		]);
+
+		$response = $this->actingAs($this->user)
+			->delete('/groups/'.$group->id)
+			->assertSessionHas('status', __('groups.statuses.deleted'));
 	}
 
 	/** @test */

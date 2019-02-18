@@ -12,4 +12,9 @@ return [
     'placeholders' => [
         'title' => 'Title of your Group',
     ],
+    'statuses' => [
+        'created' => 'The group was created',
+        'updated' => 'The group was updated',
+        'deleted' => 'The group was deleted',
+    ],
 ];
