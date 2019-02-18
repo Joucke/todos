@@ -86,7 +86,13 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
-	public function it_shows_tasks_for_a_task_list()
+	public function it_shows_breadcrumbs()
+	{
+	    $this->markTestIncomplete('Dusk test?');
+	}
+
+	/** @test */
+	public function it_shows_all_tasks_for_a_task_list()
 	{
 		$group = $this->createGroup($this->user);
 		$jane = factory(User::class)->create();
@@ -104,6 +110,12 @@ class TaskListsTest extends TestCase
 			->assertViewHas('task_list', function ($task_list) use ($task) {
 				return $task_list->tasks->contains('id', $task->id);
 			});
+	}
+
+	/** @test */
+	public function it_shows_task_data_for_each_task_on_a_list()
+	{
+	    $this->markTestIncomplete();
 	}
 
 	/** @test */
