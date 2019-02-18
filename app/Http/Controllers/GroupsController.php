@@ -35,7 +35,8 @@ class GroupsController extends Controller
 
         $group->users()->attach($request->user());
 
-        return redirect(route('groups.show', $group));
+        return redirect(route('groups.show', $group))
+            ->with('status', __('groups.statuses.created'));
     }
 
     /**
@@ -85,7 +86,8 @@ class GroupsController extends Controller
             ])
         );
 
-        return redirect(route('groups.show', $group));
+        return redirect(route('groups.show', $group))
+            ->with('status', __('groups.statuses.updated'));
     }
 
     /**
@@ -101,6 +103,7 @@ class GroupsController extends Controller
         $group->users()->sync([]);
         $group->delete();
 
-        return redirect(route('dashboard'));
+        return redirect(route('dashboard'))
+            ->with('status', __('groups.statuses.deleted'));
     }
 }

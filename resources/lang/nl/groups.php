@@ -12,4 +12,9 @@ return [
     'placeholders' => [
         'title' => 'Titel van de groep',
     ],
+    'statuses' => [
+        'created' => 'De groep is aangemaakt',
+        'updated' => 'De groep is bijgewerkt',
+        'deleted' => 'De groep is verwijderd',
+    ],
 ];
