@@ -19,12 +19,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="h-full">
-    <div id="app" class="min-h-full">
-        <nav class="flex border-b-2 border-blue-darker bg-blue-dark text-white fixed pin-t pin-x z-100 h-16 items-center px-2 sm:px-0">
+    <div id="app" class="min-h-full lg:flex">
+        <nav class="flex border-b-2 border-blue-darker bg-blue-dark text-white fixed lg:relative lg:border-b-0 lg:h-auto lg:w-64 lg:flex-col lg:flex-no-shrink pin-t pin-x z-100 h-16 items-center px-2 sm:px-0">
             @include ('layouts.nav')
         </nav>
 
-        <main class="pt-16">
+        <main class="pt-16 lg:pt-0 lg:flex lg:flex-grow lg:px-4">
             <div class="mx-auto container py-4 px-2 sm:px-0">
                 {{-- TODO: design an alert --}}
                 @if (session('status'))

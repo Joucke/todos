@@ -116,6 +116,25 @@
     }
 }
 
+.nav {
+    @apply flex no-underline px-4 py-3 items-center;
+    &:hover {
+        @apply underline;
+    }
+    &.blue {
+        @apply text-white bg-blue-dark;
+        &:hover {
+            @apply bg-blue-darker;
+        }
+        &.active {
+            @apply bg-blue-darker;
+            @screen lg {
+                @apply border-r-4 border-blue-darkest;
+            }
+        }
+    }
+}
+
 /**
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.

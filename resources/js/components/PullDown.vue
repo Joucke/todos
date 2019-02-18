@@ -1,9 +1,22 @@
 <template>
     <div class="">
-        <p class="cursor-pointer" v-if="title" v-html="title" @click="toggle"></p>
-        <svg-icon :name="`icon-${icon}`" v-if="icon" class="w-8 h-8 primary-white secondary-white cursor-pointer" @click="toggle"></svg-icon>
-        <div class="absolute container mt-16 pin-t" v-if="show">
-            <div :class="menu" class="absolute">
+        <div :class="showTitle">
+            <p class="cursor-pointer"
+                v-if="title"
+                v-html="title"
+                @click="toggle"
+                >
+            </p>
+            <svg-icon
+                :name="`icon-${icon}`"
+                v-if="icon"
+                class="w-8 h-8 primary-white secondary-white cursor-pointer"
+                @click="toggle"
+                >
+            </svg-icon>
+        </div>
+        <div :class="menuContainer">
+            <div :class="menu">
                 <slot></slot>
             </div>
         </div>
@@ -18,7 +31,31 @@ export default {
     components: {
         SvgIcon,
     },
-    props: ['title', 'menuClasses', 'icon'],
+    props: {
+        title: String,
+        menuClasses: String,
+        menuContainer: String,
+        icon: String,
+        responsive: {
+            type: Object,
+            default: () => {
+                return {
+                    menu: {
+                        sm: 'hidden',
+                        md: 'hidden',
+                        lg: 'flex',
+                        xl: 'flex',
+                    },
+                    title: {
+                        sm: 'flex',
+                        md: 'flex',
+                        lg: 'hidden',
+                        xl: 'hidden',
+                    }
+                };
+            },
+        },
+    },
     data () {
         return {
             show: false,
@@ -34,9 +71,19 @@ export default {
             let classes = this.menuClasses.split(' ');
             if (! this.show) {
                 classes.push('hidden');
+                for (let screen in this.responsive.menu) {
+                    classes.push(`${screen}:${this.responsive.menu[screen]}`);
+                }
+            }
+            return classes;
+        },
+        showTitle () {
+            let classes = ['flex items-center'];
+            for (let screen in this.responsive.title) {
+                classes.push(`${screen}:${this.responsive.title[screen]}`);
             }
             return classes;
         }
-    }
+    },
 }
 </script>
