@@ -19,8 +19,9 @@
     </div>
 </header>
 <div class="py-4">
+
     <div class="card-container">
-        <div class="card-padding mb-4">
+        <div class="card-padding mb-4 lg:w-1/2">
             <div class="card">
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('task_lists.task_lists') }}</p>
@@ -31,7 +32,10 @@
                     <ul class="list-reset leading-normal">
                         @foreach ($group->task_lists as $list)
                             <li>
-                                <a href="{{ route('task_lists.show', ['task_list' => $list]) }}">{{ $list->title }}</a>
+                                <a class="nav blue-light justify-between" href="{{ route('task_lists.show', ['task_list' => $list]) }}">
+                                    <span>{{ $list->title }}</span>
+                                    <span class="text-black">{{ trans_choice('tasks.count', $list->tasks->count()) }}</span>
+                                </a>
                             </li>
                         @endforeach
                     </ul>
@@ -39,7 +43,7 @@
             </div>
         </div>
 
-        <div class="card-padding mb-4">
+        <div class="card-padding mb-4 lg:w-1/2">
             <div class="card">
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('groups.members') }}</p>
@@ -49,8 +53,15 @@
                 <div class="card-body bg-white">
                     <ul class="list-reset leading-normal">
                         @foreach ($group->users as $user)
-                            <li>
-                                <a href="{{ route('users.show', $user) }}">{{ $user->name }}</a>
+                            <li class="flex items-center justify-between">
+                                <a class="nav blue-light" href="{{ route('users.show', $user) }}">
+                                    <span>{{ $user->name }}</span>
+                                </a>
+                                @can ('update', $group)
+                                    @unless ($user->is(auth()->user()))
+                                        <button class="button button-red button-secondary button-xs">Kick</button>
+                                    @endunless
+                                @endcan
                             </li>
                         @endforeach
                     </ul>
