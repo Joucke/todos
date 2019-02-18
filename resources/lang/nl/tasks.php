@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'count' => ':count taak|:count taken',
     'tasks' => 'Taken',
     'create' => 'Taak toevoegen',
     'edit' => 'Taak bewerken',
