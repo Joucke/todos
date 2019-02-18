@@ -256,4 +256,10 @@ class GroupsTest extends TestCase
 
 	    // upon implementation, the pulldown targeted in @a_group_owner_can_see_all_users should also be removed.
 	}
+
+	/** @test */
+	public function a_group_owner_can_remove_a_user_from_a_group()
+	{
+	    $this->markTestIncomplete();
+	}
 }
