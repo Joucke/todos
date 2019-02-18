@@ -10,4 +10,9 @@ return [
     'placeholders' => [
         'title' => 'Title of your List',
     ],
+    'statuses' => [
+        'created' => 'The list was created',
+        'updated' => 'The list was updated',
+        'deleted' => 'The list was deleted',
+    ],
 ];

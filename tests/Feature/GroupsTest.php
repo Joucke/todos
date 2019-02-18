@@ -18,38 +18,6 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function only_signed_in_users_can_list_groups()
-	{
-	    $this->get('/groups')
-	    	->assertRedirect('/login');
-
-	    $this->actingAs($this->user)
-	    	->get('/groups')
-	    	->assertOk();
-	}
-
-	/** @test */
-	public function it_lists_all_groups_for_current_user()
-	{
-		$this->user = factory(User::class)->create();
-		$jane = factory(User::class)->create();
-
-		$family = factory(Group::class)->create();
-		$work = factory(Group::class)->create();
-
-		$this->user->groups()->attach($family);
-		$jane->groups()->attach($work);
-
-	    $this->actingAs($this->user)
-	    	->get('/groups')
-	    	->assertOk()
-	    	->assertViewHas('groups', function($groups) use ($family, $work) {
-	    		return $groups->pluck('id')->contains($family->id) &&
-	    			!$groups->pluck('id')->contains($work->id);
-	    	});
-	}
-
-	/** @test */
 	public function a_group_can_be_created()
 	{
 		$this->actingAs($this->user)
@@ -58,12 +26,23 @@ class GroupsTest extends TestCase
 			->assertViewIs('groups.create');
 
 		$groupCount = $this->user->owned_groups->count();
-		$this->actingAs($this->user)
+		$response = $this->actingAs($this->user)
+			->post('/groups', [
+				'title' => 'foobar',
+			]);
+		$group = Group::latest()->first();
+		$response->assertRedirect('/groups/'.$group->id);
+		$this->assertEquals($groupCount + 1, $this->user->fresh()->owned_groups->count());
+	}
+
+	/** @test */
+	public function it_displays_a_flash_message_after_creating_a_group()
+	{
+		$response = $this->actingAs($this->user)
 			->post('/groups', [
 				'title' => 'foobar',
 			])
-			->assertRedirect('/groups');
-		$this->assertEquals($groupCount + 1, $this->user->fresh()->owned_groups->count());
+			->assertSessionHas('status', __('groups.statuses.created'));
 	}
 
 	/** @test */
@@ -72,10 +51,9 @@ class GroupsTest extends TestCase
 		$this->actingAs($this->user)
 			->post('/groups', [
 				'title' => 'foobar',
-			])
-			->assertRedirect('/groups');
+			]);
 
-		$this->assertTrue(Group::first()->owner->is($this->user));
+		$this->assertTrue(Group::latest()->first()->owner->is($this->user));
 	}
 
 	/** @test */
@@ -131,9 +109,22 @@ class GroupsTest extends TestCase
 
 		$this->actingAs($this->user)
 			->patch('/groups/'.$group->id, ['title' => 'foobar'])
-			->assertRedirect('/groups');
+			->assertRedirect('/groups/'.$group->id);
 
 		$this->assertEquals('foobar', $group->fresh()->title);
+	}
+
+	/** @test */
+	public function it_displays_a_flash_message_after_updating_a_group()
+	{
+		$group = factory(Group::class)->create([
+			'owner_id' => $this->user->id,
+			'title' => 'barbaz'
+		]);
+
+		$response = $this->actingAs($this->user)
+			->patch('/groups/'.$group->id, ['title' => 'foobar'])
+			->assertSessionHas('status', __('groups.statuses.updated'));
 	}
 
 	/** @test */
@@ -167,9 +158,22 @@ class GroupsTest extends TestCase
 		$groupCount = $this->user->owned_groups->count();
 		$this->actingAs($this->user)
 			->delete('/groups/'.$group->id)
-			->assertRedirect('/groups');
+			->assertRedirect('/dashboard');
 
 		$this->assertEquals($groupCount - 1, $this->user->fresh()->owned_groups->count());
+	}
+
+	/** @test */
+	public function it_displays_a_flash_message_after_deleting_a_group()
+	{
+		$group = factory(Group::class)->create([
+			'owner_id' => $this->user->id,
+			'title' => 'barbaz'
+		]);
+
+		$response = $this->actingAs($this->user)
+			->delete('/groups/'.$group->id)
+			->assertSessionHas('status', __('groups.statuses.deleted'));
 	}
 
 	/** @test */
@@ -189,21 +193,6 @@ class GroupsTest extends TestCase
 			->assertForbidden();
 
 		$this->assertEquals($groupCount, $this->user->fresh()->owned_groups->count());
-	}
-
-	/** @test */
-	public function a_group_owner_can_see_all_users()
-	{
-		$group = factory(Group::class)->create(['owner_id' => $this->user->id]);
-
-		$jane = factory(User::class)->create();
-
-		$group->users()->attach($this->user);
-
-		$this->actingAs($this->user)
-			->get('/groups/'.$group->id)
-			->assertViewIs('groups.show')
-			->assertViewHas('users', User::all());
 	}
 
 	/** @test */
@@ -251,5 +240,11 @@ class GroupsTest extends TestCase
 	    // this will replace @a_group_owner_can_add_a_member_to_a_group and should get a new test for @a_group_member_cannot_add_another_member_to_a_group
 
 	    // upon implementation, the pulldown targeted in @a_group_owner_can_see_all_users should also be removed.
+	}
+
+	/** @test */
+	public function a_group_owner_can_remove_a_user_from_a_group()
+	{
+	    $this->markTestIncomplete();
 	}
 }

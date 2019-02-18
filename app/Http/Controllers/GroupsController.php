@@ -10,16 +10,6 @@ use Illuminate\Support\Facades\Auth;
 class GroupsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('groups.index')->withGroups(Auth::user()->groups);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -45,7 +35,8 @@ class GroupsController extends Controller
 
         $group->users()->attach($request->user());
 
-        return redirect(route('groups.index'));
+        return redirect(route('groups.show', $group))
+            ->with('status', __('groups.statuses.created'));
     }
 
     /**
@@ -58,10 +49,8 @@ class GroupsController extends Controller
     {
         $this->authorize('view', $group);
 
-        $group->load('users');
-        if (auth()->user()->can('update', $group)) {
-            return view('groups.show')->withGroup($group)->withUsers(User::all());
-        }
+        $group->load(['users', 'task_lists.tasks']);
+
         return view('groups.show')->withGroup($group);
     }
 
@@ -95,7 +84,8 @@ class GroupsController extends Controller
             ])
         );
 
-        return redirect(route('groups.index'));
+        return redirect(route('groups.show', $group))
+            ->with('status', __('groups.statuses.updated'));
     }
 
     /**
@@ -111,6 +101,7 @@ class GroupsController extends Controller
         $group->users()->sync([]);
         $group->delete();
 
-        return redirect(route('groups.index'));
+        return redirect(route('dashboard'))
+            ->with('status', __('groups.statuses.deleted'));
     }
 }

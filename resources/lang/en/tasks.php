@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'count' => ':count task|:count tasks',
     'tasks' => 'Tasks',
     'create' => 'Add Task',
     'edit' => 'Edit Task',

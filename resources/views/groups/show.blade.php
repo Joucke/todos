@@ -19,19 +19,22 @@
     </div>
 </header>
 <div class="py-4">
+
     <div class="card-container">
-        <div class="card-padding mb-4">
+        <div class="card-padding mb-4 lg:w-1/2">
             <div class="card">
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('task_lists.task_lists') }}</p>
-                    <a class="button button-blue button-secondary button-xs" href="{{ route('groups.task_lists.create', $group) }}">{{ __('task_lists.create') }}</a>
                 </div>
 
                 <div class="card-body bg-white">
                     <ul class="list-reset leading-normal">
                         @foreach ($group->task_lists as $list)
                             <li>
-                                <a href="{{ route('task_lists.show', ['task_list' => $list]) }}">{{ $list->title }}</a>
+                                <a class="nav blue-light justify-between" href="{{ route('task_lists.show', ['task_list' => $list]) }}">
+                                    <span>{{ $list->title }}</span>
+                                    <span class="text-black">{{ trans_choice('tasks.count', $list->tasks->count()) }}</span>
+                                </a>
                             </li>
                         @endforeach
                     </ul>
@@ -39,7 +42,7 @@
             </div>
         </div>
 
-        <div class="card-padding mb-4">
+        <div class="card-padding mb-4 lg:w-1/2">
             <div class="card">
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('groups.members') }}</p>
@@ -49,13 +52,40 @@
                 <div class="card-body bg-white">
                     <ul class="list-reset leading-normal">
                         @foreach ($group->users as $user)
-                            <li>
-                                <a href="#{{-- TODO: route('users.show', $user) --}}">{{ $user->name }}</a>
+                            <li class="flex items-center justify-between">
+                                <a class="nav blue-light" href="{{ route('users.show', $user) }}">
+                                    <span>{{ $user->name }}</span>
+                                </a>
+                                @can ('update', $group)
+                                    @unless ($user->is(auth()->user()))
+                                        <button class="button button-red button-secondary button-xs">Kick</button>
+                                    @endunless
+                                @endcan
                             </li>
                         @endforeach
                     </ul>
                 </div>
             </div>
+        </div>
+
+        <div class="card-padding mb-4 lg:w-1/2">
+            <form action="{{ route('groups.task_lists.store', $group) }}" method="POST" class="card bg-white">
+                <div class="card-header bg-grey-lighter border-b">
+                    <p class="font-semibold">{{ __('task_lists.create') }}</p>
+                </div>
+                @csrf
+                <div class="card-body flex flex-col">
+                    <input
+                        class="border rounded py-2 px-2"
+                        placeholder="{{ __('task_lists.placeholders.title') }}"
+                        type="text"
+                        name="title"
+                        value="{{ old('title') }}">
+                </div>
+                <div class="card-footer">
+                    <input class="button button-blue w-full rounded-t-none" type="submit" value="{{ __('task_lists.add') }}">
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -26,21 +26,13 @@ class TaskListsTest extends TestCase
 		$jane = factory(User::class)->create();
 		$group->users()->attach($jane);
 
-		$this->actingAs($jane)
-			->get('/groups/'.$group->id.'/task_lists/create')
-			->assertOk();
-
+		$listCount = TaskList::count();
 		$this->actingAs($jane)
 			->post('/groups/'.$group->id.'/task_lists', [
 				'title' => 'foobar',
 			])
 			->assertRedirect('/groups/'.$group->id);
-
-		$this->actingAs($this->user)
-			->get('/groups/'.$group->id.'/task_lists/create')
-			->assertOk()
-			->assertViewIs('task_lists.create')
-			->assertViewHas('group', $group);
+		$this->assertEquals($listCount + 1, TaskList::count());
 
 		$listCount = TaskList::count();
 		$this->actingAs($this->user)
@@ -52,14 +44,22 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
+	public function it_displays_a_flash_message_after_creating_a_group()
+	{
+		$group = $this->createGroup($this->user);
+
+		$response = $this->actingAs($this->user)
+			->post('/groups/'.$group->id.'/task_lists', [
+				'title' => 'foobar',
+			])
+			->assertSessionHas('status', __('task_lists.statuses.created'));
+	}
+
+	/** @test */
 	public function it_cannot_be_created_by_non_group_members()
 	{
 		$group = $this->createGroup($this->user);
 		$jane = factory(User::class)->create();
-
-		$this->actingAs($jane)
-			->get('/groups/'.$group->id.'/task_lists/create')
-			->assertForbidden();
 
 		$this->actingAs($jane)
 			->post('/groups/'.$group->id.'/task_lists', [
@@ -86,7 +86,13 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
-	public function it_shows_tasks_for_a_task_list()
+	public function it_shows_breadcrumbs()
+	{
+	    $this->markTestIncomplete('Dusk test?');
+	}
+
+	/** @test */
+	public function it_shows_all_tasks_for_a_task_list()
 	{
 		$group = $this->createGroup($this->user);
 		$jane = factory(User::class)->create();
@@ -104,6 +110,12 @@ class TaskListsTest extends TestCase
 			->assertViewHas('task_list', function ($task_list) use ($task) {
 				return $task_list->tasks->contains('id', $task->id);
 			});
+	}
+
+	/** @test */
+	public function it_shows_task_data_for_each_task_on_a_list()
+	{
+	    $this->markTestIncomplete();
 	}
 
 	/** @test */
@@ -147,6 +159,22 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
+	public function it_displays_a_flash_message_after_updating_a_group()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+			'title' => 'barbaz',
+		]);
+
+		$response = $this->actingAs($this->user)
+			->patch('/task_lists/'.$list->id, [
+				'title' => 'foobar',
+			])
+			->assertSessionHas('status', __('task_lists.statuses.updated'));
+	}
+
+	/** @test */
 	public function it_can_be_deleted_by_the_group_owner()
 	{
 		$group = $this->createGroup($this->user);
@@ -166,6 +194,20 @@ class TaskListsTest extends TestCase
 			->delete('/task_lists/'.$list->id)
 			->assertRedirect('/groups/'.$group->id);
 		$this->assertEquals($listCount - 1, TaskList::count());
+	}
+
+	/** @test */
+	public function it_displays_a_flash_message_after_deleting_a_group()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+			'title' => 'barbaz',
+		]);
+
+		$response = $this->actingAs($this->user)
+			->delete('/task_lists/'.$list->id)
+			->assertSessionHas('status', __('task_lists.statuses.deleted'));
 	}
 
 	protected function createGroup(User $owner, array $overrides = [], User $member = null)

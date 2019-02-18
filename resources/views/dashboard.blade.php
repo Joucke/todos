@@ -2,8 +2,7 @@
 
 @section('content')
 
-    @foreach ($groups['scheduled'] as $group)
-        {{-- TODO: design tabs (on the side on lg:xxx) --}}
+    @foreach ($my_groups['scheduled'] as $group)
         <div>
             <h1>{{ $group->title }}</h1>
             <div class="card-container">
@@ -22,7 +21,7 @@
     @endforeach
 
 
-    @foreach ($groups['unscheduled'] as $group)
+    @foreach ($my_groups['unscheduled'] as $group)
         <div>
             <h1>{{ $group->title }}</h1>
             <div class="card-container">
