@@ -34,7 +34,7 @@ import SvgIcon from 'vue-svgicon';
 Vue.component('pull-down', require('./components/PullDown.vue').default);
 Vue.component('task-card', require('./components/TaskCard.vue').default);
 Vue.component('task-form', require('./components/TaskForm.vue').default);
-Vue.component('svg-icon', require('vue-svgicon').default);
+Vue.component('svg-icon', SvgIcon);
 import './icons/icon-user';
 /**
  * Next, we will create a fresh Vue application instance and attach it to

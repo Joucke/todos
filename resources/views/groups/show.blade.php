@@ -50,7 +50,7 @@
                     <ul class="list-reset leading-normal">
                         @foreach ($group->users as $user)
                             <li>
-                                <a href="#{{-- TODO: route('users.show', $user) --}}">{{ $user->name }}</a>
+                                <a href="{{ route('users.show', $user) }}">{{ $user->name }}</a>
                             </li>
                         @endforeach
                     </ul>
