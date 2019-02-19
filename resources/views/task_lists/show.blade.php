@@ -22,21 +22,41 @@
         @endcan
     </div>
 </header>
+
 <div class="py-4">
     <div class="card-container">
-        <div class="card-padding mb-4">
-        	<div class="card">
+        <div class="card-padding mb-4 lg:w-1/2">
+            <div class="card">
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('tasks.tasks') }}</p>
                     <a class="button button-blue button-secondary button-xs" href="{{ route('task_lists.tasks.create', $task_list) }}">{{ __('tasks.create') }}</a>
                 </div>
 
                 <div class="card-body bg-white">
+                    <ul class="list-reset leading-normal">
+                        @foreach ($task_list->tasks as $task)
+                            <li class="flex justify-between items-center">
+                                <a class="nav blue-light w-1/2" href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $task->title }}</a>
+                                <p class="w-1/2 text-right">Frequentie{{-- TODO: task interval --}}</p>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-padding mb-4 lg:w-1/2">
+        	<div class="card">
+                <div class="card-header bg-grey-lighter border-b">
+                    <p class="font-semibold">{{ __('tasks.recent') }}</p>
+                </div>
+
+                <div class="card-body bg-white">
             		<ul class="list-reset leading-normal">
             			@foreach ($task_list->tasks as $task)
-    						<li>
-                                <a href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $task->title }}</a>
-                                {{-- TODO: add more task specifics here --}}
+                            <li class="flex justify-between items-center">
+                                <a class="nav blue-light w-1/2" href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $task->title }}</a>
+                                <p class="w-1/2 text-right">Datum / Tijd{{-- TODO: task completion --}}</p>
                             </li>
             			@endforeach
             		</ul>

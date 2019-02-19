@@ -3,6 +3,7 @@
 return [
     'groups' => 'Groups',
     'create' => 'Add Group',
+    'add' => 'Add group',
     'edit' => 'Edit Group',
     'update' => 'Update Group',
     'delete' => 'Delete Group',

@@ -33,4 +33,5 @@ return [
     'start' => 'Van',
     'end' => 'Tot',
     'optional' => 'Optioneel',
+    'recent' => 'Recently completed',
 ];
