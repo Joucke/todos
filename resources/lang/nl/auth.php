@@ -18,4 +18,8 @@ return [
     'login' => 'Inloggen',
     'logout' => 'Uitloggen',
     'register' => 'Registeren',
+    'password' => 'Wachtwoord vergeten?',
+    'remember' => 'Onthouden',
+    'reset_password' => 'Wachtwoord herstellen',
+    'send_link' => 'Stuur link voor wachtwoordherstel',
 ];
