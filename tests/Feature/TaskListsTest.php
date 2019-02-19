@@ -113,6 +113,12 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
+	public function it_shows_recently_completed_tasks_on_a_list()
+	{
+	    $this->markTestIncomplete();
+	}
+
+	/** @test */
 	public function it_can_be_updated_by_the_group_owner()
 	{
 		$group = $this->createGroup($this->user);
