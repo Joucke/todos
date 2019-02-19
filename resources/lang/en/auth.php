@@ -18,4 +18,8 @@ return [
     'login' => 'Login',
     'logout' => 'Logout',
     'register' => 'Register',
+    'password' => 'Forgot Your Password?',
+    'remember' => 'Remember Me',
+    'reset_password' => 'Reset Password',
+    'send_link' => 'Send Password Reset Link',
 ];
