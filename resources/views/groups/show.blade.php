@@ -18,8 +18,8 @@
         @endcan
     </div>
 </header>
-<div class="py-4">
 
+<div class="py-4">
     <div class="card-container">
         <div class="card-padding mb-4 lg:w-1/2">
             <div class="card">
@@ -70,10 +70,12 @@
 
         <div class="card-padding mb-4 lg:w-1/2">
             <form action="{{ route('groups.task_lists.store', $group) }}" method="POST" class="card bg-white">
+                @csrf
+
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('task_lists.create') }}</p>
                 </div>
-                @csrf
+
                 <div class="card-body flex flex-col">
                     <input
                         class="border rounded py-2 px-2"
@@ -81,7 +83,14 @@
                         type="text"
                         name="title"
                         value="{{ old('title') }}">
+
+                    @if ($errors->has('title'))
+                        <p class="text-red text-sm my-2" role="alert">
+                            <strong>{{ $errors->first('title') }}</strong>
+                        </p>
+                    @endif
                 </div>
+
                 <div class="card-footer">
                     <input class="button button-blue w-full rounded-t-none" type="submit" value="{{ __('task_lists.add') }}">
                 </div>

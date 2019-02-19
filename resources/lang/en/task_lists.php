@@ -3,6 +3,7 @@
 return [
     'task_lists' => 'Task Lists',
     'create' => 'Add Task List',
+    'add' => 'Add List',
     'edit' => 'Edit Task List',
     'update' => 'Update Task List',
     'delete' => 'Delete Task List',
