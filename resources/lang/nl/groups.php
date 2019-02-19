@@ -3,6 +3,7 @@
 return [
     'groups' => 'Groepen',
     'create' => 'Groep toevoegen',
+    'add' => 'Toevoegen',
     'edit' => 'Groep bewerken',
     'update' => 'Groep bijwerken',
     'delete' => 'Groep verwijderen',
