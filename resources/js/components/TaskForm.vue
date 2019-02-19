@@ -1,9 +1,21 @@
 <template>
     <div>
+        <div class="card-header bg-grey-lighter border-b">
+            <p class="font-semibold">{{ formTitle }}</p>
+        </div>
+
         <div class="card-body">
             <div class="flex flex-col mb-4">
-                <label class="mb-1" for="title">{{ t('tasks.title') }}:</label>
-                <input class="border rounded py-2 px-2" :placeholder="t('tasks.placeholders.title')" type="text" name="title" v-model="task.title">
+                <input
+                    class="border rounded p-2"
+                    :placeholder="t('tasks.placeholders.title')"
+                    type="text"
+                    name="title"
+                    v-model="task.title">
+
+                <p class="text-red text-sm my-2" role="alert" v-if="errors.title">
+                    <strong v-for="error in errors.title" v-text="error"></strong>
+                </p>
             </div>
             <div class="flex flex-col mb-4">
                 <label class="" for="interval">{{ t('tasks.interval') }}:</label>
@@ -84,6 +96,7 @@ export default {
     },
     props: {
         action: String,
+        formTitle: String,
         taskData: Object,
         method: {
             type: String,
@@ -94,14 +107,21 @@ export default {
         return {
             task_intervals: Task.intervals(),
             task: new Task(this.taskData, this.t),
+            errors: {
+                title: null,
+            },
         };
     },
     methods: {
         submitForm () {
             let task = this.task.export();
+            this.errors = {title: null};
             axios[this.method](this.action, task)
                 .then(({data}) => {
                     location.href = data.redirect;
+                })
+                .catch(({response}) => {
+                    this.errors = response.data.errors;
                 });
         },
         hasInterval (interval) {
