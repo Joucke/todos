@@ -327,6 +327,19 @@ class TasksTest extends TestCase
 	}
 
 	/** @test */
+	public function it_is_scheduled_when_created()
+	{
+		$this->actingAs($this->user)
+			->post('/task_lists/'.$this->list->id.'/tasks', $attributes = [
+				'title' => 'foobar',
+				'interval' => 7,
+			]);
+
+		$task = Task::where($attributes)->latest()->first();
+		$this->assertCount(1, $task->scheduled_tasks);
+	}
+
+	/** @test */
 	public function it_cannot_be_viewed_by_non_members()
 	{
 		$task = $this->list->tasks()->create(factory(Task::class)->raw());

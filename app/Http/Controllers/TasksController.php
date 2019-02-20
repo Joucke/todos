@@ -33,7 +33,7 @@ class TasksController extends Controller
     {
         $this->authorize('view', $taskList);
 
-        $taskList->tasks()->create($request->validate([
+        $task = $taskList->tasks()->create($request->validate([
             'title' => 'required',
             'interval' => 'required',
             'days' => 'nullable',
@@ -50,6 +50,8 @@ class TasksController extends Controller
             'ends_at' => 'nullable|date',
             'optional' => 'nullable|boolean',
         ]));
+
+        $task->schedule();
 
         return [
             'status' => 200,
