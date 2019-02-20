@@ -212,8 +212,33 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function a_group_member_cannot_add_another_member_to_a_group()
+	public function a_group_owner_can_invite_an_existing_user_to_a_group()
 	{
+	    $this->markTestIncomplete();
+	    // this is a more privacy safe way of adding users to groups.
+	    // let the admin input an email address
+	    // if the address exists as a user, send the user an invite to join the group
+	    // if the address does not exist, invite the user to join, and prepare an invite to join the group
+
+	    // this will replace @a_group_owner_can_add_a_member_to_a_group and should get a new test for @a_group_member_cannot_add_another_member_to_a_group
+	}
+
+	/** @test */
+	public function a_group_owner_can_invite_a_new_user_to_a_group()
+	{
+	    $this->markTestIncomplete();
+	    // this is a more privacy safe way of adding users to groups.
+	    // let the admin input an email address
+	    // if the address exists as a user, send the user an invite to join the group
+	    // if the address does not exist, invite the user to join, and prepare an invite to join the group
+
+	    // this will replace @a_group_owner_can_add_a_member_to_a_group and should get a new test for @a_group_member_cannot_add_another_member_to_a_group
+	}
+
+	/** @test */
+	public function a_group_member_cannot_invite_users_to_a_group()
+	{
+		$this->markTestIncomplete();
 		$john = $this->user;
 		[$jane, $jack] = factory(User::class, 2)->create();
 		$group = factory(Group::class)->create(['owner_id' => $john->id]);
@@ -229,21 +254,13 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function a_group_owner_can_invite_a_user_to_a_group()
+	public function a_group_owner_can_remove_a_user_from_a_group()
 	{
 	    $this->markTestIncomplete();
-	    // this is a more privacy safe way of adding users to groups.
-	    // let the admin input an email address
-	    // if the address exists as a user, send the user an invite to join the group
-	    // if the address does not exist, invite the user to join, and prepare an invite to join the group
-
-	    // this will replace @a_group_owner_can_add_a_member_to_a_group and should get a new test for @a_group_member_cannot_add_another_member_to_a_group
-
-	    // upon implementation, the pulldown targeted in @a_group_owner_can_see_all_users should also be removed.
 	}
 
 	/** @test */
-	public function a_group_owner_can_remove_a_user_from_a_group()
+	public function a_group_member_cannot_remove_a_user_from_a_group()
 	{
 	    $this->markTestIncomplete();
 	}
