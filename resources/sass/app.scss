@@ -119,6 +119,15 @@
     }
 }
 
+.tabs {
+    li {
+        @apply border-b-2 border-transparent;
+        &.active {
+            @apply border-b-2 border-blue-dark;
+        }
+    }
+}
+
 .nav {
     @apply flex no-underline px-4 py-3 items-center;
     &:hover {

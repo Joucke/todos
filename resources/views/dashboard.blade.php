@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-
+<tabbed-cards
+    class="card-container"
+    :tabs="{{ $tabs }}"
+    :cards="{{ $tasks }}"
+    >
+</tabbed-cards>
+{{--
     @foreach ($my_groups['scheduled'] as $group)
         <div>
             <h1>{{ $group->title }}</h1>
@@ -38,5 +44,5 @@
             </div>
         </div>
     @endforeach
-
+ --}}
 @endsection

@@ -32,6 +32,7 @@ import SvgIcon from 'vue-svgicon';
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('pull-down', require('./components/PullDown.vue').default);
+Vue.component('tabbed-cards', require('./components/TabbedCards.vue').default);
 Vue.component('task-card', require('./components/TaskCard.vue').default);
 Vue.component('task-form', require('./components/TaskForm.vue').default);
 Vue.component('svg-icon', SvgIcon);
