@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Group;
+use App\Invitation;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -41,7 +42,7 @@ class UserTest extends TestCase
 	{
 		$family = factory(Group::class)->create();
 		$work = factory(Group::class)->create();
-		
+
 		$user = factory(User::class)->create();
 
 		$user->groups()->attach($family);
@@ -59,9 +60,115 @@ class UserTest extends TestCase
 		$user = factory(User::class)->create();
 		$work = factory(Group::class)->create(['owner_id' => $user->id]);
 
-		$user->groups()->attach($work);
-
 		$this->assertTrue($work->owner->is($user));
 		$this->assertContains($work->id, $user->owned_groups->pluck('id'));
 	}
+
+	/** @test */
+	public function it_can_have_many_invitations()
+	{
+        $group = factory(Group::class)->create();
+
+        $jane = factory(User::class)->create();
+
+        $invitation = factory(Invitation::class)->create([
+        	'group_id' => $group->id,
+            'email' => $jane->email,
+        ]);
+
+        tap($jane->fresh(), function ($jane) use ($group, $invitation) {
+        	$this->assertCount(1, $jane->invitations);
+	        $this->assertContains($invitation->id, $jane->invitations->pluck('id'));
+        });
+	}
+
+	/** @test */
+	public function it_can_have_many_invites_through_group()
+	{
+		$user = factory(User::class)->create();
+        $group = factory(Group::class)->create([
+        	'owner_id' => $user->id,
+        ]);
+
+        $jane = factory(User::class)->create();
+
+        $invitation = factory(Invitation::class)->create([
+        	'group_id' => $group->id,
+            'email' => $jane->email,
+        ]);
+
+        $this->assertCount(1, $user->invites);
+	}
+
+	/** @test */
+	public function it_hides_accepted_invitations()
+	{
+        $group = factory(Group::class)->create();
+
+        $jane = factory(User::class)->create();
+
+        $invitation = factory(Invitation::class)->create([
+        	'group_id' => $group->id,
+            'email' => $jane->email,
+            'accepted' => true,
+        ]);
+
+        tap($jane->fresh(), function ($jane) {
+        	$this->assertCount(0, $jane->invitations);
+        });
+	}
+
+    /** @test */
+    public function it_hides_declined_invitations()
+    {
+        $group = factory(Group::class)->create();
+
+        $jane = factory(User::class)->create();
+
+        $invitation = factory(Invitation::class)->create([
+            'group_id' => $group->id,
+            'email' => $jane->email,
+            'accepted' => false,
+        ]);
+
+        tap($jane->fresh(), function ($jane) {
+            $this->assertCount(0, $jane->invitations);
+        });
+    }
+
+    /** @test */
+    public function it_hides_accepted_invites()
+    {
+        $group = factory(Group::class)->create();
+
+        $jane = factory(User::class)->create();
+
+        $invitation = factory(Invitation::class)->create([
+            'group_id' => $group->id,
+            'email' => $jane->email,
+            'accepted' => true,
+        ]);
+
+        tap($group->owner->fresh(), function ($owner) {
+            $this->assertCount(0, $owner->invites);
+        });
+    }
+
+    /** @test */
+    public function it_hides_declined_invites()
+    {
+        $group = factory(Group::class)->create();
+
+        $jane = factory(User::class)->create();
+
+        $invitation = factory(Invitation::class)->create([
+            'group_id' => $group->id,
+            'email' => $jane->email,
+            'accepted' => false,
+        ]);
+
+        tap($group->owner->fresh(), function ($owner) {
+            $this->assertCount(0, $owner->invites);
+        });
+    }
 }

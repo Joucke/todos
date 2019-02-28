@@ -34,4 +34,9 @@ class Group extends Model
     {
         return $this->hasManyThrough(Task::class, TaskList::class);
     }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
 }

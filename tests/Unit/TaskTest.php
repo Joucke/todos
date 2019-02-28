@@ -141,7 +141,7 @@ class TaskTest extends TestCase
 	    $scheduled = $task->schedule();
 
 	    $this->assertInstanceOf(ScheduledTask::class, $scheduled);
-	    $this->assertEquals(now()->addDays($interval)->format("Y-m-d H:i:s"), $scheduled->scheduled_at->format("Y-m-d H:i:s"));
+	    $this->assertEquals(now()->addDays($interval)->format("Y-m-d H:i"), $scheduled->scheduled_at->format("Y-m-d H:i"));
 	}
 
 	/** @test */
@@ -152,7 +152,7 @@ class TaskTest extends TestCase
 	    $scheduled = $task->schedule(2);
 
 	    $this->assertInstanceOf(ScheduledTask::class, $scheduled);
-	    $this->assertEquals(now()->addDays(2)->format("Y-m-d H:i:s"), $scheduled->scheduled_at->format("Y-m-d H:i:s"));
+	    $this->assertEquals(now()->addDays(2)->format("Y-m-d H:i"), $scheduled->scheduled_at->format("Y-m-d H:i"));
 	}
 
 	/** @test */

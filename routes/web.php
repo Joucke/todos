@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', 'Dashboard')->name('dashboard');
+    Route::get('dashboard', 'Dashboard')->name('dashboard');
 
     Route::resource('groups', GroupsController::class, ['except' => ['index']]);
     Route::resource('groups.task_lists', TaskListsController::class, ['only' => ['create', 'store']]);
@@ -26,5 +26,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('task_lists.tasks', TasksController::class, ['except' => 'index']);
     Route::resource('tasks.completed_tasks', CompletedTasksController::class);
     Route::resource('groups.users', GroupUsersController::class);
+    Route::resource('groups.invites', GroupInvitationsController::class);
     Route::get('/users/{user}', 'UsersController@show')->name('users.show');
+    Route::resource('invites', InvitesController::class, ['only' => ['index', 'destroy']]);
+    Route::get('invitations', 'Invitations')->name('invitations');
 });
