@@ -19,7 +19,7 @@
                     class="bg-white flex flex-col p-4 rounded-lg w-full lg:w-1/3 z-50"
                     id="invite-modal"
                     >
-                    <div class="mb-3 flex items-start">
+                    <div class="mb-3 flex items-start justify-between">
                         <p class="leading-normal" v-text="t('groups.invite_text')"></p>
                         <svg-icon
                             name="icon-close"
