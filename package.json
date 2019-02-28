@@ -29,6 +29,7 @@
     "dependencies": {
         "lang.js": "^1.1.13",
         "moment": "^2.23.0",
+        "portal-vue": "^1.5.1",
         "vue-slider-component": "^2.8.6"
     }
 }

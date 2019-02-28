@@ -28,12 +28,12 @@ class GroupUsersController extends Controller
      */
     public function store(Request $request, Group $group)
     {
-        $this->authorize('update', $group);
+        // $this->authorize('update', $group);
 
-        $user = User::findOrFail($request->input('user_id'));
-        $group->users()->attach($user);
+        // $user = User::findOrFail($request->input('user_id'));
+        // $group->users()->attach($user);
 
-        return redirect(route('groups.show', $group));
+        // return redirect(route('groups.show', $group));
     }
 
     /**
@@ -70,6 +70,17 @@ class GroupUsersController extends Controller
      */
     public function destroy(Group $group, User $user)
     {
-        //
+        if (! $selfdestruction = auth()->user()->is($user)) {
+            $this->authorize('update', $group);
+        }
+
+        $group->users()->detach($user);
+
+        if ($selfdestruction) {
+            return redirect(route('dashboard'))->with('status', __('groups.you_left'));
+        }
+        return [
+            'status' => 200,
+        ];
     }
 }

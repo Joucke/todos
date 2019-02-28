@@ -8,6 +8,8 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+
+// translation
 const Lang = require('lang.js');
 import translations from '../../public/js/messages.js';
 
@@ -19,29 +21,22 @@ Vue.filter('trans', (...args) => {
     return lang.get(...args);
 });
 
-import SvgIcon from 'vue-svgicon';
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+// portal-vue
+import PortalVue from 'portal-vue';
+Vue.use(PortalVue);
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('action-card', require('./components/ActionCard.vue').default);
+Vue.component('group-invite', require('./components/GroupInvite.vue').default);
 Vue.component('pull-down', require('./components/PullDown.vue').default);
 Vue.component('tabbed-cards', require('./components/TabbedCards.vue').default);
 Vue.component('task-card', require('./components/TaskCard.vue').default);
 Vue.component('task-form', require('./components/TaskForm.vue').default);
+
+// icons
+import SvgIcon from 'vue-svgicon';
 Vue.component('svg-icon', SvgIcon);
 import './icons/icon-user';
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 const app = new Vue({
     el: '#app'
