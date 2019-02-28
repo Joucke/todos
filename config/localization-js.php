@@ -12,7 +12,9 @@ return [
      * ],
      */
     'messages' => [
+        'groups',
         'tasks',
+        'users',
     ],
 
     /*

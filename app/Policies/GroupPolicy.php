@@ -19,7 +19,7 @@ class GroupPolicy
      */
     public function view(User $user, Group $group)
     {
-        return $group->users->pluck('id')->contains($user->id);
+        return $group->owner->is($user) || $group->users->pluck('id')->contains($user->id);
     }
 
     /**

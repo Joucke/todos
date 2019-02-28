@@ -46,7 +46,7 @@
             <div class="card">
                 <div class="card-header bg-grey-lighter border-b">
                     <p class="font-semibold">{{ __('groups.members') }}</p>
-                    <a class="button button-blue button-secondary button-xs" href="#">{{ __('groups.invite') }}</a>
+                    <group-invite :group="{{ $group }}"></group-invite>
                 </div>
 
                 <div class="card-body bg-white">

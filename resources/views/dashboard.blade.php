@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<tabbed-cards
-    class="card-container"
-    :tabs="{{ $tabs }}"
-    :cards="{{ $tasks }}"
-    >
-</tabbed-cards>
+    @if ($tabs->count())
+        <tabbed-cards
+            class="card-container"
+            :tabs="{{ $tabs }}"
+            :cards="{{ $tasks }}"
+            >
+        </tabbed-cards>
+    @endif
 @endsection

@@ -155,6 +155,15 @@
     &.alert-success {
         @apply border-green-darker bg-green-lightest text-green-darker;
     }
+    &.alert-notify {
+        @apply border-blue-dark bg-blue-lightest text-blue-dark;
+        a {
+            @apply no-underline text-blue-dark flex;
+            &:hover {
+                @apply underline;
+            }
+        }
+    }
 }
 
 /**

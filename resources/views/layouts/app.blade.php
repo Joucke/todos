@@ -20,7 +20,7 @@
 </head>
 <body class="h-full">
     <div id="app" class="min-h-full lg:flex">
-        <nav class="flex border-b-2 border-blue-darker bg-blue-dark text-white fixed lg:relative lg:border-b-0 lg:h-auto lg:w-64 lg:flex-col lg:flex-no-shrink pin-t pin-x z-100 h-16 items-center px-2 sm:px-0">
+        <nav class="flex border-b-2 border-blue-darker bg-blue-dark text-white fixed lg:relative lg:border-b-0 lg:h-auto lg:w-64 lg:flex-col lg:flex-no-shrink pin-t pin-x z-40 h-16 items-center px-2 sm:px-0">
             @include ('layouts.nav')
         </nav>
 
@@ -31,9 +31,19 @@
                         {{ session('status') }}
                     </div>
                 @endif
+                @auth
+                    @foreach ($invitations as $invitation)
+                        <div class="alert alert-notify" role="alert">
+                            <a href="{{ route('invitations') }}">
+                                {{ __('groups.invited', ['group' => $invitation->group->title])}}
+                            </a>
+                        </div>
+                    @endforeach
+                @endauth
                 @yield('content')
             </div>
         </main>
+        <portal-target name="modals"></portal-target>
     </div>
 </body>
 </html>

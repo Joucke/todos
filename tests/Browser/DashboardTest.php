@@ -66,6 +66,7 @@ class DashboardTest extends DuskTestCase
     /** @test */
     public function it_lists_tasks_ordered_by_task_list_then_scheduled_at()
     {
+        // TODO: implement task list sorting
         $group = $this->createGroup($this->user);
         $listOne = $group->task_lists()->create(['title' => 'foobar']);
         $firstTask = $listOne->tasks()->create(['title' => 'Go to the store', 'interval' => 7])->schedule();
@@ -83,8 +84,6 @@ class DashboardTest extends DuskTestCase
                 ->assertSeeIn('main .tabs .card-container:last-child', 'Go to the store')
                 ;
         });
-
-        $this->markTestIncomplete('Task List sorting is not there yet');
     }
 
     protected function createGroup(User $owner, array $overrides = [], User $member = null)

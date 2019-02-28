@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             if (auth()->check()) {
                 $view->with('groups', auth()->user()->groups);
+                $view->with('invitations', auth()->user()->invitations);
             }
         });
     }

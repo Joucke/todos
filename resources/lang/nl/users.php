@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'user' => 'Gebruiker',
     'profile' => 'Mijn profiel',
     'name' => 'Naam',
     'email' => 'E-mailadres',

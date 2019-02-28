@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Group;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class GroupsTest extends TestCase
@@ -18,21 +16,22 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function a_group_can_be_created()
+	public function a_user_can_create_a_group()
 	{
 		$this->actingAs($this->user)
 			->get('/groups/create')
 			->assertOk()
 			->assertViewIs('groups.create');
 
-		$groupCount = $this->user->owned_groups->count();
+		$groupCount = Group::count();
 		$response = $this->actingAs($this->user)
 			->post('/groups', [
 				'title' => 'foobar',
 			]);
+
 		$group = Group::latest()->first();
 		$response->assertRedirect('/groups/'.$group->id);
-		$this->assertEquals($groupCount + 1, $this->user->fresh()->owned_groups->count());
+		$this->assertEquals($groupCount + 1, Group::count());
 	}
 
 	/** @test */
@@ -57,7 +56,7 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function it_can_list_all_users_for_current_group()
+	public function it_lists_all_users_for_a_group()
 	{
 		$group = factory(Group::class)->create();
 
@@ -71,8 +70,9 @@ class GroupsTest extends TestCase
 			->assertOk()
 			->assertViewIs('groups.show')
 			->assertViewHas('group', function ($group) use ($jane) {
-				return $group->users->pluck('id')->contains($this->user->id) &&
-					$group->users->pluck('id')->contains($jane->id);
+				$users = $group->users->pluck('id');
+				return $users->contains($this->user->id)
+					&& $users->contains($jane->id);
 			});
 	}
 
@@ -80,10 +80,9 @@ class GroupsTest extends TestCase
 	public function only_group_members_can_view_a_group()
 	{
 		$group = factory(Group::class)->create();
+		$group->users()->attach($this->user);
 
 		$jane = factory(User::class)->create();
-
-		$group->users()->attach($this->user);
 
 		$this->actingAs($this->user)
 			->get('/groups/'.$group->id)
@@ -95,7 +94,7 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
-	public function a_group_owner_can_update_a_group()
+	public function a_group_owner_can_edit_a_group()
 	{
 		$group = factory(Group::class)->create([
 			'owner_id' => $this->user->id,
@@ -193,58 +192,5 @@ class GroupsTest extends TestCase
 			->assertForbidden();
 
 		$this->assertEquals($groupCount, $this->user->fresh()->owned_groups->count());
-	}
-
-	/** @test */
-	public function a_group_owner_can_add_a_member_to_a_group()
-	{
-		$john = $this->user;
-		$jane = factory(User::class)->create();
-	    $group = factory(Group::class)->create(['owner_id' => $john->id]);
-
-	    $this->actingAs($john)
-	    	->post('groups/'.$group->id.'/users', [
-	    		'user_id' => $jane->id,
-	    	])
-	    	->assertRedirect('groups/'.$group->id);
-
-	    $this->assertTrue($group->fresh()->users->contains('id', $jane->id));
-	}
-
-	/** @test */
-	public function a_group_member_cannot_add_another_member_to_a_group()
-	{
-		$john = $this->user;
-		[$jane, $jack] = factory(User::class, 2)->create();
-		$group = factory(Group::class)->create(['owner_id' => $john->id]);
-		$group->users()->attach($jane);
-
-		$this->actingAs($jane)
-			->post('groups/'.$group->id.'/users', [
-				'user_id' => $jack->id,
-			])
-			->assertForbidden();
-
-		$this->assertFalse($group->fresh()->users->contains('id', $jack->id));
-	}
-
-	/** @test */
-	public function a_group_owner_can_invite_a_user_to_a_group()
-	{
-	    $this->markTestIncomplete();
-	    // this is a more privacy safe way of adding users to groups.
-	    // let the admin input an email address
-	    // if the address exists as a user, send the user an invite to join the group
-	    // if the address does not exist, invite the user to join, and prepare an invite to join the group
-
-	    // this will replace @a_group_owner_can_add_a_member_to_a_group and should get a new test for @a_group_member_cannot_add_another_member_to_a_group
-
-	    // upon implementation, the pulldown targeted in @a_group_owner_can_see_all_users should also be removed.
-	}
-
-	/** @test */
-	public function a_group_owner_can_remove_a_user_from_a_group()
-	{
-	    $this->markTestIncomplete();
 	}
 }

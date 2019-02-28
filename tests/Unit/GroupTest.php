@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Group;
+use App\Invitation;
 use App\Task;
 use App\TaskList;
 use App\User;
@@ -82,5 +83,16 @@ class GroupTest extends TestCase
 		$home->tasks()->create(factory(Task::class)->raw());
 
 		$this->assertCount(4, $group->fresh()->tasks);
+	}
+
+	/** @test */
+	public function it_can_have_many_invitations()
+	{
+		$group = factory(Group::class)->create();
+		$invitation = factory(Invitation::class)->create([
+			'group_id' => $group->id,
+		]);
+
+		$this->assertTrue($group->fresh()->invitations->contains('id', $invitation->id));
 	}
 }

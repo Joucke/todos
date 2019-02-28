@@ -37,4 +37,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Group::class, 'owner_id');
     }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class, 'email', 'email')
+            ->whereNull('accepted');
+    }
+
+    public function invites()
+    {
+        return $this->hasManyThrough(Invitation::class, Group::class, 'owner_id')
+            ->whereNull('accepted');
+    }
 }
