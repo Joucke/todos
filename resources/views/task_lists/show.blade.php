@@ -37,7 +37,7 @@
                         @foreach ($task_list->tasks as $task)
                             <li class="flex justify-between items-center">
                                 <a class="nav blue-light w-1/2" href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $task->title }}</a>
-                                <p class="w-1/2 text-right">Frequentie{{-- TODO: task interval --}}</p>
+                                <p class="w-1/2 text-right">Frequentie</p>
                             </li>
                         @endforeach
                     </ul>
@@ -56,7 +56,7 @@
             			@foreach ($task_list->tasks as $task)
                             <li class="flex justify-between items-center">
                                 <a class="nav blue-light w-1/2" href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $task->title }}</a>
-                                <p class="w-1/2 text-right">Datum / Tijd{{-- TODO: task completion --}}</p>
+                                <p class="w-1/2 text-right">Datum / Tijd</p>
                             </li>
             			@endforeach
             		</ul>

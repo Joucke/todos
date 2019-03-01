@@ -29,7 +29,7 @@ class InviteUsersTest extends DuskTestCase
                     $modal
                         ->type('email', $jane->email)
                         ->press(__('groups.invite'))
-                        ->waitForText(__('groups.invite_sent', ['email' => $jane->email]));
+                        ->waitForText(__('groups.invite_sent', ['email' => $jane->email]), 100);
                 });
 
             $this->assertCount(1, $jane->fresh()->invitations);

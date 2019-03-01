@@ -24,6 +24,14 @@ class TaskListTest extends TestCase
 	}
 
 	/** @test */
+	public function it_has_a_sort_field()
+	{
+	    $list = factory(TaskList::class)->create();
+
+	    $this->assertEquals($list->id, $list->sort_field);
+	}
+
+	/** @test */
 	public function it_belongs_to_a_group()
 	{
 		$group = factory(Group::class)->create();

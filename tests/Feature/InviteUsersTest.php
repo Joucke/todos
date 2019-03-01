@@ -111,6 +111,18 @@ class InviteUsersTest extends TestCase
     }
 
     /** @test */
+    public function it_displays_a_message_when_there_are_no_invites()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
+    public function it_hides_the_menu_item_when_there_are_no_invites()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
     public function a_group_owner_can_cancel_their_invites()
     {
         $group = factory(Group::class)->create([
@@ -205,6 +217,18 @@ class InviteUsersTest extends TestCase
             ->get('/invitations')
             ->assertOk()
             ->assertSee($group->title);
+    }
+
+    /** @test */
+    public function it_displays_a_message_when_there_are_no_invitations()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
+    public function it_hides_the_menu_item_when_there_are_no_invitations()
+    {
+        $this->markTestIncomplete();
     }
 
     /** @test */
