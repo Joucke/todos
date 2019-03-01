@@ -7,4 +7,7 @@ return [
     'email' => 'E-mailadres',
     'password' => 'Wachtwoord',
     'password_confirm' => 'Wachtwoord herhalen',
+    'edit' => 'Bewerken',
+    'update' => 'Bijwerken',
+    'data' => 'Gegevens',
 ];
