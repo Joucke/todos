@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tasks.completed_tasks', CompletedTasksController::class);
     Route::resource('groups.users', GroupUsersController::class);
     Route::resource('groups.invites', GroupInvitationsController::class);
-    Route::get('/users/{user}', 'UsersController@show')->name('users.show');
+    Route::resource('users', UsersController::class);
     Route::resource('invites', InvitesController::class, ['only' => ['index', 'destroy']]);
     Route::get('invitations', 'Invitations')->name('invitations');
 });

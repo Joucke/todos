@@ -31,6 +31,8 @@
                                 </a>
                             </li>
                         </ul>
+
+                        {{-- TODO: hide this when there are no invites and invitations? --}}
                         <p class="uppercase tracking-wide leading-normal text-xs">
                             {{ __('invitations.invitations') }}
                         </p>
@@ -48,6 +50,7 @@
                                 </a>
                             </li>
                         </ul>
+
                         <p class="uppercase tracking-wide leading-normal text-xs">{{ auth()->user()->name }}</p>
                         <ul class="list-reset">
                             <li>

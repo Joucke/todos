@@ -53,6 +53,12 @@ class InviteUsersTest extends TestCase
     }
 
     /** @test */
+    public function a_group_owner_cannot_invite_an_existing_member_to_a_group()
+    {
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
     public function a_group_owner_can_invite_a_new_user_to_a_group()
     {
         $group = factory(Group::class)->create([
