@@ -52,8 +52,7 @@ class Dashboard extends Controller
             ->map(function ($dates) {
                 return $dates->map(function ($items) {
                     return $items->sortBy(function ($task) {
-                        // TODO: get a sort_order for task_lists
-                        return $task->task_list_id . '-' . $task->incompleted_scheduled_tasks->first()->scheduled_at->getTimestamp();
+                        return $task->task_list->sort_field . '-' . $task->incompleted_scheduled_tasks->first()->scheduled_at->getTimestamp();
                     })->values();
                 })->sortKeys();
             })

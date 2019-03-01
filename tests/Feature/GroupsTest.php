@@ -147,6 +147,12 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
+	public function a_group_member_can_sort_their_groups()
+	{
+	    $this->markTestIncomplete();
+	}
+
+	/** @test */
 	public function a_group_owner_can_delete_a_group()
 	{
 		$group = factory(Group::class)->create([

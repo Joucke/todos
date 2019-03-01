@@ -52,7 +52,6 @@
                     </div>
                 </div>
             </div>
-            <!-- TODO: improve style of checkboxes for period -->
             <div class="flex flex-col mb-4">
                 <label class="mb-1" for="period">{{ t('tasks.period') }}: <input v-model="task.period" type="checkbox" name="period" id="period"></label>
                 <div class="flex w-full" v-if="task.period">
@@ -66,7 +65,6 @@
                     </p>
                 </div>
             </div>
-            <!-- TODO: improve style of checkboxes for optional -->
             <div class="flex">
                 <label class="mb-1 flex flex-col" for="optional">
                     <span>{{ t('tasks.optional') }}:</span>

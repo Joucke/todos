@@ -25,4 +25,9 @@ class TaskList extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function getSortFieldAttribute()
+    {
+        return $this->id;
+    }
 }

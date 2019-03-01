@@ -32,7 +32,6 @@
                             </li>
                         </ul>
 
-                        {{-- TODO: hide this when there are no invites and invitations? --}}
                         <p class="uppercase tracking-wide leading-normal text-xs">
                             {{ __('invitations.invitations') }}
                         </p>
