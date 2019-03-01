@@ -4,40 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      *
@@ -46,7 +16,9 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        //
+        $this->authorize('view', $user);
+
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -57,7 +29,9 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $this->authorize('update', $user);
+
+        return view('users.edit', compact('user'));
     }
 
     /**
@@ -69,7 +43,19 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $this->authorize('update', $user);
+
+        $user->update(
+            $request->validate([
+                'name' => 'required',
+                'email' => [
+                    'required',
+                    Rule::unique('users')->ignore($user->id),
+                ],
+            ])
+        );
+
+        return redirect(route('users.show', $user));
     }
 
     /**
