@@ -147,6 +147,57 @@ class GroupsTest extends TestCase
 	}
 
 	/** @test */
+	public function a_group_member_can_view_a_list_of_their_groups()
+	{
+		[$home, $work] = factory(Group::class, 2)->create();
+		$school = factory(Group::class)->create();
+		$user = factory(User::class)->create();
+		$user->groups()->attach([$home->id, $work->id]);
+
+		$response = $this->actingAs($user)
+			->get('/groups');
+
+		$response
+			->assertOk()
+			->assertViewIs('groups.index')
+			->assertViewHas('groups', $user->groups);
+
+		$groups = $response->original->getData()['groups'];
+		$this->assertTrue($groups->contains('id', $home->id));
+		$this->assertTrue($groups->contains('id', $work->id));
+		$this->assertFalse($groups->contains('id', $school->id));
+	}
+
+	/** @test */
+	public function a_group_member_can_sort_their_groups()
+	{
+		[$home, $work] = factory(Group::class, 2)->create();
+		$user = factory(User::class)->create();
+		$user->groups()->attach([$home->id, $work->id]);
+
+        $this->assertEquals([$home->id, $work->id], $user->groups->pluck('id')->toArray());
+
+		$this->actingAs($user)
+			->patch('/users/'.$user->id.'/groups', [
+				'user_group_order' => [
+					$work->id => ['sort_order' => 1],
+					$home->id => ['sort_order' => 2],
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'items' => [
+					$work->toArray(),
+					$home->toArray(),
+				],
+			]);
+
+		tap($user->fresh(), function ($user) use ($work, $home) {
+	        $this->assertEquals([$work->id, $home->id], $user->groups->pluck('id')->toArray());
+		});
+	}
+
+	/** @test */
 	public function a_group_owner_can_delete_a_group()
 	{
 		$group = factory(Group::class)->create([

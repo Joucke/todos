@@ -4,6 +4,7 @@ return [
     'groups' => 'Groepen',
     'group' => 'Groep',
     'create' => 'Groep toevoegen',
+    'sort' => 'Groepen sorteren',
     'add' => 'Toevoegen',
     'edit' => 'Groep bewerken',
     'update' => 'Groep bijwerken',

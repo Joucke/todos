@@ -33,7 +33,6 @@
                 >
             </action-card>
         @empty
-            {{-- TODO: write something here --}}
             No invites yet.
         @endforelse
     </div>

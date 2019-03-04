@@ -64,9 +64,41 @@ class DashboardTest extends DuskTestCase
     }
 
     /** @test */
+    public function tabs_are_ordered_by_group_sort_order()
+    {
+        $first = $this->createGroup($this->user);
+        $second = $this->createGroup($this->user);
+
+        $this->user->groups()->sync([
+            $first->id => ['sort_order' => 1],
+            $second->id => ['sort_order' => 2],
+        ]);
+
+        $this->browse(function (Browser $browser) use ($first, $second) {
+
+            $browser->loginAs($this->user)
+                ->visit('/dashboard/')
+                ->assertSeeIn('main .tabs .card-header li:first-child', $first->title)
+                ->assertSeeIn('main .tabs .card-header li:last-child', $second->title);
+        });
+
+        $this->user->groups()->sync([
+            $first->id => ['sort_order' => 2],
+            $second->id => ['sort_order' => 1],
+        ]);
+
+        $this->browse(function (Browser $browser) use ($first, $second) {
+
+            $browser->loginAs($this->user)
+                ->visit('/dashboard/')
+                ->assertSeeIn('main .tabs .card-header li:last-child', $first->title)
+                ->assertSeeIn('main .tabs .card-header li:first-child', $second->title);
+        });
+    }
+
+    /** @test */
     public function it_lists_tasks_ordered_by_task_list_then_scheduled_at()
     {
-        // TODO: implement task list sorting
         $group = $this->createGroup($this->user);
         $listOne = $group->task_lists()->create(['title' => 'foobar']);
         $firstTask = $listOne->tasks()->create(['title' => 'Go to the store', 'interval' => 7])->schedule();
@@ -84,6 +116,7 @@ class DashboardTest extends DuskTestCase
                 ->assertSeeIn('main .tabs .card-container:last-child', 'Go to the store')
                 ;
         });
+        $this->markTestIncomplete('Task List sorting is still missing');
     }
 
     protected function createGroup(User $owner, array $overrides = [], User $member = null)

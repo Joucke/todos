@@ -107,7 +107,7 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
-	public function it_shows_task_data_for_each_task_on_a_list()
+	public function it_shows_the_task_frequency_for_each_task_on_a_list()
 	{
 	    $this->markTestIncomplete();
 	}
@@ -115,30 +115,17 @@ class TaskListsTest extends TestCase
 	/** @test */
 	public function it_shows_recently_completed_tasks_on_a_list()
 	{
-	    $this->markTestIncomplete();
+	    $this->markTestIncomplete('Display with completion date/time');
 	}
 
 	/** @test */
 	public function it_can_be_updated_by_the_group_owner()
 	{
 		$group = $this->createGroup($this->user);
-		$jane = factory(User::class)->create();
-		$group->users()->attach($jane);
 		$list = factory(TaskList::class)->create([
 			'group_id' => $group->id,
 			'title' => 'barbaz',
 		]);
-
-		$this->actingAs($jane)
-			->get('/task_lists/'.$list->id.'/edit')
-			->assertForbidden();
-
-		$this->actingAs($jane)
-			->patch('/task_lists/'.$list->id, [
-				'title' => 'foobar',
-				'group_id' => $group->id,
-			])
-			->assertForbidden();
 
 		$this->actingAs($this->user)
 			->get('/task_lists/'.$list->id.'/edit')
@@ -159,6 +146,29 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
+	public function it_cannot_be_updated_by_group_members()
+	{
+		$group = $this->createGroup($this->user);
+		$jane = factory(User::class)->create();
+		$group->users()->attach($jane);
+		$list = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+			'title' => 'barbaz',
+		]);
+
+		$this->actingAs($jane)
+			->get('/task_lists/'.$list->id.'/edit')
+			->assertForbidden();
+
+		$this->actingAs($jane)
+			->patch('/task_lists/'.$list->id, [
+				'title' => 'foobar',
+				'group_id' => $group->id,
+			])
+			->assertForbidden();
+	}
+
+	/** @test */
 	public function it_displays_a_flash_message_after_updating_a_group()
 	{
 		$group = $this->createGroup($this->user);
@@ -172,6 +182,12 @@ class TaskListsTest extends TestCase
 				'title' => 'foobar',
 			])
 			->assertSessionHas('status', __('task_lists.statuses.updated'));
+	}
+
+	/** @test */
+	public function the_group_owner_can_sort_task_lists_within_a_group()
+	{
+	    $this->markTestIncomplete();
 	}
 
 	/** @test */

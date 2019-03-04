@@ -30,7 +30,7 @@ class User extends Authenticatable
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class)->withPivot('sort_order')->orderBy('pivot_sort_order');
     }
 
     public function owned_groups()
