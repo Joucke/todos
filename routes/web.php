@@ -20,14 +20,15 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', 'Dashboard')->name('dashboard');
 
-    Route::resource('groups', GroupsController::class, ['except' => ['index']]);
+    Route::resource('groups', GroupsController::class);
     Route::resource('groups.task_lists', TaskListsController::class, ['only' => ['create', 'store']]);
     Route::resource('task_lists', TaskListsController::class, ['except' => ['create', 'store', 'index']]);
     Route::resource('task_lists.tasks', TasksController::class, ['except' => 'index']);
     Route::resource('tasks.completed_tasks', CompletedTasksController::class);
-    Route::resource('groups.users', GroupUsersController::class);
+    Route::resource('groups.users', GroupUsersController::class, ['only' => ['destroy']]);
     Route::resource('groups.invites', GroupInvitationsController::class);
     Route::resource('users', UsersController::class);
+    Route::patch('users/{user}/groups', 'UserGroupOrder')->name('groups.sort');
     Route::resource('invites', InvitesController::class, ['only' => ['index', 'destroy']]);
     Route::get('invitations', 'Invitations')->name('invitations');
 });
