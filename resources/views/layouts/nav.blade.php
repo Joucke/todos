@@ -27,7 +27,13 @@
                             <li>
                                 <a class="nav blue{{ current_url(route('groups.create')) ? ' active' : '' }}" href="{{ route('groups.create') }}">
                                     <svg-icon name="icon-add" class="w-6 h-6 primary-transparent secondary-white"></svg-icon>
-                                    <span>{{ __('groups.create') }}</span>
+                                    <span class="ml-1">{{ __('groups.create') }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav blue{{ current_url(route('groups.index')) ? ' active' : '' }}" href="{{ route('groups.index') }}">
+                                    <svg-icon name="icon-order-vertical" class="w-6 h-6 primary-white secondary-white"></svg-icon>
+                                    <span class="ml-1">{{ __('groups.sort') }}</span>
                                 </a>
                             </li>
                         </ul>
