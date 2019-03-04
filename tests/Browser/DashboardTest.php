@@ -66,7 +66,34 @@ class DashboardTest extends DuskTestCase
     /** @test */
     public function tabs_are_ordered_by_group_sort_order()
     {
-        $this->markTestIncomplete();
+        $first = $this->createGroup($this->user);
+        $second = $this->createGroup($this->user);
+
+        $this->user->groups()->sync([
+            $first->id => ['sort_order' => 1],
+            $second->id => ['sort_order' => 2],
+        ]);
+
+        $this->browse(function (Browser $browser) use ($first, $second) {
+
+            $browser->loginAs($this->user)
+                ->visit('/dashboard/')
+                ->assertSeeIn('main .tabs .card-header li:first-child', $first->title)
+                ->assertSeeIn('main .tabs .card-header li:last-child', $second->title);
+        });
+
+        $this->user->groups()->sync([
+            $first->id => ['sort_order' => 2],
+            $second->id => ['sort_order' => 1],
+        ]);
+
+        $this->browse(function (Browser $browser) use ($first, $second) {
+
+            $browser->loginAs($this->user)
+                ->visit('/dashboard/')
+                ->assertSeeIn('main .tabs .card-header li:last-child', $first->title)
+                ->assertSeeIn('main .tabs .card-header li:first-child', $second->title);
+        });
     }
 
     /** @test */

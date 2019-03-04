@@ -29,6 +29,7 @@ Vue.use(PortalVue);
 Vue.component('action-card', require('./components/ActionCard.vue').default);
 Vue.component('group-invite', require('./components/GroupInvite.vue').default);
 Vue.component('pull-down', require('./components/PullDown.vue').default);
+Vue.component('sort-table', require('./components/SortTable.vue').default);
 Vue.component('tabbed-cards', require('./components/TabbedCards.vue').default);
 Vue.component('task-card', require('./components/TaskCard.vue').default);
 Vue.component('task-form', require('./components/TaskForm.vue').default);

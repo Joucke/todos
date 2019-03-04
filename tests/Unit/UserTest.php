@@ -54,6 +54,20 @@ class UserTest extends TestCase
 		});
 	}
 
+    /** @test */
+    public function groups_are_sorted_by_sort_order()
+    {
+        $family = factory(Group::class)->create();
+        $work = factory(Group::class)->create();
+
+        $user = factory(User::class)->create();
+
+        $user->groups()->attach($family->id, ['sort_order' => 2]);
+        $user->groups()->attach($work->id, ['sort_order' => 1]);
+
+        $this->assertEquals([$work->id, $family->id], $user->groups->pluck('id')->toArray());
+    }
+
 	/** @test */
 	public function a_user_can_own_groups()
 	{
