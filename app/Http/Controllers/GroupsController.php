@@ -39,6 +39,12 @@ class GroupsController extends Controller
             ->with('status', __('groups.statuses.created'));
     }
 
+    public function index(Request $request)
+    {
+        return view('groups.index')
+            ->with('groups', auth()->user()->groups);
+    }
+
     /**
      * Display the specified resource.
      *
