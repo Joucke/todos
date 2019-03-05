@@ -149,6 +149,23 @@ class InviteUsersTest extends DuskTestCase
     /** @test */
     public function a_group_owner_can_remove_a_member_from_a_group()
     {
-        $this->markTestIncomplete();
+        $this->browse(function (Browser $browser) {
+            $group = factory(Group::class)->create();
+            $user = factory(User::class)->create();
+            $group->users()->attach($user);
+
+            $browser
+                ->loginAs($group->owner)
+                ->visit('/groups/'.$group->id)
+                ->assertSee($user->name)
+                ->press(__('groups.remove_member'))
+                ->waitForText(__('groups.statuses.member_removed'))
+                ->assertRouteIs('groups.show', ['group' => $group])
+                ->assertDontSee($user->name);
+
+            $this->assertFalse($user->groups()->get()->contains('id', $group->id));
+
+            $browser->logout();
+        });
     }
 }
