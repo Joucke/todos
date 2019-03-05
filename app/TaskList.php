@@ -14,6 +14,7 @@ class TaskList extends Model
     protected $fillable = [
         'title',
         'group_id',
+        'sort_order',
     ];
 
     public function group()
@@ -28,6 +29,6 @@ class TaskList extends Model
 
     public function getSortFieldAttribute()
     {
-        return $this->id;
+        return $this->sort_order;
     }
 }

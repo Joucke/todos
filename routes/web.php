@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('groups', GroupsController::class);
     Route::resource('groups.task_lists', TaskListsController::class, ['only' => ['create', 'store']]);
+    Route::patch('groups/{group}/task_lists', 'TaskListsController@sort')->name('groups.task_lists.sort');
     Route::resource('task_lists', TaskListsController::class, ['except' => ['create', 'store', 'index']]);
     Route::resource('task_lists.tasks', TasksController::class, ['except' => 'index']);
     Route::resource('tasks.completed_tasks', CompletedTasksController::class);

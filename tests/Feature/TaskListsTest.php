@@ -109,7 +109,7 @@ class TaskListsTest extends TestCase
 	/** @test */
 	public function it_shows_the_task_frequency_for_each_task_on_a_list()
 	{
-	    $this->markTestIncomplete();
+	    $this->markTestIncomplete('Display with task frequency');
 	}
 
 	/** @test */
@@ -185,9 +185,50 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
-	public function the_group_owner_can_sort_task_lists_within_a_group()
+	public function it_can_be_sorted_by_group_owners()
 	{
-	    $this->markTestIncomplete();
+		$group = $this->createGroup($this->user);
+
+		[$first, $second] = factory(TaskList::class, 2)->create([
+			'group_id' => $group->id,
+		]);
+		$first->tasks()->create(factory(Task::class)->raw());
+		$first->load('tasks');
+
+		$this->actingAs($this->user)
+			->patch('/groups/'.$group->id.'/task_lists', [
+				'task_list_order' => [
+					$second->id => ['sort_order' => 1],
+					$first->id => ['sort_order' => 2],
+				],
+			])
+			->assertJson([
+				'status' => 200,
+				'items' => [
+					$second->toArray(),
+					$first->toArray(),
+				],
+			]);
+	}
+
+	/** @test */
+	public function it_cannot_be_sorted_by_group_members()
+	{
+		$john = factory(User::class)->create();
+		$group = $this->createGroup($this->user, [], $john);
+
+		[$first, $second] = factory(TaskList::class, 2)->create([
+			'group_id' => $group->id,
+		]);
+
+		$this->actingAs($john)
+			->patch('/groups/'.$group->id.'/task_lists', [
+				'task_list_order' => [
+					$second->id => ['sort_order' => 1],
+					$first->id => ['sort_order' => 2],
+				],
+			])
+			->assertForbidden();
 	}
 
 	/** @test */
@@ -201,15 +242,27 @@ class TaskListsTest extends TestCase
 			'title' => 'barbaz',
 		]);
 
-		$this->actingAs($jane)
-			->delete('/task_lists/'.$list->id)
-			->assertForbidden();
-
 		$listCount = TaskList::count();
 		$this->actingAs($this->user)
 			->delete('/task_lists/'.$list->id)
 			->assertRedirect('/groups/'.$group->id);
 		$this->assertEquals($listCount - 1, TaskList::count());
+	}
+
+	/** @test */
+	public function it_cannot_be_deleted_by_group_members()
+	{
+		$group = $this->createGroup($this->user);
+		$jane = factory(User::class)->create();
+		$group->users()->attach($jane);
+		$list = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+			'title' => 'barbaz',
+		]);
+
+		$this->actingAs($jane)
+			->delete('/task_lists/'.$list->id)
+			->assertForbidden();
 	}
 
 	/** @test */
