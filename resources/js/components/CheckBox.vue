@@ -6,11 +6,12 @@
             <svg-icon
                 name="icon-check"
                 class="w-8 h-8 -mx-2 -my-2 primary-transparent"
-                :class="checked ? 'secondary-blue' : 'secondary-transparent'"
+                :class="isChecked ? 'secondary-blue' : 'secondary-transparent'"
                 >
             </svg-icon>
         </span>
         <span class="ml-2" v-text="label"></span>
+        <input type="checkbox" class="hidden" :name="name" v-model="isChecked" @change="toggle">
     </label>
 </template>
 
@@ -21,10 +22,10 @@ export default {
     components: {
         SvgIcon,
     },
-    props: ['checked', 'label'],
+    props: ['value', 'label', 'name'],
     data () {
         return {
-            //
+            isChecked: this.value,
         };
     },
     methods: {
