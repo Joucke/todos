@@ -33,9 +33,9 @@ class DashboardTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->markTestIncomplete();
         $this->actingAs($user)
             ->get('/dashboard')
-            ->assertSee('Create a group of your own!');
+            ->assertSee(__('groups.no_groups'))
+            ->assertDontSee('groups.no_groups');
     }
 }
