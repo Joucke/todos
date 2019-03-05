@@ -2,45 +2,31 @@
     <table>
         <tbody>
             <tr v-for="item, index in items" :key="item.id">
-                <td>
-                    <svg-icon
-                        @click="up(index)"
-                        name="icon-sort-ascending"
-                        class="up cursor-pointer w-6 h-6 primary-black secondary-black"
-                        v-if="index > 0"
-                        >
-                    </svg-icon>
-                </td>
-                <td v-for="column in columns" v-text="item[column]"></td>
-                <td>
-                    <svg-icon
-                        @click="down(index)"
-                        name="icon-sort-decending"
-                        class="down cursor-pointer w-6 h-6 primary-black secondary-black"
-                        v-if="index < items.length - 1"
-                        >
-                    </svg-icon>
-                </td>
+                <slot name="row" :item="item" :index="index" :items="items" :up="up" :down="down" :t_count="t_count"></slot>
             </tr>
         </tbody>
     </table>
 </template>
 
 <script>
-import SvgIcon from 'vue-svgicon';
-import '../icons';
-
 export default {
-    components: {
-        SvgIcon,
-    },
-    props: ['listData', 'columns', 'sortUrl', 'sortKey'],
+    props: ['listData', 'sortUrl', 'sortKey'],
     data () {
         return {
             items: this.listData,
         };
     },
     methods: {
+        t (key) {
+            return this.$options.filters.trans(key);
+        },
+        t_count (key, count) {
+            let lang = this.t(key).split('|');
+            if (count == 1) {
+                return lang[0].replace(':count', 1);
+            }
+            return lang[1].replace(':count', count);
+        },
         down (index) {
             let items = this.items;
             [items[index], items[index + 1]] = [items[index + 1], items[index]];
