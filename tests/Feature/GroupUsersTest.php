@@ -28,9 +28,8 @@ class GroupUsersTest extends TestCase
 
         $this->actingAs($this->user)
             ->delete('/groups/'.$group->id.'/users/'.$jane->id)
-            ->assertJson([
-                'status' => 200,
-            ]);
+            ->assertRedirect('/groups/'.$group->id)
+            ->assertSessionHas('status', __('groups.statuses.member_removed'));
 
         $this->assertCount($groupUserCount - 1, $group->fresh()->users);
     }
@@ -70,6 +69,6 @@ class GroupUsersTest extends TestCase
         $this->actingAs($jane)
             ->delete('/groups/'.$group->id.'/users/'.$jane->id)
             ->assertRedirect('/dashboard')
-            ->assertSessionHas('status', __('groups.you_left'));
+            ->assertSessionHas('status', __('groups.statuses.you_left'));
     }
 }

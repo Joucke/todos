@@ -55,7 +55,31 @@ class InviteUsersTest extends TestCase
     /** @test */
     public function a_group_owner_cannot_invite_an_existing_member_to_a_group()
     {
-        $this->markTestIncomplete();
+        $group = factory(Group::class)->create();
+        $john = factory(User::class)->create();
+        $group->users()->attach($john);
+        factory(Invitation::class)->create([
+            'group_id' => $group->id,
+            'email' => $jane = 'jane@example.com',
+        ]);
+
+        $response = $this->actingAs($group->owner)
+            ->postJson('/groups/'.$group->id.'/invites', [
+                'email' => $john->email,
+            ])
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => __('groups.errors.member_exists'),
+            ]);
+
+        $response = $this->actingAs($group->owner)
+            ->postJson('/groups/'.$group->id.'/invites', [
+                'email' => $jane,
+            ])
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => __('groups.errors.duplicate_invite'),
+            ]);
     }
 
     /** @test */
@@ -103,7 +127,6 @@ class InviteUsersTest extends TestCase
         ]));
 
         $this->actingAs($this->user)
-            ->withoutExceptionHandling()
             ->get('/invites')
             ->assertOk()
             ->assertSee($group->title)
@@ -111,15 +134,38 @@ class InviteUsersTest extends TestCase
     }
 
     /** @test */
-    public function it_displays_a_message_when_there_are_no_invites()
+    public function it_displays_a_message_on_the_invites_page_when_there_are_no_invites()
     {
-        $this->markTestIncomplete();
+        $this->actingAs($this->user)
+            ->get('/invites')
+            ->assertOk()
+            ->assertSee(__('invitations.no_invites'));
     }
 
     /** @test */
     public function it_hides_the_menu_item_when_there_are_no_invites()
     {
-        $this->markTestIncomplete();
+        $group = factory(Group::class)->create([
+            'owner_id' => $this->user->id,
+        ]);
+
+        $jane = factory(User::class)->create();
+
+        $invite = $group->invitations()->create(factory(Invitation::class)->raw([
+            'email' => $jane->email,
+        ]));
+
+        $this->actingAs($this->user->fresh())
+            ->get('/dashboard')
+            ->assertSee(__('invitations.invitations'))
+            ->assertSee(__('invitations.by_me'));
+
+        $invite->delete();
+
+        $this->actingAs($this->user->fresh())
+            ->get('/dashboard')
+            ->assertDontSee(__('invitations.invitations'))
+            ->assertDontSee(__('invitations.by_me'));
     }
 
     /** @test */
@@ -222,13 +268,36 @@ class InviteUsersTest extends TestCase
     /** @test */
     public function it_displays_a_message_when_there_are_no_invitations()
     {
-        $this->markTestIncomplete();
+        $this->actingAs($this->user)
+            ->get('/invitations')
+            ->assertOk()
+            ->assertSee(__('invitations.no_invitations'));
     }
 
     /** @test */
     public function it_hides_the_menu_item_when_there_are_no_invitations()
     {
-        $this->markTestIncomplete();
+        $group = factory(Group::class)->create([
+            'owner_id' => $this->user->id,
+        ]);
+
+        $jane = factory(User::class)->create();
+
+        $invite = $group->invitations()->create(factory(Invitation::class)->raw([
+            'email' => $jane->email,
+        ]));
+
+        $this->actingAs($jane->fresh())
+            ->get('/dashboard')
+            ->assertSee(__('invitations.invitations'))
+            ->assertSee(__('invitations.to_me'));
+
+        $invite->delete();
+
+        $this->actingAs($jane->fresh())
+            ->get('/dashboard')
+            ->assertDontSee(__('invitations.invitations'))
+            ->assertDontSee(__('invitations.to_me'));
     }
 
     /** @test */

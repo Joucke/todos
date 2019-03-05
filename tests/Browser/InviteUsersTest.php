@@ -39,6 +39,49 @@ class InviteUsersTest extends DuskTestCase
     }
 
     /** @test */
+    public function a_group_owner_cannot_issue_a_duplicate_invite()
+    {
+        $this->browse(function (Browser $browser) {
+
+            $group = factory(Group::class)->create();
+            $jane = factory(User::class)->create();
+            $invite = $group->invitations()->create([
+                'email' => $jane->email,
+            ]);
+            $this->assertCount(1, $jane->fresh()->invitations);
+
+            $browser
+                ->loginAs($group->owner)
+                ->visit('/groups/'.$group->id)
+                ->click('#invite')
+                ->whenAvailable('#invite-modal', function ($modal) use ($jane) {
+                    $modal
+                        ->type('email', $jane->email)
+                        ->press(__('groups.invite'))
+                        ->waitForText(__('groups.errors.duplicate_invite'), 100);
+                });
+
+            $this->assertCount(1, $jane->fresh()->invitations);
+
+            $invite->delete();
+            $group->users()->attach($jane);
+
+            $browser
+                // ->loginAs($group->owner)
+                ->visit('/groups/'.$group->id)
+                ->click('#invite')
+                ->whenAvailable('#invite-modal', function ($modal) use ($jane) {
+                    $modal
+                        ->type('email', $jane->email)
+                        ->press(__('groups.invite'))
+                        ->waitForText(__('groups.errors.member_exists'), 100);
+                });
+
+            $browser->logout();
+        });
+    }
+
+    /** @test */
     public function a_group_owner_can_cancel_a_group_invite()
     {
         $this->browse(function (Browser $browser) {
@@ -149,6 +192,23 @@ class InviteUsersTest extends DuskTestCase
     /** @test */
     public function a_group_owner_can_remove_a_member_from_a_group()
     {
-        $this->markTestIncomplete();
+        $this->browse(function (Browser $browser) {
+            $group = factory(Group::class)->create();
+            $user = factory(User::class)->create();
+            $group->users()->attach($user);
+
+            $browser
+                ->loginAs($group->owner)
+                ->visit('/groups/'.$group->id)
+                ->assertSee($user->name)
+                ->press(__('groups.remove_member'))
+                ->waitForText(__('groups.statuses.member_removed'))
+                ->assertRouteIs('groups.show', ['group' => $group])
+                ->assertDontSee($user->name);
+
+            $this->assertFalse($user->groups()->get()->contains('id', $group->id));
+
+            $browser->logout();
+        });
     }
 }

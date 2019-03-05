@@ -21,6 +21,12 @@ class GroupInvitationsController extends Controller
     {
         $this->authorize('update', $group);
 
+        $user = $group->users()->whereEmail($request->input('email'))->first();
+        abort_if($user, 422, __('groups.errors.member_exists'));
+
+        $invite = $group->invitations()->whereEmail($request->input('email'))->first();
+        abort_if($invite, 422, __('groups.errors.duplicate_invite'));
+
         $invite = $group->invitations()->create(
             $request->validate([
                 'email' => 'required|email',

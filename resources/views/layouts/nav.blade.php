@@ -38,23 +38,29 @@
                             </li>
                         </ul>
 
-                        <p class="uppercase tracking-wide leading-normal text-xs">
-                            {{ __('invitations.invitations') }}
-                        </p>
-                        <ul class="list-reset mb-4">
-                            <li>
-                                <a class="nav blue{{ current_url(route('invites.index')) ? ' active' : '' }}" href="{{ route('invites.index') }}">
-                                    {{ __('invitations.by_me') }}
-                                    ({{ auth()->user()->invites->count() }})
-                                </a>
-                            </li>
-                            <li>
-                                <a class="nav blue{{ current_url(route('invitations')) ? ' active' : '' }}" href="{{ route('invitations') }}">
-                                    {{ __('invitations.to_me') }}
-                                    ({{ auth()->user()->invitations->count() }})
-                                </a>
-                            </li>
-                        </ul>
+                        @if (auth()->user()->invites->count() || auth()->user()->invitations->count())
+                            <p class="uppercase tracking-wide leading-normal text-xs">
+                                {{ __('invitations.invitations') }}
+                            </p>
+                            <ul class="list-reset mb-4">
+                                @if (auth()->user()->invites->count())
+                                <li>
+                                    <a class="nav blue{{ current_url(route('invites.index')) ? ' active' : '' }}" href="{{ route('invites.index') }}">
+                                        {{ __('invitations.by_me') }}
+                                        ({{ auth()->user()->invites->count() }})
+                                    </a>
+                                </li>
+                                @endif
+                                @if (auth()->user()->invitations->count())
+                                    <li>
+                                        <a class="nav blue{{ current_url(route('invitations')) ? ' active' : '' }}" href="{{ route('invitations') }}">
+                                            {{ __('invitations.to_me') }}
+                                            ({{ auth()->user()->invitations->count() }})
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        @endif
 
                         <p class="uppercase tracking-wide leading-normal text-xs">{{ auth()->user()->name }}</p>
                         <ul class="list-reset">

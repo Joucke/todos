@@ -12,4 +12,6 @@ return [
         'accepted' => 'De uitnodiging is aangenomen',
         'declined' => 'De uitnodiging is afgewezen',
     ],
+    'no_invites' => 'Je hebt (nog) niemand uitgenodigd voor een groep',
+    'no_invitations' => 'Je bent (nog) door niemand uitgenodigd voor een groep',
 ];
