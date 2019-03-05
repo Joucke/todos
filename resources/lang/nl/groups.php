@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'no_groups' => 'Je bent (nog) geen lid van een groep. Maak een groep aan!',
     'groups' => 'Groepen',
     'group' => 'Groep',
     'create' => 'Groep toevoegen',
