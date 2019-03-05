@@ -95,6 +95,7 @@ class Task {
         this.data = this.data || {};
         this.data.weeks = this.data.weeks || 3;
         this.data.months = this.data.months || 3;
+        this.optional = this.optional || false;
     }
     calculateInterval () {
         switch (this.interval) {

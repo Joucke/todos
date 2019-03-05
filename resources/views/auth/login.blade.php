@@ -61,16 +61,12 @@
                     </div>
 
                     <div class="flex items-center">
-                        <input id="remember"
-                            class=""
-                            type="checkbox"
+                        <check-box
+                            :checked="{{ old('remember', 'false') }}"
+                            :label="'{{ __('auth.remember') }}'"
                             name="remember"
-                            {{ old('remember') ? 'checked' : '' }}
                             >
-
-                        <label class="text-sm pl-2" for="remember">
-                            {{ __('auth.remember') }}
-                        </label>
+                        </check-box>
                     </div>
                 </div>
 
