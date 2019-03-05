@@ -75,6 +75,22 @@ class TaskListsController extends Controller
             ->with('status', __('task_lists.statuses.updated'));
     }
 
+    public function sort(Request $request, Group $group)
+    {
+        $this->authorize('update', $group);
+
+        $orders = $request->input('task_list_order');
+        $lists = $group->task_lists;
+        $lists->each(function (TaskList $list) use ($orders) {
+            $list->update($orders[$list->id]);
+        });
+
+        return [
+            'status' => 200,
+            'items' => $group->task_lists()->with('tasks')->get(),
+        ];
+    }
+
     /**
      * Remove the specified resource from storage.
      *

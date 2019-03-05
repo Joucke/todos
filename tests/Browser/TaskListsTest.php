@@ -36,6 +36,31 @@ class TaskListsTest extends DuskTestCase
         });
     }
 
+    /** @test */
+    public function the_group_owner_can_sort_task_lists()
+    {
+        $this->browse(function (Browser $browser) {
+            $group = $this->createGroup($this->user);
+            [$first, $second] = factory(TaskList::class, 2)->create(['group_id' => $group->id]);
+
+            $browser->loginAs($this->user)
+                ->visit('/groups/'.$group->id)
+                ->click('.down')
+                ->pause(1000)
+                ->assertSeeIn('tbody tr:first-child', $second->title)
+                ->assertSeeIn('tbody tr:last-child', $first->title);
+
+            $this->assertEquals([$second->id, $first->id], $group->task_lists()->get()->pluck('id')->toArray());
+
+            $browser->click('.up')
+                ->pause(1000)
+                ->assertSeeIn('tbody tr:first-child', $first->title)
+                ->assertSeeIn('tbody tr:last-child', $second->title);
+
+            $this->assertEquals([$first->id, $second->id], $group->task_lists()->get()->pluck('id')->toArray());
+        });
+    }
+
     protected function createGroup(User $owner, array $overrides = [], User $member = null)
     {
         if (!$member) {

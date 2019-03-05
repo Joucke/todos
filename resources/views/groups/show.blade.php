@@ -28,16 +28,40 @@
                 </div>
 
                 <div class="card-body bg-white">
-                    <ul class="list-reset leading-normal">
-                        @foreach ($group->task_lists as $list)
-                            <li>
-                                <a class="nav blue-light justify-between" href="{{ route('task_lists.show', ['task_list' => $list]) }}">
-                                    <span>{{ $list->title }}</span>
-                                    <span class="text-black">{{ trans_choice('tasks.count', $list->tasks->count()) }}</span>
+                    <sort-table
+                        class="w-full"
+                        :list-data="{{ $group->task_lists }}"
+                        sort-url="{{ route('groups.task_lists.sort', ['group' => $group]) }}"
+                        sort-key="task_list_order">
+                        <template slot="row" slot-scope="{index, item, items, up, down, t_count}">
+                            <td>
+                                <svg-icon
+                                    @click="up(index)"
+                                    name="icon-sort-ascending"
+                                    class="up cursor-pointer w-6 h-6 primary-black secondary-black"
+                                    v-if="index > 0"
+                                    >
+                                </svg-icon>
+                            </td>
+                            <td>
+                                <a
+                                    class="nav blue-light justify-between"
+                                    :href="'{{ route('task_lists.show', ['task_list' => '__list__']) }}'.replace('__list__', item.id)"
+                                    v-text="item.title">
                                 </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                            </td>
+                            <td v-text="t_count('tasks.count', item.tasks ? item.tasks.length : 0)"></td>
+                            <td>
+                                <svg-icon
+                                    @click="down(index)"
+                                    name="icon-sort-decending"
+                                    class="down cursor-pointer w-6 h-6 primary-black secondary-black"
+                                    v-if="index < items.length - 1"
+                                    >
+                                </svg-icon>
+                            </td>
+                        </template>
+                    </sort-table>
                 </div>
             </div>
         </div>
