@@ -24,10 +24,9 @@ class GroupUsersController extends Controller
         $group->users()->detach($user);
 
         if ($selfdestruction) {
-            return redirect(route('dashboard'))->with('status', __('groups.you_left'));
+            return redirect(route('dashboard'))->with('status', __('groups.statuses.you_left'));
         }
-        return [
-            'status' => 200,
-        ];
+
+        return redirect(route('groups.show', $group))->with('status', __('groups.statuses.member_removed'));
     }
 }

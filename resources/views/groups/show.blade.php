@@ -82,7 +82,13 @@
                                 </a>
                                 @can ('update', $group)
                                     @unless ($user->is(auth()->user()))
-                                        <button class="button button-red button-secondary button-xs">Kick</button>
+                                        <form action="{{ route('groups.users.destroy', compact('group', 'user')) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="button button-red button-secondary button-xs">
+                                                {{ __('groups.remove_member') }}
+                                            </button>
+                                        </form>
                                     @endunless
                                 @endcan
                             </li>

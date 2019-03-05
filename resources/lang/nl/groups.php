@@ -12,6 +12,7 @@ return [
     'invite' => 'Uitnodigen',
     'invite_text' => 'Voer een e-mailadres in om een gebruiker uit te nodigen voor deze groep.',
     'members' => 'Leden',
+    'remove_member' => 'Lid verwijderen',
     'title' => 'Titel',
     'placeholders' => [
         'title' => 'Titel van de groep',
@@ -20,8 +21,13 @@ return [
         'created' => 'De groep is aangemaakt',
         'updated' => 'De groep is bijgewerkt',
         'deleted' => 'De groep is verwijderd',
+        'member_removed' => 'Het lid is verwijderd uit de groep',
+        'you_left' => 'Je hebt de groep verlaten',
     ],
-    'you_left' => 'Je hebt de groep verlaten',
+    'errors' => [
+        'member_exists' => 'Deze gebruiker is al lid van deze groep',
+        'duplicate_invite' => 'Deze gebruiker is al uitgenodigd voor deze groep',
+    ],
     'invited' => 'Je bent uitgenodigd voor de groep :group',
     'invite_sent' => 'De uitnodiging is verzonden naar :email',
     'mails' => [
