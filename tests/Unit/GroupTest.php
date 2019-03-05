@@ -67,6 +67,23 @@ class GroupTest extends TestCase
 	}
 
 	/** @test */
+	public function it_sorts_task_lists()
+	{
+		$group = factory(Group::class)->create();
+
+		$holidays = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+			'sort_order' => 2,
+		]);
+		$home = factory(TaskList::class)->create([
+			'group_id' => $group->id,
+			'sort_order' => 1,
+		]);
+
+		$this->assertEquals([$home->id, $holidays->id], $group->task_lists()->get()->pluck('id')->toArray());
+	}
+
+	/** @test */
 	public function it_can_have_many_tasks_through_task_lists()
 	{
 		$group = factory(Group::class)->create();

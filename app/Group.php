@@ -27,7 +27,8 @@ class Group extends Model
 
     public function task_lists()
     {
-        return $this->hasMany(TaskList::class);
+        return $this->hasMany(TaskList::class)
+            ->orderBy('sort_order');
     }
 
     public function tasks()
