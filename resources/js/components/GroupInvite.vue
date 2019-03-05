@@ -49,6 +49,11 @@
                         v-for="message in invite_messages"
                         v-text="message">
                     </p>
+                    <p
+                        class="text-red-dark mt-3"
+                        v-for="message in error_messages"
+                        v-text="message">
+                    </p>
                 </div>
             </div>
         </portal>
@@ -69,6 +74,7 @@ export default {
             showModal: false,
             email: '',
             invite_messages: [],
+            error_messages: [],
         };
     },
     created () {
@@ -101,9 +107,10 @@ export default {
                 if (data.invited) {
                     this.invite_messages.push(data.message);
                 }
-                console.log(data);
             }).catch(({response}) => {
-                console.dir(response);
+                if (response.data.message) {
+                    this.error_messages.push(response.data.message);
+                }
             });
         },
         openModal () {
