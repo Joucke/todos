@@ -21,7 +21,7 @@
                 >
             </action-card>
         @empty
-            No invites yet.
+            <p class="px-2">{{ __('invitations.no_invites') }}</p>
         @endforelse
     </div>
 </div>
