@@ -17,18 +17,22 @@ class TaskListTest extends TestCase
 	    $list = new TaskList([
 	    	'title' => 'foobar',
 	    	'group_id' => 1,
+	    	'sort_order' => 5,
 	    ]);
 
 	    $this->assertEquals('foobar', $list->title);
 	    $this->assertEquals(1, $list->group_id);
+	    $this->assertEquals(5, $list->sort_order);
 	}
 
 	/** @test */
 	public function it_has_a_sort_field()
 	{
-	    $list = factory(TaskList::class)->create();
+	    $list = factory(TaskList::class)->create([
+	    	'sort_order' => 5,
+	    ]);
 
-	    $this->assertEquals($list->id, $list->sort_field);
+	    $this->assertEquals(5, $list->sort_field);
 	}
 
 	/** @test */
