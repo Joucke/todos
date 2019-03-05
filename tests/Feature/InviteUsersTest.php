@@ -55,7 +55,31 @@ class InviteUsersTest extends TestCase
     /** @test */
     public function a_group_owner_cannot_invite_an_existing_member_to_a_group()
     {
-        $this->markTestIncomplete();
+        $group = factory(Group::class)->create();
+        $john = factory(User::class)->create();
+        $group->users()->attach($john);
+        factory(Invitation::class)->create([
+            'group_id' => $group->id,
+            'email' => $jane = 'jane@example.com',
+        ]);
+
+        $response = $this->actingAs($group->owner)
+            ->postJson('/groups/'.$group->id.'/invites', [
+                'email' => $john->email,
+            ])
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => __('groups.errors.member_exists'),
+            ]);
+
+        $response = $this->actingAs($group->owner)
+            ->postJson('/groups/'.$group->id.'/invites', [
+                'email' => $jane,
+            ])
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => __('groups.errors.duplicate_invite'),
+            ]);
     }
 
     /** @test */

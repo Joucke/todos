@@ -24,6 +24,10 @@ return [
         'member_removed' => 'Het lid is verwijderd uit de groep',
         'you_left' => 'Je hebt de groep verlaten',
     ],
+    'errors' => [
+        'member_exists' => 'Deze gebruiker is al lid van deze groep',
+        'duplicate_invite' => 'Deze gebruiker is al uitgenodigd voor deze groep',
+    ],
     'invited' => 'Je bent uitgenodigd voor de groep :group',
     'invite_sent' => 'De uitnodiging is verzonden naar :email',
     'mails' => [
