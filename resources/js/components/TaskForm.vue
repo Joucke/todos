@@ -11,6 +11,7 @@
                     :placeholder="t('tasks.placeholders.title')"
                     type="text"
                     name="title"
+                    autofocus
                     v-model="task.title">
 
                 <p class="text-red text-sm my-2" role="alert" v-if="errors.title">
@@ -53,7 +54,8 @@
                 </div>
             </div>
             <div class="flex flex-col mb-4">
-                <label class="mb-1" for="period">{{ t('tasks.period') }}: <input v-model="task.period" type="checkbox" name="period" id="period"></label>
+                <check-box class="mb-1" :checked="task.period" @toggle="task.period = !task.period" :label="t('tasks.period')">
+                </check-box>
                 <div class="flex w-full" v-if="task.period">
                     <p class="flex flex-col w-1/2 pr-2">
                         <label for="mb-1">{{ t('tasks.start') }}</label>
@@ -66,10 +68,8 @@
                 </div>
             </div>
             <div class="flex">
-                <label class="mb-1 flex flex-col" for="optional">
-                    <span>{{ t('tasks.optional') }}:</span>
-                    <input v-model="task.optional" type="checkbox" name="optional" id="optional">
-                </label>
+                <check-box class="mb-1" :checked="task.optional" @toggle="task.optional = !task.optional" :label="t('tasks.optional')">
+                </check-box>
             </div>
         </div>
         <div class="card-footer">
@@ -83,12 +83,14 @@
 </template>
 
 <script>
+import CheckBox from './CheckBox';
 import RadioCard from './RadioCard';
 import vueSlider from 'vue-slider-component';
 import Task from '../Task';
 
 export default {
     components: {
+        CheckBox,
         RadioCard,
         vueSlider,
     },
