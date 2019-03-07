@@ -37,7 +37,14 @@
                         @foreach ($task_list->tasks as $task)
                             <li class="flex justify-between items-center">
                                 <a class="nav blue-light w-1/2" href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $task->title }}</a>
-                                <p class="w-1/2 text-right">Frequentie</p>
+                                <p class="w-1/2 text-right">
+                                    <span>
+                                        {{ $task->text_interval }}
+                                    </span>
+                                    @if ($task->data['interval'] == 77)
+                                        {{ $task->text_days }}
+                                    @endif
+                                </p>
                             </li>
                         @endforeach
                     </ul>
