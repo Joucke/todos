@@ -2,7 +2,13 @@
 
 @section('content')
 <header class="flex justify-between items-center">
-	<h1 class="page-header">{{ $task->title }}</h1>
+	<h1 class="page-header">
+        <a class="text-black no-underline" href="{{ route('groups.show', $task_list->group->id) }}">{{ $task_list->group->title }}</a>
+        <span>-</span>
+        <a class="text-black no-underline" href="{{ route('task_lists.show', $task_list->id) }}">{{ $task_list->title }}</a>
+        <span>-</span>
+		{{ $task->title }}
+	</h1>
 	<div class="flex">
 		@can('view', $task_list)
 			<a class="button button-blue button-secondary button-xs" href="{{ route('task_lists.tasks.edit', compact('task_list', 'task')) }}">
