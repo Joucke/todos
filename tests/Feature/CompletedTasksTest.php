@@ -42,13 +42,13 @@ class CompletedTasksTest extends TestCase
 		$this->assertCount(0, $task->scheduled_tasks);
 
 		$this->actingAs($this->user)
-			->withoutExceptionHandling()
 			->post('/tasks/'.$task->id.'/completed_tasks')
 			->assertRedirect('/task_lists/'.$task->task_list_id);
 
 		$this->assertCount(1, $task->fresh()->scheduled_tasks()->completed()->get());
 
 		$this->assertEquals(now()->format('Y-m-d H:i:s'), $task->fresh()->scheduled_tasks->first()->completed_at->format('Y-m-d H:i:s'));
+		$this->markTestIncomplete('There should be no more unscheduled tasks');
 	}
 
 	/** @test */

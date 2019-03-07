@@ -43,6 +43,19 @@ class Task extends Model
         return route('tasks.completed_tasks.store', $this);
     }
 
+    public function getTextIntervalAttribute()
+    {
+        return __('tasks.intervals.'.$this->data['interval'], $this->data);
+    }
+
+    public function getTextDaysAttribute()
+    {
+        $days = collect(array_keys(array_filter($this->days)));
+        return $days->map(function ($day) {
+            return __('tasks.'.$day);
+        })->implode(', ');
+    }
+
     public function task_list()
     {
     	return $this->belongsTo(TaskList::class);

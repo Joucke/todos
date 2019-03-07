@@ -92,9 +92,16 @@ class TaskListsTest extends TestCase
 		$jane = factory(User::class)->create();
 		$group->users()->attach($jane);
 		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
-		$task = factory(Task::class)->create(['task_list_id' => $list->id]);
+		$task = factory(Task::class)->create([
+			'task_list_id' => $list->id,
+			'interval' => 1,
+			'data' => [
+				'interval' => 1,
+			],
+		]);
 
 		$this->actingAs($jane)
+			->withoutExceptionHandling()
 			->get('/task_lists/'.$list->id)
 			->assertOk()
 			->assertViewIs('task_lists.show')
@@ -107,9 +114,189 @@ class TaskListsTest extends TestCase
 	}
 
 	/** @test */
-	public function it_shows_the_task_frequency_for_each_task_on_a_list()
+	public function it_shows_the_task_frequency_for_daily_tasks_on_a_list()
 	{
-	    $this->markTestIncomplete('Display with task frequency');
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 1,
+			'data' => [
+				'interval' => 1,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.1'));
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_other_daily_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 2,
+			'data' => [
+				'interval' => 2,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.2'));
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_weekly_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 7,
+			'data' => [
+				'interval' => 7,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.7'));
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_other_weekly_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 14,
+			'data' => [
+				'interval' => 14,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.14'));
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_monthly_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 30,
+			'data' => [
+				'interval' => 30,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.30'));
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_other_monthly_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 60,
+			'data' => [
+				'interval' => 60,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.60'));
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_weekly_on_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 77,
+			'data' => [
+				'interval' => 77,
+			],
+			'days' => [
+				'mon' => true,
+				'tue' => false,
+				'wed' => false,
+				'thu' => true,
+				'fri' => false,
+				'sat' => true,
+				'sun' => false,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.77'))
+			->assertSee(__('tasks.mon'))
+			->assertSee(__('tasks.thu'))
+			->assertSee(__('tasks.sat'))
+			;
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_x_weekly_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 88,
+			'data' => [
+				'interval' => 88,
+				'weeks' => 4,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.88', ['weeks' => 4]));
+	}
+
+	/** @test */
+	public function it_shows_the_task_frequency_for_x_monthly_tasks_on_a_list()
+	{
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 99,
+			'data' => [
+				'interval' => 99,
+				'months' => 4,
+			],
+		]));
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSee($task->title)
+			->assertSee(__('tasks.intervals.99', ['months' => 4]));
 	}
 
 	/** @test */

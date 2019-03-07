@@ -12,26 +12,26 @@ class Task {
     }
     static intervals () {
         return {
-            1: {label: 'daily'},
-            2: {label: 'other_day'},
-            7: {label: 'weekly'},
-            14: {label: 'other_week'},
-            30: {label: 'monthly'},
-            60: {label: 'other_month'},
+            1: {label: 'intervals.1'},
+            2: {label: 'intervals.2'},
+            7: {label: 'intervals.7'},
+            14: {label: 'intervals.14'},
+            30: {label: 'intervals.30'},
+            60: {label: 'intervals.60'},
             77: {
-                label: 'weekly_on',
+                label: 'intervals.77',
                 sub: 'optionBar',
                 options: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
             },
             88: {
-                label: 'many_weekly',
+                label: 'intervals.88',
                 sub: 'slider',
                 min: 1,
                 max: 6,
                 target: 'weeks',
             },
             99: {
-                label: 'many_monthly',
+                label: 'intervals.99',
                 sub: 'slider',
                 min: 1,
                 max: 6,

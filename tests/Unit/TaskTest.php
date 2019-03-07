@@ -124,6 +124,147 @@ class TaskTest extends TestCase
 	}
 
 	/** @test */
+	public function it_gets_a_text_interval_string_for_daily()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 1,
+	    	'data' => [
+	    		'interval' => 1,
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.1'), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_representation_for_days()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 1,
+	    	'data' => [
+	    		'interval' => 1,
+	    	],
+	    	'days' => [
+	    		'mon' => true,
+	    		'tue' => false,
+				'wed' => false,
+				'thu' => true,
+				'fri' => false,
+				'sat' => false,
+				'sun' => false,
+			],
+	    ]);
+
+	    $this->assertEquals(__('tasks.mon').', '.__('tasks.thu'), $task->text_days);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_other_daily()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 2,
+	    	'data' => [
+	    		'interval' => 2,
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.2'), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_weekly()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 7,
+	    	'data' => [
+	    		'interval' => 7,
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.7'), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_other_weekly()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 14,
+	    	'data' => [
+	    		'interval' => 14,
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.14'), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_weekly_on()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 77,
+	    	'data' => [
+	    		'interval' => 77,
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.77'), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_monthly()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 30,
+	    	'data' => [
+	    		'interval' => 30,
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.30'), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_other_monthly()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 60,
+	    	'data' => [
+	    		'interval' => 60,
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.60'), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_every_x_weeks()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 88,
+	    	'data' => [
+	    		'interval' => 88,
+	    		'weeks' => 4
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.88', ['weeks' => 4]), $task->text_interval);
+	}
+
+	/** @test */
+	public function it_gets_a_text_interval_string_for_every_x_months()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 88,
+	    	'data' => [
+	    		'interval' => 88,
+	    		'months' => 4
+	    	],
+	    ]);
+
+	    $this->assertEquals(__('tasks.intervals.88', ['months' => 4]), $task->text_interval);
+	}
+
+	/** @test */
 	public function it_belongs_to_a_task_list()
 	{
 	    $list = factory(TaskList::class)->create();
