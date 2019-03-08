@@ -51,8 +51,6 @@ class TasksController extends Controller
             'optional' => 'nullable|boolean',
         ]));
 
-        $task->schedule();
-
         return [
             'status' => 200,
             'redirect' => route('task_lists.show', $taskList),

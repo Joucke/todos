@@ -2,12 +2,14 @@
 
 namespace Tests\Unit;
 
+use App\Events\TaskSaved;
 use App\ScheduledTask;
 use App\Task;
 use App\TaskList;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -286,6 +288,41 @@ class TaskTest extends TestCase
 	}
 
 	/** @test */
+	public function it_fires_a_task_saved_event_on_save()
+	{
+		Event::fake();
+
+	    $task = factory(Task::class)->create(['interval' => 1]);
+	    Event::assertDispatched(TaskSaved::class, 1);
+
+	    $task->save();
+	    Event::assertDispatched(TaskSaved::class, 2);
+
+	    $task->schedule();
+	    $task->scheduled_tasks->first()->delete();
+	    Event::assertDispatched(TaskSaved::class, 2);
+	}
+
+	/** @test */
+	public function it_schedules_itself_on_save_if_its_not_already()
+	{
+	    $task = factory(Task::class)->create(['interval' => 1])->fresh();
+	    $this->assertCount(1, $task->scheduled_tasks);
+
+	    $task->scheduled_tasks->first()->delete();
+	    $task = $task->fresh();
+	    $this->assertCount(0, $task->scheduled_tasks);
+
+	    $task->save();
+	    $task = $task->fresh();
+	    $this->assertCount(1, $task->scheduled_tasks);
+
+	    $task->save();
+	    $task = $task->fresh();
+	    $this->assertCount(1, $task->scheduled_tasks);
+	}
+
+	/** @test */
 	public function it_can_schedule_a_task_on_an_interval()
 	{
 		$interval = 1;
@@ -299,6 +336,8 @@ class TaskTest extends TestCase
 	/** @test */
 	public function it_can_schedule_a_task_between_dates()
 	{
+		Event::fake();
+
 	    $task = factory(Task::class)->create([
 	    	'interval' => 3,
 	    	'starts_at' => now()->subDays(20),
@@ -349,6 +388,7 @@ class TaskTest extends TestCase
 	    $today = factory(ScheduledTask::class)->create(['task_id' => $task->id, 'scheduled_at' => now()]);
 	    $tomorrow = factory(ScheduledTask::class)->create(['task_id' => $task->id, 'scheduled_at' => now()->addDay()]);
 
+	    $task->load('scheduled_tasks');
 	    $this->assertTrue($task->scheduled_tasks->contains('id', $today->id));
 	    $this->assertTrue($task->scheduled_tasks->contains('id', $tomorrow->id));
 	}
