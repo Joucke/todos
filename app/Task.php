@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\TaskSaved;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -21,6 +22,10 @@ class Task extends Model
         'optional',
         'starts_at',
         'ends_at',
+    ];
+
+    protected $dispatchesEvents = [
+        'saved' => TaskSaved::class,
     ];
 
     protected $casts = [

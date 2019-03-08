@@ -25,7 +25,7 @@ class CompletedTasksTest extends TestCase
 	public function a_scheduled_task_can_be_completed()
 	{
 		$task = factory(Task::class)->create(['task_list_id' => $this->list->id]);
-		$scheduled = $task->schedule();
+		$scheduled = $task->scheduled_tasks()->first();
 
 		$this->actingAs($this->user)
 			->withoutExceptionHandling()
@@ -36,26 +36,10 @@ class CompletedTasksTest extends TestCase
 	}
 
 	/** @test */
-	public function an_unscheduled_task_can_be_completed()
-	{
-		$task = factory(Task::class)->create(['task_list_id' => $this->list->id]);
-		$this->assertCount(0, $task->scheduled_tasks);
-
-		$this->actingAs($this->user)
-			->post('/tasks/'.$task->id.'/completed_tasks')
-			->assertRedirect('/task_lists/'.$task->task_list_id);
-
-		$this->assertCount(1, $task->fresh()->scheduled_tasks()->completed()->get());
-
-		$this->assertEquals(now()->format('Y-m-d H:i:s'), $task->fresh()->scheduled_tasks->first()->completed_at->format('Y-m-d H:i:s'));
-		$this->markTestIncomplete('There should be no more unscheduled tasks');
-	}
-
-	/** @test */
 	public function completing_a_task_schedules_the_task_again()
 	{
 		$task = factory(Task::class)->create(['task_list_id' => $this->list->id]);
-		$scheduled = $task->schedule();
+		$scheduled = $task->scheduled_tasks()->first();
 		$this->assertCount(0, $task->scheduled_tasks()->completed()->get());
 		$this->assertCount(1, $task->scheduled_tasks()->incompleted()->get());
 		$this->assertTrue($task->scheduled_tasks()->incompleted()->get()->contains('id', $scheduled->id));
