@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Group;
+use App\ScheduledTask;
 use App\Task;
 use App\TaskList;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class TaskListsTest extends TestCase
@@ -302,7 +304,34 @@ class TaskListsTest extends TestCase
 	/** @test */
 	public function it_shows_recently_completed_tasks_on_a_list()
 	{
-	    $this->markTestIncomplete('Display with completion date/time');
+		$group = $this->createGroup($this->user);
+		$list = factory(TaskList::class)->create(['group_id' => $group->id]);
+		$task = $list->tasks()->create(factory(Task::class)->raw([
+			'interval' => 1,
+			'data' => [
+				'interval' => 1,
+			],
+		]));
+		[$one, $two, $three] = factory(ScheduledTask::class, 3)->create([
+			'task_id' => $task->id,
+		]);
+
+		Carbon::setTestNow();
+		Carbon::setTestNow(Carbon::parse('2 days ago'));
+		$one->complete();
+
+		Carbon::setTestNow();
+		Carbon::setTestNow(Carbon::parse('yesterday'));
+		$three->complete();
+
+		$this->actingAs($this->user)
+			->get('/task_lists/'.$list->id)
+			->assertSeeInOrder([
+				$three->task->title,
+				$three->completed_at->diffForHumans(),
+				$one->task->title,
+				$one->completed_at->diffForHumans(),
+			]);
 	}
 
 	/** @test */

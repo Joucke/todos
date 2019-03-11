@@ -60,12 +60,20 @@
 
                 <div class="card-body bg-white">
             		<ul class="list-reset leading-normal">
-            			@foreach ($task_list->tasks as $task)
+            			@forelse ($task_list->completed_tasks as $completed_task)
                             <li class="flex justify-between items-center">
-                                <a class="nav blue-light w-1/2" href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $task->title }}</a>
-                                <p class="w-1/2 text-right">Datum / Tijd</p>
+                                <a class="nav blue-light w-1/2" href="{{ route('task_lists.tasks.show', compact('task_list', 'task')) }}">{{ $completed_task->task->title }}</a>
+                                <p class="w-1/2 text-right">
+                                    {{ $completed_task->completed_at->diffForHumans() }}
+                                </p>
                             </li>
-            			@endforeach
+                        @empty
+                            <li class="flex justify-between items-center">
+                                <a class="nav">
+                                    {{ __('tasks.no_recent_tasks') }}
+                                </a>
+                            </li>
+            			@endforelse
             		</ul>
                 </div>
             </div>
