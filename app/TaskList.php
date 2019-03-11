@@ -27,6 +27,12 @@ class TaskList extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function completed_tasks()
+    {
+        return $this->hasManyThrough(ScheduledTask::class, Task::class)
+            ->completed()->latest('completed_at');
+    }
+
     public function getSortFieldAttribute()
     {
         return $this->sort_order;

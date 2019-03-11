@@ -36,4 +36,5 @@ return [
     'end' => 'Tot',
     'optional' => 'Optioneel',
     'recent' => 'Recent uitgevoerd',
+    'no_recent_tasks' => 'Er zijn geen taken recent uitgevoerd',
 ];
