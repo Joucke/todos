@@ -99,28 +99,34 @@ class DashboardTest extends DuskTestCase
     /** @test */
     public function it_lists_tasks_ordered_by_task_list_then_scheduled_at()
     {
-        $group = $this->createGroup($this->user);
+        $this->browse(function (Browser $browser) {
 
-        $listTwo = $group->task_lists()->create([
-            'title' => 'barbaz',
-            'sort_order' => 2,
-        ]);
-        $secondTask = $listTwo->tasks()->create(['title' => 'Perform second', 'interval' => 1])->schedule(2);
-        $thirdTask = $listTwo->tasks()->create(['title' => 'Perform first', 'interval' => 1])->schedule(1);
+            $group = $this->createGroup($this->user);
 
-        $listOne = $group->task_lists()->create([
-            'title' => 'foobar',
-            'sort_order' => 1,
-        ]);
-        $firstTask = $listOne->tasks()->create(['title' => 'Go to the store', 'interval' => 7])->schedule();
+            $listTwo = $group->task_lists()->create([
+                'title' => 'barbaz',
+                'sort_order' => 2,
+            ]);
+            $secondTask = tap($listTwo->tasks()->create(['title' => 'Perform second', 'interval' => 1]), function ($task) {
+                $task->schedule(2);
+            });
+            $thirdTask = tap($listTwo->tasks()->create(['title' => 'Perform first', 'interval' => 1]), function ($task) {
+                $task->schedule(1);
+            });
 
-        $this->browse(function (Browser $browser) use ($group) {
+            $listOne = $group->task_lists()->create([
+                'title' => 'foobar',
+                'sort_order' => 1,
+            ]);
+            $firstTask = tap($listOne->tasks()->create(['title' => 'Go to the store', 'interval' => 7]), function ($task) {
+                $task->schedule();
+            });
 
             $browser->loginAs($this->user)
                 ->visit('/dashboard/')
-                ->assertSeeIn('main .tabs .card-container:first-child', 'Perform first')
-                ->assertSeeIn('main .tabs .card-container:not(:first-child):not(:last-child)', 'Perform second')
-                ->assertSeeIn('main .tabs .card-container:last-child', 'Go to the store')
+                ->assertSeeIn('main .tabs .card-container:first-child', $thirdTask->title)
+                ->assertSeeIn('main .tabs .card-container:first-child', $secondTask->title)
+                ->assertSeeIn('main .tabs .card-container:last-child', $firstTask->title)
                 ;
         });
     }

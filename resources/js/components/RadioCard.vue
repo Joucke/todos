@@ -1,6 +1,6 @@
 <template>
-    <label class="block border rounded py-3 px-4 cursor-pointer" :class="classes" :for="id" @click="select">
-        <input type="radio" class="hidden" :name="name" :id="id" :value="value">
+    <label class="block border rounded py-3 px-4 cursor-pointer relative" :class="classes" :for="id">
+        <input type="radio" class="opacity-0 absolute pointer-events-none" :name="name" :id="id" :value="value" @input="selecting">
         <p class="">{{ title }}</p>
         <slot></slot>
     </label>
@@ -18,8 +18,8 @@ export default {
         },
     },
     methods: {
-        select () {
-            this.$emit('click', this.value);
+        selecting () {
+            this.$emit('selecting', this.value);
         },
     },
 }

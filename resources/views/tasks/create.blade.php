@@ -14,6 +14,9 @@
 <div class="card-container py-4">
     <div class="card-padding-full mb-4">
     	<task-form
+            @if (app()->environment() !== 'Production')
+                dusk="task-form-component"
+            @endif
             class="card bg-white"
             form-title="{{ __('tasks.create') }}"
             :task-data="{title:'',interval:1,data:{}}"

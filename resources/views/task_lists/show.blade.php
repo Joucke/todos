@@ -42,7 +42,7 @@
                                         {{ $task->text_interval }}
                                     </span>
                                     @if ($task->data['interval'] == 77)
-                                        {{ $task->text_days }}
+                                        <span>{{ $task->text_days }}</span>
                                     @endif
                                 </p>
                             </li>
