@@ -24,15 +24,15 @@
                     <div class="w-full md:w-1/2 lg:w-1/3 p-2"
                         v-for="(interval, index) in task_intervals" :key="index">
                         <radio-card
-                            @click="setInterval"
+                            @selecting="setInterval"
                             selected="blue"
                             name="interval"
                             :value="index"
                             :checked="hasInterval(index)"
-                            :title="(hasInterval(index) && interval.target) ? t(`tasks.${interval.label}`).replace('x', task.data[interval.target]) : t(`tasks.${interval.label}`)"
+                            :title="titleFor(interval)"
                             >
                             <div v-if="hasInterval(index) && interval.sub && interval.sub == 'optionBar'" class="w-full justify-between mt-3 flex">
-                                <label v-for="(option, i) in interval.options" class="flex flex-grow justify-center border-blue border py-2" :class="{ 'border-b-4' : task.days[option], 'border-r-0': i+1 < interval.options.length }" @click="toggle(option)">
+                                <label v-for="(option, i) in interval.options" class="flex relative flex-grow justify-center border-blue border py-2" :class="{ 'border-b-4' : task.days[option], 'border-r-0': i+1 < interval.options.length }" @click="toggle(option)" :for="`option_${i}`">
                                     <span v-html="t(`tasks.${option}`)"></span>
                                 </label>
                             </div>
@@ -128,15 +128,20 @@ export default {
             if (this.task.data && this.task.data.interval) {
                 return this.task.data.interval == interval;
             }
-            else {
-                return this.task.interval == interval;
-            }
+            return this.task.interval == interval;
         },
         setInterval (value) {
             this.task.interval = this.task.data.interval = value;
+            this.$forceUpdate();
         },
         t (key) {
             return this.$options.filters.trans(key);
+        },
+        titleFor (interval) {
+            if (interval.target) {
+                return this.task.parseTarget(interval);
+            }
+            return this.t(`tasks.${interval.label}`);
         },
         toggle (day) {
             this.task.days[day] = !this.task.days[day];

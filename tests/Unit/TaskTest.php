@@ -323,6 +323,22 @@ class TaskTest extends TestCase
 	}
 
 	/** @test */
+	public function it_auto_schedules_itself_between_dates()
+	{
+	    $task = factory(Task::class)->create([
+	    	'interval' => 1,
+	    	'data' => [
+	    		'interval' => 1,
+	    	],
+	    	'starts_at' => now()->addDays(20),
+	    	'ends_at' => now()->addDays(30),
+	    ]);
+
+	    $scheduled = $task->scheduled_tasks()->first();
+	    $this->assertEquals(now()->addDays(20)->format('Y-m-d'), $scheduled->scheduled_at->format('Y-m-d'));
+	}
+
+	/** @test */
 	public function it_can_schedule_a_task_on_an_interval()
 	{
 		$interval = 1;

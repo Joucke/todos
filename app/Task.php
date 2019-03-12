@@ -95,6 +95,10 @@ class Task extends Model
             $this->incrementPeriodYear();
             return $this->starts_at;
         }
+        if ($this->starts_at && $nextDate->lt($this->starts_at)) {
+            return $this->starts_at;
+        }
+
         return $nextDate;
     }
 

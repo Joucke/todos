@@ -82,9 +82,9 @@ class Task {
             days: this.interval == 77 ? this.days : null,
             optional: this.optional,
             data: {
-                interval: this.interval,
-                weeks: this.interval == 88 ? this.weeks : null,
-                months: this.interval == 99 ? this.months : null,
+                interval: this.data.interval,
+                weeks: this.data.interval == 88 ? this.data.weeks : null,
+                months: this.data.interval == 99 ? this.data.months : null,
             },
         };
     }
@@ -128,9 +128,17 @@ class Task {
             return this.t(`tasks.${task.label}`) + ' ' + days.join(', ');
         }
         if (task.target) {
-            return this.t(`tasks.${task.label}`).replace('x', this.data[task.target]);
+            return this.parseTarget(task);
         }
         return this.t(`tasks.${task.label}`);
+    }
+    parseTarget (task) {
+        return this
+            .t(`tasks.${task.label}`)
+            .replace(
+                `:${task.target}`,
+                this.data[task.target]
+            );
     }
 }
 
