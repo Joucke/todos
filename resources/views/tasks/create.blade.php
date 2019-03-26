@@ -19,7 +19,7 @@
             @endif
             class="card bg-white"
             form-title="{{ __('tasks.create') }}"
-            :task-data="{title:'',interval:1,data:{}}"
+            :task-data="{title:'',interval:1,data:{interval:1}}"
             action="{{ route('task_lists.tasks.store', $task_list) }}"
             >
         </task-form>
