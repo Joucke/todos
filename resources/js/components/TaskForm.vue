@@ -54,21 +54,21 @@
                 </div>
             </div>
             <div class="flex flex-col mb-4">
-                <check-box class="mb-1" :checked="task.period" @toggle="task.period = !task.period" :label="t('tasks.period')">
+                <check-box class="mb-1" id="check-period" :checked="task.period" @toggle="task.period = !task.period" :label="t('tasks.period')">
                 </check-box>
                 <div class="flex w-full" v-if="task.period">
                     <p class="flex flex-col w-1/2 pr-2">
-                        <label for="mb-1">{{ t('tasks.start') }}</label>
-                        <input class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="period" v-model="task.startDate">
+                        <label for="start" class="mb-1">{{ t('tasks.start') }}</label>
+                        <input id="start" class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="start" v-model="task.startDate">
                     </p>
                     <p class="flex flex-col w-1/2 pl-2">
-                        <label for="mb-1">{{ t('tasks.end') }}</label>
-                        <input class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="period" v-model="task.endDate">
+                        <label for="end" class="mb-1">{{ t('tasks.end') }}</label>
+                        <input id="end" class="flex border rounded py-2 px-2" :placeholder="t('tasks.placeholders.period')" type="date" name="end" v-model="task.endDate">
                     </p>
                 </div>
             </div>
             <div class="flex">
-                <check-box class="mb-1" :checked="task.optional" @toggle="task.optional = !task.optional" :label="t('tasks.optional')">
+                <check-box class="mb-1" id="check-optional" :checked="task.optional" @toggle="task.optional = !task.optional" :label="t('tasks.optional')">
                 </check-box>
             </div>
         </div>

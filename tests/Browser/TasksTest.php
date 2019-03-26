@@ -107,22 +107,25 @@ class TasksTest extends DuskTestCase
                 ->assertSeeIn('label[for=interval_99]', __('tasks.intervals.99', ['months' => 3]))
                 ->dragRight('.vue-slider-dot-handle', 50)
                 ->assertVue('task.data.months', '4', '@task-form-component')
+
+                ->assertDontSee(__('tasks.start'))
+                ->assertDontSee(__('tasks.end'))
+                ->click('#check-period')
+                ->assertVue('task.period', true, '@task-form-component')
+                ->assertSee(__('tasks.start'))
+                ->type('start', '03312022') // type m-d-Y b/c stupid headless chrome format
+                ->assertVue('task.startDate', '2022-03-31', '@task-form-component')
+                ->assertSee(__('tasks.end'))
+                ->type('end', '06302022') // type m-d-Y b/c stupid headless chrome format
+                ->assertVue('task.endDate', '2022-06-30', '@task-form-component')
+                ->click('#check-optional')
+                ->assertVue('task.optional', true, '@task-form-component')
+                ->press(__('tasks.add'))
+                ->waitUntilMissing('@task-form-component')
+                ->assertRouteIs('task_lists.show', ['task_list' => $list])
                 ;
 
-            // etc
-
-            // when the user checks the period checkbox
-            // we should see two date inputs
-            // when the user selects two dates
-            // the vue component should have the dates
-
-            // when the user checks the optional checkbox
-            // the vue component should have a true value for optional
-
-            // when the user clicks the add button
-            // we should be redirected to the tasks/show page
-
-            $this->markTestIncomplete();
+            $this->markTestIncomplete('Get new task and assert stuff on it');
         });
     }
 }
