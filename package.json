@@ -11,25 +11,25 @@
         "svg": "vsvg -s ./resources/svg/src -t ./resources/js/icons"
     },
     "devDependencies": {
-        "axios": "^0.18",
-        "bootstrap": "^4.0.0",
-        "cross-env": "^5.1",
-        "jquery": "^3.2",
-        "laravel-mix": "^4.0.7",
-        "lodash": "^4.17.5",
-        "popper.js": "^1.12",
-        "resolve-url-loader": "^2.3.1",
-        "sass": "^1.15.2",
-        "sass-loader": "^7.1.0",
-        "tailwindcss": "^0.7.3",
-        "vue": "^2.5.17",
-        "vue-svgicon": "^3.2.2",
-        "vue-template-compiler": "^2.5.21"
+        "axios": "^0.18.1",
+        "bootstrap": "^4.3.1",
+        "cross-env": "^5.2.1",
+        "jquery": "^3.4.1",
+        "laravel-mix": "^4.1.4",
+        "lodash": "^4.17.13",
+        "popper.js": "^1.16.0",
+        "resolve-url-loader": "^2.3.2",
+        "sass": "^1.23.0",
+        "sass-loader": "^7.3.1",
+        "tailwindcss": "^0.7.4",
+        "vue": "^2.6.10",
+        "vue-svgicon": "^3.2.6",
+        "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "lang.js": "^1.1.13",
-        "moment": "^2.23.0",
+        "lang.js": "^1.1.14",
+        "moment": "^2.24.0",
         "portal-vue": "^1.5.1",
-        "vue-slider-component": "^2.8.6"
+        "vue-slider-component": "^2.8.16"
     }
 }
