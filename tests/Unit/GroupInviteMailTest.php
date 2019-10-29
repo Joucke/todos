@@ -25,13 +25,13 @@ class GroupInviteMailTest extends TestCase
         $mail = new GroupInvite($invitation);
         $view = $mail->render();
 
-        $this->assertContains(__('groups.mails.existing.message', ['group' => $group->title]), $view);
-        $this->assertContains(__('groups.mails.existing.call_to_action'), $view);
-        $this->assertContains(route('invitations'), $view);
+        $this->assertStringContainsString(__('groups.mails.existing.message', ['group' => $group->title]), $view);
+        $this->assertStringContainsString(__('groups.mails.existing.call_to_action'), $view);
+        $this->assertStringContainsString(route('invitations'), $view);
 
-        $this->assertNotContains('groups.mails.existing.title', $view);
-        $this->assertNotContains('groups.mails.existing.message', $view);
-        $this->assertNotContains('groups.mails.existing.call_to_action', $view);
+        $this->assertStringNotContainsString('groups.mails.existing.title', $view);
+        $this->assertStringNotContainsString('groups.mails.existing.message', $view);
+        $this->assertStringNotContainsString('groups.mails.existing.call_to_action', $view);
     }
 
     /** @test */
@@ -46,12 +46,12 @@ class GroupInviteMailTest extends TestCase
         $mail = new GroupInvite($invitation);
         $view = $mail->render();
 
-        $this->assertContains(__('groups.mails.new_user.message', ['group' => $group->title]), $view);
-        $this->assertContains(__('groups.mails.new_user.call_to_action'), $view);
-        $this->assertContains(route('register'), $view);
+        $this->assertStringContainsString(__('groups.mails.new_user.message', ['group' => $group->title]), $view);
+        $this->assertStringContainsString(__('groups.mails.new_user.call_to_action'), $view);
+        $this->assertStringContainsString(route('register'), $view);
 
-        $this->assertNotContains('groups.mails.new_user.title', $view);
-        $this->assertNotContains('groups.mails.new_user.message', $view);
-        $this->assertNotContains('groups.mails.new_user.call_to_action', $view);
+        $this->assertStringNotContainsString('groups.mails.new_user.title', $view);
+        $this->assertStringNotContainsString('groups.mails.new_user.message', $view);
+        $this->assertStringNotContainsString('groups.mails.new_user.call_to_action', $view);
     }
 }

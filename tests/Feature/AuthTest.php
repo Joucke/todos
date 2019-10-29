@@ -47,8 +47,8 @@ class AuthTest extends TestCase
         $response = $this->post('/password/reset', [
             'token' => $token,
             'email' => $user->email,
-            'password' => 'secret',
-            'password_confirmation' => 'secret',
+            'password' => 'secret01',
+            'password_confirmation' => 'secret01',
         ])->assertRedirect('/dashboard');
     }
 

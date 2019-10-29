@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class TasksTest extends TestCase
 {
-	public function setUp()
+	public function setUp():void
 	{
 		parent::setUp();
 
@@ -356,6 +356,7 @@ class TasksTest extends TestCase
 		$task = $this->list->tasks()->create(factory(Task::class)->raw());
 
 		$this->actingAs($this->user)
+			->withoutExceptionHandling()
 			->get('/task_lists/'.$this->list->id.'/tasks/'.$task->id)
 			->assertOk()
 			->assertViewIs('tasks.show')
