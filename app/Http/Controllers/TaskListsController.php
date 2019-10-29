@@ -30,28 +30,28 @@ class TaskListsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @return \Illuminate\Http\Response
      */
-    public function show(TaskList $taskList)
+    public function show(TaskList $task_list)
     {
-        $this->authorize('view', $taskList);
+        $this->authorize('view', $task_list);
 
-        return view('task_lists.show', ['task_list' => $taskList]);
+        return view('task_lists.show', compact('task_list'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @return \Illuminate\Http\Response
      */
-    public function edit(TaskList $taskList)
+    public function edit(TaskList $task_list)
     {
-        $this->authorize('update', $taskList);
+        $this->authorize('update', $task_list);
 
         return view('task_lists.edit', [
-            'task_list' => $taskList,
+            'task_list' => $task_list,
             'groups' => auth()->user()->groups,
         ]);
     }
@@ -60,18 +60,18 @@ class TaskListsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TaskList $taskList)
+    public function update(Request $request, TaskList $task_list)
     {
-        $this->authorize('update', $taskList);
+        $this->authorize('update', $task_list);
 
-        $taskList->update($request->validate([
+        $task_list->update($request->validate([
             'title' => 'required',
         ]));
 
-        return redirect(route('groups.show', $taskList->group_id))
+        return redirect(route('groups.show', $task_list->group_id))
             ->with('status', __('task_lists.statuses.updated'));
     }
 
@@ -94,16 +94,16 @@ class TaskListsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TaskList $taskList)
+    public function destroy(TaskList $task_list)
     {
-        $this->authorize('delete', $taskList);
+        $this->authorize('delete', $task_list);
 
-        $taskList->delete();
+        $task_list->delete();
 
-        return redirect(route('groups.show', $taskList->group_id))
+        return redirect(route('groups.show', $task_list->group_id))
             ->with('status', __('task_lists.statuses.deleted'));
     }
 }

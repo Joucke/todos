@@ -11,29 +11,27 @@ class TasksController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @return \Illuminate\Http\Response
      */
-    public function create(TaskList $taskList)
+    public function create(TaskList $task_list)
     {
-        $this->authorize('view', $taskList);
-        return view('tasks.create')->with([
-            'task_list' => $taskList,
-        ]);
+        $this->authorize('view', $task_list);
+        return view('tasks.create')->with(compact('task_list'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, TaskList $taskList)
+    public function store(Request $request, TaskList $task_list)
     {
-        $this->authorize('view', $taskList);
+        $this->authorize('view', $task_list);
 
-        $task = $taskList->tasks()->create($request->validate([
+        $task = $task_list->tasks()->create($request->validate([
             'title' => 'required',
             'interval' => 'required',
             'days' => 'nullable',
@@ -53,57 +51,51 @@ class TasksController extends Controller
 
         return [
             'status' => 200,
-            'redirect' => route('task_lists.show', $taskList),
+            'redirect' => route('task_lists.show', $task_list),
         ];
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(TaskList $taskList, Task $task)
+    public function show(TaskList $task_list, Task $task)
     {
-        $this->authorize('view', $taskList);
+        $this->authorize('view', $task_list);
 
         $task->load('task_list');
 
-        return view('tasks.show')->with([
-            'task' => $task,
-            'task_list' => $taskList,
-        ]);
+        return view('tasks.show')->with(compact('task', 'task_list'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function edit(TaskList $taskList, Task $task)
+    public function edit(TaskList $task_list, Task $task)
     {
-        $this->authorize('view', $taskList);
+        $this->authorize('view', $task_list);
 
-        return view('tasks.edit')->with([
-            'task' => $task,
-            'task_list' => $taskList,
-        ]);
+        return view('tasks.edit')->with(compact('task', 'task_list'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TaskList $taskList, Task $task)
+    public function update(Request $request, TaskList $task_list, Task $task)
     {
-        $this->authorize('view', $taskList);
+        $this->authorize('view', $task_list);
 
         $task->update($request->validate([
             'title' => 'required',
@@ -125,23 +117,23 @@ class TasksController extends Controller
 
         return [
             'status' => 200,
-            'redirect' => route('task_lists.tasks.show', compact('taskList', 'task')),
+            'redirect' => route('task_lists.tasks.show', compact('task_list', 'task')),
         ];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  \App\TaskList  $task_list
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TaskList $taskList, Task $task)
+    public function destroy(TaskList $task_list, Task $task)
     {
-        $this->authorize('view', $taskList);
+        $this->authorize('view', $task_list);
 
         $task->delete();
 
-        return redirect(route('task_lists.show', ['task_list' => $taskList]));
+        return redirect(route('task_lists.show', $task_list));
     }
 }
