@@ -45,13 +45,15 @@
                                         v-text="item.title"
                                         >
                                     </a>
-                                    <p v-text="t_count('tasks.count', item.tasks ? item.tasks.length : 0)"></p>
-                                    <sortable-handle>
-                                        <svg class="w-6 h-6 cursor-move" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <path class="fill-current text-red" d="M7 18.59V9a1 1 0 0 1 2 0v9.59l2.3-2.3a1 1 0 0 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42L7 18.6z"/>
-                                            <path class="fill-current text-green" d="M17 5.41V15a1 1 0 1 1-2 0V5.41l-2.3 2.3a1 1 0 1 1-1.4-1.42l4-4a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1-1.4 1.42L17 5.4z"/>
-                                        </svg>
-                                    </sortable-handle>
+                                    <p class="flex items-center">
+                                        <span v-text="t_count('tasks.count', item.tasks ? item.tasks.length : 0)"></span>
+                                        <sortable-handle>
+                                            <svg class="ml-4 w-6 h-6 cursor-move" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <path class="fill-current text-red" d="M7 18.59V9a1 1 0 0 1 2 0v9.59l2.3-2.3a1 1 0 0 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42L7 18.6z"/>
+                                                <path class="fill-current text-green" d="M17 5.41V15a1 1 0 1 1-2 0V5.41l-2.3 2.3a1 1 0 1 1-1.4-1.42l4-4a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1-1.4 1.42L17 5.4z"/>
+                                            </svg>
+                                        </sortable-handle>
+                                    </p>
                                 </div>
                             </sortable-item>
                         </div>
