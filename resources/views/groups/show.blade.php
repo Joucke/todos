@@ -28,40 +28,34 @@
                 </div>
 
                 <div class="card-body bg-white">
-                    <sort-table
-                        class="w-full"
-                        :list-data="{{ $group->task_lists }}"
+                    <sortable-list
+                        :data="{{ json_encode($group->task_lists) }}"
                         sort-url="{{ route('groups.task_lists.sort', ['group' => $group]) }}"
-                        sort-key="task_list_order">
-                        <template slot="row" slot-scope="{index, item, items, up, down, t_count}">
-                            <td>
-                                <svg-icon
-                                    @click="up(index)"
-                                    name="icon-sort-ascending"
-                                    class="up cursor-pointer w-6 h-6 primary-black secondary-black"
-                                    v-if="index > 0"
-                                    >
-                                </svg-icon>
-                            </td>
-                            <td>
-                                <a
-                                    class="nav blue-light justify-between"
-                                    :href="'{{ route('task_lists.show', ['task_list' => '__list__']) }}'.replace('__list__', item.id)"
-                                    v-text="item.title">
-                                </a>
-                            </td>
-                            <td v-text="t_count('tasks.count', item.tasks ? item.tasks.length : 0)"></td>
-                            <td>
-                                <svg-icon
-                                    @click="down(index)"
-                                    name="icon-sort-decending"
-                                    class="down cursor-pointer w-6 h-6 primary-black secondary-black"
-                                    v-if="index < items.length - 1"
-                                    >
-                                </svg-icon>
-                            </td>
-                        </template>
-                    </sort-table>
+                        sort-key="task_list_order"
+                        >
+                        <div class="w-full flex flex-col" slot-scope="{ items }">
+                            <sortable-item
+                                v-for="item in items"
+                                :key="item.id"
+                                >
+                                <div class="w-full flex justify-between items-center bg-white">
+                                    <a
+                                        class="nav blue-light justify-between"
+                                        :href="'{{ route('task_lists.show', ['task_list' => '__list__']) }}'.replace('__list__', item.id)"
+                                        v-text="item.title"
+                                        >
+                                    </a>
+                                    <p v-text="t_count('tasks.count', item.tasks ? item.tasks.length : 0)"></p>
+                                    <sortable-handle>
+                                        <svg class="w-6 h-6 cursor-move" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path class="fill-current text-red" d="M7 18.59V9a1 1 0 0 1 2 0v9.59l2.3-2.3a1 1 0 0 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42L7 18.6z"/>
+                                            <path class="fill-current text-green" d="M17 5.41V15a1 1 0 1 1-2 0V5.41l-2.3 2.3a1 1 0 1 1-1.4-1.42l4-4a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1-1.4 1.42L17 5.4z"/>
+                                        </svg>
+                                    </sortable-handle>
+                                </div>
+                            </sortable-item>
+                        </div>
+                    </sortable-list>
                 </div>
             </div>
         </div>
