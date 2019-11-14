@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\ScheduledTask;
 use App\Task;
-use App\TaskList;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Controller
 {
@@ -20,21 +17,6 @@ class Dashboard extends Controller
     {
         // order by day, task_list, then time
         $tabs = auth()->user()->groups()->with('tasks.incompleted_scheduled_tasks', 'tasks.task_list')->get();
-        $scheduled_tasks = ScheduledTask::incompleted()
-            ->whereHas('task.task_list.group', function ($query) {
-                $query->whereIn('groups.id', auth()->user()->groups->pluck('id'));
-            })
-            ->with('task.task_list')
-            ->orderBy('scheduled_at', 'asc')
-            ->get()
-            ->groupBy([
-                function ($sTask) {
-                    return $sTask->task->task_list->group_id;
-                },
-                function ($sTask) {
-                    return $sTask->scheduled_at->toDateString();
-                },
-            ]);
         $tasks = Task::with(['incompleted_scheduled_tasks', 'task_list'])
             ->whereHas('task_list.group', function ($query) {
                 $query->whereIn('groups.id', auth()->user()->groups->pluck('id'));
@@ -46,16 +28,25 @@ class Dashboard extends Controller
                     return $task->task_list->group_id;
                 },
                 function ($task) {
-                    return $task->incompleted_scheduled_tasks->first()->scheduled_at->toDateString();
+                    $moment = $task->incompleted_scheduled_tasks->first()->scheduled_at;
+                    if ($moment->isToday()) {
+                        return '1-today';
+                    }
+                    if ($moment->isCurrentWeek()) {
+                        if ($moment->isFuture()) {
+                            return '5-future';
+                        }
+                        return '2-this_week';
+                    }
+                    if ($moment->isLastWeek()) {
+                        return '3-last_week';
+                    }
+                    if ($moment->isPast()) {
+                        return '4-older';
+                    }
+                    return '6-future';
                 },
             ])
-            ->map(function ($dates) {
-                return $dates->map(function ($items) {
-                    return $items->sortBy(function ($task) {
-                        return $task->task_list->sort_field . '-' . $task->incompleted_scheduled_tasks->first()->scheduled_at->getTimestamp();
-                    })->values();
-                })->sortKeys();
-            })
             ;
         return view('dashboard', compact('tabs', 'tasks'));
     }

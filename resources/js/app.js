@@ -28,6 +28,7 @@ Vue.use(PortalVue);
 
 Vue.component('action-card', require('./components/ActionCard.vue').default);
 Vue.component('check-box', require('./components/CheckBox.vue').default);
+Vue.component('collapse-section', require('./components/CollapseSection.vue').default);
 Vue.component('group-invite', require('./components/GroupInvite.vue').default);
 Vue.component('pull-down', require('./components/PullDown.vue').default);
 Vue.component('sortable-list', require('./components/SortableList.vue').default);
