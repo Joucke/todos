@@ -18,11 +18,11 @@
                 </div>
 
                 <div class="card-body bg-white" v-for="tab in tabs" v-if="isSelected(tab)">
-                    <div class="card-container" v-for="(dates, section) in cards[tab.id]">
+                    <div class="card-container" v-for="(tasks, section) in cards[tab.id]">
                         <!-- TODO: use section to collapse dates -->
                         <collapse-section :section="section" class="w-full">
                             <task-card
-                                v-for="task in dates"
+                                v-for="task in tasks"
                                 :key="`task_${task.id}`"
                                 :show-title="true"
                                 :task-data="task"

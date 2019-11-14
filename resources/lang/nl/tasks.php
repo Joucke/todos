@@ -41,6 +41,7 @@ return [
         'today' => 'Vandaag',
         'future' => 'Toekomst',
         'this_week' => 'Deze week',
+        'upcoming_week' => 'Komende week',
         'last_week' => 'Vorige week',
         'older' => 'Ouder',
     ],

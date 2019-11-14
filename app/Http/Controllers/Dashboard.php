@@ -34,7 +34,7 @@ class Dashboard extends Controller
                     }
                     if ($moment->isCurrentWeek()) {
                         if ($moment->isFuture()) {
-                            return '5-future';
+                            return '5-upcoming_week';
                         }
                         return '2-this_week';
                     }
@@ -47,6 +47,9 @@ class Dashboard extends Controller
                     return '6-future';
                 },
             ])
+            ->map(function ($dates) {
+                return $dates->sortKeys();
+            })
             ;
         return view('dashboard', compact('tabs', 'tasks'));
     }
