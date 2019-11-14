@@ -37,4 +37,11 @@ return [
     'optional' => 'Optioneel',
     'recent' => 'Recent uitgevoerd',
     'no_recent_tasks' => 'Er zijn geen taken recent uitgevoerd',
+    'sections' => [
+        'today' => 'Vandaag',
+        'future' => 'Toekomst',
+        'this_week' => 'Deze week',
+        'last_week' => 'Vorige week',
+        'older' => 'Ouder',
+    ],
 ];
