@@ -21,7 +21,7 @@
   </div>
 
   <div class="relative pt-6 pb-12 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
-    <responsive-nav :links="[{url: '#features', title: 'Features'}, {url: '#testimonials', title: 'Testimonials'}, {url: '/live-demo', title: 'Live demo'}, {url: '#get-started', title: 'Get started'}]" :login="{{ Route::has('login') ? json_encode(['url' => route('login'), 'title' => 'Login']) : 0 }}" :register="{{ Route::has('register') ? json_encode(['url' => route('register'), 'title' => 'Register']) : 0 }}" :auth="{{ Auth::check() ? json_encode(['url' => route('dashboard'), 'title' => 'Dashboard']) : 0 }}">
+    <responsive-nav :links="[{url: '#features', title: 'Features'}, {url: '#testimonials', title: 'Testimonials'}, {url: '/live-demo', title: 'Live demo'}, {url: '{{ route('register') }}', title: 'Get started'}]" :login="{{ Route::has('login') ? json_encode(['url' => route('login'), 'title' => 'Login']) : 0 }}" :register="{url: '{{ route('register') }}', title: 'Register' }" :auth="{{ Auth::check() ? json_encode(['url' => route('dashboard'), 'title' => 'Dashboard']) : 0 }}">
     </responsive-nav>
 
     <div class="mt-10 mx-auto max-w-screen-xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 xl:mt-28">
@@ -36,7 +36,7 @@
         </p>
         <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
           <div class="rounded-md shadow">
-            <a href="#get-started" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
+            <a href="{{ route('register') }}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
               Get started
             </a>
           </div>
