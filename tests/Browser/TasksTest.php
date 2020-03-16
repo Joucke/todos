@@ -113,10 +113,10 @@ class TasksTest extends DuskTestCase
                 ->click('#check-period')
                 ->assertVue('task.period', true, '@task-form-component')
                 ->assertSee(__('tasks.start'))
-                ->type('start', '03312022') // type m-d-Y b/c stupid headless chrome format
+                ->type('start', '31032022') // type m-d-Y b/c stupid headless chrome format
                 ->assertVue('task.startDate', '2022-03-31', '@task-form-component')
                 ->assertSee(__('tasks.end'))
-                ->type('end', '06302022') // type m-d-Y b/c stupid headless chrome format
+                ->type('end', '30062022') // type m-d-Y b/c stupid headless chrome format
                 ->assertVue('task.endDate', '2022-06-30', '@task-form-component')
                 ->click('#check-optional')
                 ->assertVue('task.optional', true, '@task-form-component')
