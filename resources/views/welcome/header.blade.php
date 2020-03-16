@@ -21,7 +21,7 @@
   </div>
 
   <div class="relative pt-6 pb-12 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
-    <responsive-nav :links="[{url: '#features', title: 'Features'}, {url: '#testimonials', title: 'Testimonials'}, {url: '/live-demo', title: 'Live demo'}, {url: '{{ route('register') }}', title: 'Get started'}]" :login="{{ Route::has('login') ? json_encode(['url' => route('login'), 'title' => 'Login']) : 0 }}" :register="{url: '{{ route('register') }}', title: 'Register' }" :auth="{{ Auth::check() ? json_encode(['url' => route('dashboard'), 'title' => 'Dashboard']) : 0 }}">
+    <responsive-nav :links="[{url: '#features', title: 'Features'}, {url: '#testimonials', title: 'Testimonials'}, {url: '/live-demo', title: 'Live demo'}, {url: '{{ route('register') }}', title: 'Get started'}]" :login="{{ Route::has('login') ? json_encode(['url' => route('login'), 'title' => 'Login']) : 0 }}" :auth="{{ Auth::check() ? json_encode(['url' => route('dashboard'), 'title' => 'Dashboard']) : 0 }}">
     </responsive-nav>
 
     <div class="mt-10 mx-auto max-w-screen-xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 xl:mt-28">
@@ -31,7 +31,7 @@
           <br class="xl:hidden" />
           <span class="text-indigo-600">recurring tasks</span>
         </h2>
-        <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+        <p class="mt-3 mx-auto text-base text-gray-600 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl">
           List your recurring tasks. Check what's left to do, and when you did it last. Repeat tasks as recurring as you wish. You can do it all.
         </p>
         <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
