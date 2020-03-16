@@ -292,7 +292,7 @@ class TasksTest extends TestCase
 				'title' => 'foobar',
 				'interval' => 7,
 				'starts_at' => '2010-01-01',
-				'ends_at' => '2020-01-01',
+				'ends_at' => '2021-01-01',
 			])
 			->assertJson([
 				'status' => 200,
@@ -304,7 +304,7 @@ class TasksTest extends TestCase
 		$this->assertEquals('foobar', $task->title);
 		$this->assertEquals(7, $task->interval);
 	    $this->assertEquals('2010-01-01', $task->starts_at->format('Y-m-d'));
-	    $this->assertEquals('2020-01-01', $task->ends_at->format('Y-m-d'));
+	    $this->assertEquals('2021-01-01', $task->ends_at->format('Y-m-d'));
 	}
 
 	/** @test */
