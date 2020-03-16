@@ -30,6 +30,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/live-demo', function () {
+    return 'This page hasn\'t been created yet. Please stay tuned!';
+});
+
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
