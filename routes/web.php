@@ -12,7 +12,22 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome')->with([
+        'testimonials' => [
+            (object) [
+                'name' => 'Joucke Hempenius',
+                'description' => 'Private user, Vught',
+                'avatar' => null,
+                'quote' => 'It really helps me keep track of who does what in the house. Easy to see if the floors have been cleaned, without doing double work!',
+            ],
+            (object) [
+                'name' => 'Ilse Ketelaars',
+                'description' => 'Private user, Vught',
+                'avatar' => null,
+                'quote' => 'Todo\'s is really simple to use. It helps me keep track of things to do, and eases my life a whole lot.',
+            ],
+        ],
+    ]);
 });
 
 Auth::routes();

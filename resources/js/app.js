@@ -38,6 +38,9 @@ Vue.component('tabbed-cards', require('./components/TabbedCards.vue').default);
 Vue.component('task-card', require('./components/TaskCard.vue').default);
 Vue.component('task-form', require('./components/TaskForm.vue').default);
 
+
+Vue.component('responsive-nav', require('./components/tailwind-ui/ResponsiveNav.vue').default);
+
 // icons
 import SvgIcon from 'vue-svgicon';
 Vue.component('svg-icon', SvgIcon);
