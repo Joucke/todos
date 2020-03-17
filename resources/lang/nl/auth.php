@@ -22,5 +22,5 @@ return [
     'remember' => 'Onthouden',
     'reset_password' => 'Wachtwoord herstellen',
     'send_link' => 'Stuur link voor wachtwoordherstel',
-    'options' => 'Of ga verder met...',
+    'options' => 'Of ga verder met',
 ];

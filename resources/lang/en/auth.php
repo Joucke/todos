@@ -22,5 +22,5 @@ return [
     'remember' => 'Remember Me',
     'reset_password' => 'Reset Password',
     'send_link' => 'Send Password Reset Link',
-    'options' => 'Or continue with...',
+    'options' => 'Or continue with',
 ];
