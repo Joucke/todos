@@ -26,7 +26,7 @@
             {{ __('users.email') }}
           </label>
           <div class="mt-1 rounded-md shadow-sm">
-            <input id="email" type="email" name="email" placeholder="you@example.com" value="{{ old('email') }}" required autofocus class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5{{ $errors->has('email') ? ' border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red' : 'border-gray-300 placeholder-gray-400 focus:shadow-outline-blue focus:border-blue-300' }}" />
+            <input id="email" type="email" name="email" placeholder="you@example.com" value="{{ old('email') }}" required class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5{{ $errors->has('email') ? ' border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red' : 'border-gray-300 placeholder-gray-400 focus:shadow-outline-blue focus:border-blue-300' }}" />
           </div>
           @if ($errors->has('email'))
             <p class="mt-2 text-sm text-red-600">{{ $errors->first('email') }}</p>
