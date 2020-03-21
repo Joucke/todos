@@ -4,13 +4,6 @@
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
   @include('auth.header', ['title' => __('auth.reset_password')])
 
-  {{-- TODO: replace w/ tailwind ui alert --}}
-  @if (session('status'))
-    <div class="alert alert-success" role="alert">
-      {{ session('status') }}
-    </div>
-  @endif
-
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
     <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
       <form action="{{ route('password.email') }}" method="POST">
