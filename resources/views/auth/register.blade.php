@@ -1,83 +1,104 @@
-@extends('layouts.app')
+@extends('layouts.app-tailwind-ui')
 
 @section('content')
-<div class="card-container">
-    <div class="card-padding lg:w-1/2 mx-auto">
-        <div class="card">
-            <div class="card-header bg-grey-lighter border-b">
-                <p class="font-semibold">{{ __('auth.register') }}</p>
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  @include('auth.header', ['title' => __('auth.register')])
 
-                <div class="flex">
-                    <a class="button button-blue button-secondary button-xs" href="{{ route('login') }}">
-                        {{ __('auth.login') }}
-                    </a>
-                </div>
-            </div>
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <form action="{{ route('register') }}" method="POST">
+        @csrf
 
-            <form method="POST" action="{{ route('register') }}">
-                @csrf
-
-                <div class="card-body bg-white">
-                    <div class="flex flex-col justify-between mb-4">
-                        <label for="name" class="text-sm mb-2">{{ __('users.name') }}</label>
-
-                        <div class="flex flex-col">
-                            <input id="name" type="text" class="border rounded outline-none p-2{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
-
-                            @if ($errors->has('name'))
-                                <p class="text-red text-sm my-2" role="alert">
-                                    <strong>{{ $errors->first('name') }}</strong>
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col justify-between mb-4">
-                        <label for="email" class="text-sm mb-2">{{ __('users.email') }}</label>
-
-                        <div class="flex flex-col">
-                            <input id="email" type="email" class="border rounded outline-none p-2{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
-                            @if ($errors->has('email'))
-                                <p class="text-red text-sm my-2" role="alert">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col justify-between mb-4">
-                        <label for="password" class="text-sm mb-2">{{ __('users.password') }}</label>
-
-                        <div class="flex flex-col">
-                            <input id="password" type="password" class="border rounded outline-none p-2{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                            @if ($errors->has('password'))
-                                <p class="text-red text-sm my-2" role="alert">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col justify-between">
-                        <label for="password-confirm" class="text-sm mb-2">{{ __('users.password_confirm') }}</label>
-
-                        <div class="flex flex-col">
-                            <input id="password-confirm" type="password" class="border rounded outline-none p-2" name="password_confirmation" required>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="flex text-sm">
-                        <button type="submit" class="button button-blue rounded-t-none w-full">
-                            {{ __('auth.register') }}
-                        </button>
-                </div>
-
-            </form>
+        <div>
+          <label for="name" class="block text-sm font-medium leading-5 text-gray-700">
+            {{ __('users.name') }}
+          </label>
+          <div class="mt-1 rounded-md shadow-sm">
+            <input id="name" type="text" name="name" placeholder="Jane Doe" value="{{ old('name') }}" required autofocus class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5{{ $errors->has('name') ? ' border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red' : 'border-gray-300 placeholder-gray-400 focus:shadow-outline-blue focus:border-blue-300' }}" />
+          </div>
+          @if ($errors->has('name'))
+            <p class="mt-2 text-sm text-red-600">{{ $errors->first('name') }}</p>
+          @endif
         </div>
+
+        <div class="mt-6">
+          <label for="email" class="block text-sm font-medium leading-5 text-gray-700">
+            {{ __('users.email') }}
+          </label>
+          <div class="mt-1 rounded-md shadow-sm">
+            <input id="email" type="email" name="email" placeholder="you@example.com" value="{{ old('email') }}" required autofocus class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5{{ $errors->has('email') ? ' border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red' : 'border-gray-300 placeholder-gray-400 focus:shadow-outline-blue focus:border-blue-300' }}" />
+          </div>
+          @if ($errors->has('email'))
+            <p class="mt-2 text-sm text-red-600">{{ $errors->first('email') }}</p>
+          @endif
+        </div>
+
+        <div class="mt-6">
+          <label for="password" class="block text-sm font-medium leading-5 text-gray-700">
+            {{ __('users.password') }}
+          </label>
+          <div class="mt-1 rounded-md shadow-sm">
+            <input id="password" type="password" name="password" required class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5{{ $errors->has('password') ? ' border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red' : 'border-gray-300 placeholder-gray-400 focus:shadow-outline-blue focus:border-blue-300' }}" />
+          </div>
+          @if ($errors->has('password'))
+            <p class="mt-2 text-sm text-red-600">{{ $errors->first('password') }}</p>
+          @endif
+        </div>
+
+        <div class="mt-6">
+          <label for="password-confirm" class="block text-sm font-medium leading-5 text-gray-700">
+            {{ __('users.password_confirm') }}
+          </label>
+          <div class="mt-1 rounded-md shadow-sm">
+            <input id="password-confirm" type="password" name="password_confirmation" required class="appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5 border-gray-300 placeholder-gray-400 focus:shadow-outline-blue focus:border-blue-300" />
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <span class="block w-full rounded-md shadow-sm">
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+              {{ __('auth.register') }}
+            </button>
+          </span>
+        </div>
+      </form>
+
+      <div class="mt-6">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm leading-5">
+            <span class="px-2 bg-white text-gray-500">
+              {{ __('auth.options') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          @if (Route::has('password.request'))
+            <div>
+              <span class="w-full inline-flex rounded-md shadow-sm">
+                <a href="{{ route('password.request') }}" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-xs leading-5 font-medium text-gray-500 hover:text-gray-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition duration-150 ease-in-out">
+                  {{ __('auth.password') }}
+                </a>
+              </span>
+            </div>
+          @endif
+
+          @if (Route::has('login'))
+            <div>
+              <span class="w-full inline-flex rounded-md shadow-sm">
+                <a href="{{ route('login') }}" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-xs leading-5 font-medium text-gray-500 hover:text-gray-400 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition duration-150 ease-in-out">
+                  {{ __('auth.login') }}
+                </a>
+              </span>
+            </div>
+          @endif
+
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 @endsection
