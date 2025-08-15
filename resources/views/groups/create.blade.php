@@ -15,10 +15,10 @@
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-lg font-medium text-gray-900">Group Details</h3>
-                    <p class="mt-1 text-sm text-gray-600">Create a new group to organize your tasks and collaborate with others.</p>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Group Details</h3>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Create a new group to organize your tasks and collaborate with others.</p>
                 </div>
 
                 <form method="POST" action="{{ route('groups.store') }}" class="space-y-6">
@@ -65,7 +65,7 @@
 
                     <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
                         <a href="{{ route('groups.index') }}" class="btn-secondary">Cancel</a>
-                        <button type="submit" class="btn-primary">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>

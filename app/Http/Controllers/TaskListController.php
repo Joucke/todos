@@ -63,11 +63,11 @@ class TaskListController extends Controller
     public function show(TaskList $taskList)
     {
         $this->authorize('view', $taskList);
-        
+
         // Load the group relationship
         $taskList->load('group', 'tasks');
         $group = $taskList->group;
-        
+
         return view('task-lists.show', compact('taskList', 'group'));
     }
 
