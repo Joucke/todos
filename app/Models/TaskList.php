@@ -17,7 +17,7 @@ class TaskList extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'title',
+        'name',
         'group_id',
         'sort_order',
     ];

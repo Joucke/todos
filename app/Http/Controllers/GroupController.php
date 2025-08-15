@@ -21,12 +21,13 @@ class GroupController extends Controller
         /** @var \App\Models\User $user */
         $user = auth()->user();
 
-        $groups = $user->groups()
-            ->with(['owner', 'taskLists', 'members'])
-            ->get();
-
         $ownedGroups = $user->ownedGroups()
             ->with(['taskLists', 'members'])
+            ->get();
+
+        $groups = $user->groups()
+            ->with(['owner', 'taskLists', 'members'])
+            ->whereNot('owner_id', $user->id) // Exclude groups owned by the user
             ->get();
 
         return view('groups.index', compact('groups', 'ownedGroups'));
@@ -48,9 +49,7 @@ class GroupController extends Controller
     public function store(StoreGroupRequest $request): RedirectResponse
     {
         $group = Group::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'visibility' => $request->visibility ?? 'private',
+            'name' => $request->name,
             'owner_id' => auth()->id(),
         ]);
 
@@ -96,7 +95,7 @@ class GroupController extends Controller
     public function update(UpdateGroupRequest $request, Group $group): RedirectResponse
     {
         $group->update([
-            'title' => $request->title,
+            'name' => $request->name,
         ]);
 
         return redirect()->route('groups.show', $group)

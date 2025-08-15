@@ -25,18 +25,18 @@
                     @csrf
 
                     <div>
-                        <label for="title" class="form-label">Group Name</label>
+                        <label for="name" class="form-label">Group Name</label>
                         <input
-                            id="title"
-                            name="title"
+                            id="name"
+                            name="name"
                             type="text"
-                            class="form-input @error('title') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
-                            value="{{ old('title') }}"
+                            class="form-input @error('name') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                            value="{{ old('name') }}"
                             required
                             autofocus
                             placeholder="Enter a name for your group"
                         >
-                        @error('title')
+                        @error('name')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                         <p class="mt-2 text-xs text-gray-500">Choose a descriptive name that helps identify the purpose of this group.</p>

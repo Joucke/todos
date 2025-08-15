@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('task_lists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('group_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->string('name');
             $table->unsignedInteger('sort_order')->nullable();
             $table->timestamps();
 

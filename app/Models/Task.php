@@ -19,7 +19,7 @@ class Task extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'title',
+        'name',
         'task_list_id',
         'interval',
         'days',

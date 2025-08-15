@@ -52,8 +52,8 @@ class Invitation extends Model
 
         // Add user to group if they exist
         $user = User::where('email', $this->email)->first();
-        if ($user && !$this->group->users->contains($user)) {
-            $this->group->users()->attach($user);
+        if ($user && !$this->group->members->contains($user)) {
+            $this->group->members()->attach($user);
         }
 
         return $this;

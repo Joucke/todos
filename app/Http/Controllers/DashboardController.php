@@ -17,7 +17,7 @@ class DashboardController extends Controller
 
         // Get tasks from user's groups with pending scheduled tasks
         $tasks = Task::with(['scheduledTasks', 'taskList.group'])
-            ->whereHas('taskList.group.users', function ($query) {
+            ->whereHas('taskList.group.members', function ($query) {
                 $query->where('users.id', auth()->id());
             })
             ->whereHas('scheduledTasks', function ($query) {

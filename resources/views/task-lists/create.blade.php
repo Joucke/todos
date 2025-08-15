@@ -47,59 +47,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Description Field -->
-                            <div class="space-y-2">
-                                <label for="description" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                    Description
-                                </label>
-                                <textarea name="description"
-                                          id="description"
-                                          rows="4"
-                                          placeholder="Describe the purpose of this task list..."
-                                          class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white resize-none transition-colors duration-200 @error('description') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">{{ old('description') }}</textarea>
-                                @error('description')
-                                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Color Selection -->
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                    Color Theme
-                                </label>
-                                <div class="grid grid-cols-4 gap-3">
-                                    @php
-                                        $colors = [
-                                            'blue' => ['bg-blue-500', 'Blue'],
-                                            'purple' => ['bg-purple-500', 'Purple'],
-                                            'green' => ['bg-green-500', 'Green'],
-                                            'yellow' => ['bg-yellow-500', 'Yellow'],
-                                            'red' => ['bg-red-500', 'Red'],
-                                            'pink' => ['bg-pink-500', 'Pink'],
-                                            'indigo' => ['bg-indigo-500', 'Indigo'],
-                                            'gray' => ['bg-gray-500', 'Gray']
-                                        ];
-                                    @endphp
-                                    @foreach($colors as $color => $details)
-                                    <label class="relative flex items-center justify-center cursor-pointer">
-                                        <input type="radio"
-                                               name="color"
-                                               value="{{ $color }}"
-                                               {{ old('color', 'blue') == $color ? 'checked' : '' }}
-                                               class="sr-only peer">
-                                        <div class="w-12 h-12 {{ $details[0] }} rounded-lg flex items-center justify-center transition-all duration-200 ring-2 ring-transparent peer-checked:ring-2 peer-checked:ring-purple-500 peer-checked:ring-offset-2 dark:peer-checked:ring-offset-gray-800 hover:scale-105 transform">
-                                            <svg class="w-5 h-5 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-200" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                    </label>
-                                    @endforeach
-                                </div>
-                                @error('color')
-                                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-
                             <!-- Action Buttons -->
                             <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
                                 <a href="{{ route('groups.task-lists.index', $group) }}"

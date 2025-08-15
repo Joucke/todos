@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 
     // Task Lists (nested under groups for creation)
     Route::resource('groups.task-lists', TaskListController::class)
-        ->only(['create', 'store'])
+        ->only(['index', 'create', 'store'])
         ->parameter('task-lists', 'taskList');
 
     Route::resource('task-lists', TaskListController::class)

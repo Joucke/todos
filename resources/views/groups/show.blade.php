@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ $group->title }}
+                    {{ $group->name }}
                 </h2>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     {{ $group->members->count() }} {{ Str::plural('member', $group->members->count()) }} •
@@ -47,7 +47,7 @@
                             @foreach($group->taskLists as $taskList)
                                 <div class="card">
                                     <div class="flex items-center justify-between mb-6">
-                                        <h3 class="text-lg font-semibold text-gray-900">{{ $taskList->title }}</h3>
+                                        <h3 class="text-lg font-semibold text-gray-900">{{ $taskList->name }}</h3>
                                         @can('update', $taskList)
                                             <div class="flex space-x-2">
                                                 <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="btn-secondary text-sm">
@@ -71,7 +71,7 @@
                                                 <div class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
                                                     <div class="flex items-start justify-between">
                                                         <div class="flex-1">
-                                                            <h4 class="font-medium text-gray-900">{{ $task->title }}</h4>
+                                                            <h4 class="font-medium text-gray-900">{{ $task->name }}</h4>
                                                             <div class="mt-2 flex items-center space-x-4 text-sm text-gray-600">
                                                                 <div class="flex items-center">
                                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

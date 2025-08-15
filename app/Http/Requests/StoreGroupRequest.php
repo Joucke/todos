@@ -22,7 +22,7 @@ class StoreGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255', 'min:1'],
+            'name' => ['required', 'string', 'max:255', 'min:1'],
         ];
     }
 
@@ -34,7 +34,7 @@ class StoreGroupRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'title' => 'group name',
+            'name' => 'group name',
         ];
     }
 
@@ -46,9 +46,9 @@ class StoreGroupRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'The group name is required.',
-            'title.min' => 'The group name must not be empty.',
-            'title.max' => 'The group name may not be greater than 255 characters.',
+            'name.required' => 'The group name is required.',
+            'name.min' => 'The group name must not be empty.',
+            'name.max' => 'The group name may not be greater than 255 characters.',
         ];
     }
 }
