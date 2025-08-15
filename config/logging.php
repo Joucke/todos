@@ -54,10 +54,65 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', (string) env('LOG_STACK', 'single')),
+            'channels' => explode(',', (string) env('LOG_STACK', 'errors,warnings,info')),
             'ignore_exceptions' => false,
         ],
 
+        // Separate log files by level
+        'errors' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/errors.log'),
+            'level' => 'error',
+            'replace_placeholders' => true,
+        ],
+
+        'warnings' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/warnings.log'),
+            'level' => 'warning',
+            'replace_placeholders' => true,
+        ],
+
+        'info' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/info.log'),
+            'level' => 'info',
+            'replace_placeholders' => true,
+        ],
+
+        'debug' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/debug.log'),
+            'level' => 'debug',
+            'replace_placeholders' => true,
+        ],
+
+        // Daily rotating logs by level
+        'daily_errors' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/errors.log'),
+            'level' => 'error',
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
+        'daily_warnings' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/warnings.log'),
+            'level' => 'warning',
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
+        'daily_info' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/info.log'),
+            'level' => 'info',
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
+        // Original single channel for backwards compatibility
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
