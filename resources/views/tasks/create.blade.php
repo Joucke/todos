@@ -144,7 +144,7 @@
 
                             <!-- Action Buttons -->
                             <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-                                <a href="{{ route('groups.task-lists.show', [$group, $taskList]) }}"
+                                <a href="{{ route('task-lists.show', $taskList) }}"
                                    class="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
                                     Cancel
                                 </a>

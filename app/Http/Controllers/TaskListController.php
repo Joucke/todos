@@ -9,22 +9,6 @@ use Illuminate\Http\Request;
 class TaskListController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index(Group $group = null)
-    {
-        if ($group) {
-            // Nested route: /groups/{group}/task-lists
-            $this->authorize('view', $group);
-            $group->load(['taskLists.tasks', 'members']);
-            return view('task-lists.index', compact('group'));
-        } else {
-            // This shouldn't be used based on current routes
-            return redirect()->route('groups.index');
-        }
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create(Group $group = null)
@@ -65,7 +49,7 @@ class TaskListController extends Controller
                 'sort_order' => $maxSortOrder + 1,
             ]);
 
-            return redirect()->route('groups.task-lists.index', $group)
+            return redirect()->route('groups.show', $group)
                            ->with('success', 'Task list created successfully!');
         } else {
             // This shouldn't be used based on current routes
@@ -78,7 +62,13 @@ class TaskListController extends Controller
      */
     public function show(TaskList $taskList)
     {
-        //
+        $this->authorize('view', $taskList);
+        
+        // Load the group relationship
+        $taskList->load('group', 'tasks');
+        $group = $taskList->group;
+        
+        return view('task-lists.show', compact('taskList', 'group'));
     }
 
     /**

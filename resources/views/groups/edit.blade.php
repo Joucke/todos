@@ -148,19 +148,55 @@
                             <p class="text-xs text-red-800 dark:text-red-200 mb-4">
                                 Delete this group and all its data. This action cannot be undone and will remove all task lists, tasks, and member relationships.
                             </p>
-                            <form method="POST" action="{{ route('groups.destroy', $group) }}" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                        onclick="return confirm('Are you sure you want to delete this group? This will permanently delete all tasks, lists, and member data. This action cannot be undone.')"
-                                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg text-xs transition-colors duration-200">
-                                    Delete Group
-                                </button>
-                            </form>
+                            <button type="button"
+                                    onclick="document.getElementById('delete-group-modal').classList.remove('hidden')"
+                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg text-xs transition-colors duration-200">
+                                Delete Group
+                            </button>
                         </div>
                     </div>
                 </div>
                 @endcan
+
+                <!-- Delete Confirmation Modal -->
+                <div id="delete-group-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+                        <div class="mt-3">
+                            <!-- Warning Icon -->
+                            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/20">
+                                <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                            </div>
+
+                            <!-- Modal Content -->
+                            <div class="mt-5 text-center">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Delete Group</h3>
+                                <div class="mt-2 px-7 py-3">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                                        Are you sure you want to delete <strong>{{ $group->name }}</strong>? This will permanently delete all tasks, lists, and member data. This action cannot be undone.
+                                    </p>
+                                </div>
+
+                                <!-- Modal Actions -->
+                                <div class="flex items-center justify-center space-x-4 px-4 py-3">
+                                    <button onclick="document.getElementById('delete-group-modal').classList.add('hidden')"
+                                            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded-lg transition-colors duration-200">
+                                        Cancel
+                                    </button>
+                                    <form method="POST" action="{{ route('groups.destroy', $group) }}" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                            Delete Group
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

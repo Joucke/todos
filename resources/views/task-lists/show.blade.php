@@ -29,7 +29,7 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         @can('create', [App\Models\Task::class, $taskList])
-                        <a href="{{ route('groups.task-lists.tasks.create', [$group, $taskList]) }}"
+                        <a href="{{ route('task-lists.tasks.create', $taskList) }}"
                            class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -38,7 +38,7 @@
                         </a>
                         @endcan
                         @can('update', $taskList)
-                        <a href="{{ route('groups.task-lists.edit', [$group, $taskList]) }}"
+                        <a href="{{ route('task-lists.edit', $taskList) }}"
                            class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium rounded-lg transition-colors duration-200">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -105,7 +105,7 @@
                     Start organizing your work by adding the first task to this list.
                 </p>
                 @can('create', [App\Models\Task::class, $taskList])
-                <a href="{{ route('groups.task-lists.tasks.create', [$group, $taskList]) }}"
+                <a href="{{ route('task-lists.tasks.create', $taskList) }}"
                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -249,7 +249,7 @@
 
         <!-- Back Navigation -->
         <div class="mt-8 text-center">
-            <a href="{{ route('groups.task-lists.index', $group) }}"
+            <a href="{{ route('groups.show', $group) }}"
                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>

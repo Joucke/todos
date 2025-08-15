@@ -27,7 +27,7 @@
             <div class="lg:col-span-2">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <form method="POST" action="{{ route('groups.task-lists.update', [$group, $taskList]) }}" class="space-y-6">
+                        <form method="POST" action="{{ route('task-lists.update', $taskList) }}" class="space-y-6">
                             @csrf
                             @method('PUT')
 
@@ -103,7 +103,7 @@
 
                             <!-- Action Buttons -->
                             <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-                                <a href="{{ route('groups.task-lists.show', [$group, $taskList]) }}"
+                                <a href="{{ route('task-lists.show', $taskList) }}"
                                    class="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
                                     Cancel
                                 </a>
@@ -212,7 +212,7 @@
                             <p class="text-xs text-red-800 dark:text-red-200 mb-4">
                                 Delete this task list and all its tasks. This action cannot be undone.
                             </p>
-                            <form method="POST" action="{{ route('groups.task-lists.destroy', [$group, $taskList]) }}" class="inline">
+                            <form method="POST" action="{{ route('task-lists.destroy', $taskList) }}" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"

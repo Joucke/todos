@@ -47,16 +47,27 @@
                             @foreach($group->taskLists as $taskList)
                                 <div class="card">
                                     <div class="flex items-center justify-between mb-6">
-                                        <h3 class="text-lg font-semibold text-gray-900">{{ $taskList->name }}</h3>
+                                        <div class="flex-1">
+                                            <h3 class="text-lg font-semibold text-gray-900">
+                                                <a href="{{ route('task-lists.show', $taskList) }}" class="hover:text-blue-600 transition-colors duration-200">
+                                                    {{ $taskList->name }}
+                                                </a>
+                                            </h3>
+                                            @if($taskList->description)
+                                                <p class="text-sm text-gray-600 mt-1">{{ $taskList->description }}</p>
+                                            @endif
+                                        </div>
                                         @can('update', $taskList)
-                                            <div class="flex space-x-2">
-                                                <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="btn-secondary text-sm">
-                                                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="flex items-center space-x-2">
+                                                <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors duration-200">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                                     </svg>
                                                     Add Task
                                                 </a>
-                                                <a href="{{ route('task-lists.edit', $taskList) }}" class="text-gray-400 hover:text-gray-600">
+                                                <a href="{{ route('task-lists.edit', $taskList) }}" 
+                                                   class="inline-flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                                                   title="Edit task list">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                                     </svg>
