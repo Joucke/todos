@@ -27,7 +27,7 @@ class GroupController extends Controller
 
         $groups = $user->groups()
             ->with(['owner', 'taskLists', 'members'])
-            // Temporarily include groups owned by the user
+            ->where('owner_id', '!=', $user->id)
             ->get();
 
         return view('groups.index', compact('groups', 'ownedGroups'));

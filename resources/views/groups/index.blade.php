@@ -1,9 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('My Groups') }}
-            </h2>
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('My Groups') }}
+                </h2>
+                @if($ownedGroups->count() > 0 || $groups->count() > 0)
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        @if($ownedGroups->count() > 0)
+                            {{ $ownedGroups->count() }} {{ Str::plural('owned', $ownedGroups->count()) }}
+                        @endif
+                        @if($ownedGroups->count() > 0 && $groups->count() > 0)
+                            •
+                        @endif
+                        @if($groups->count() > 0)
+                            {{ $groups->count() }} {{ Str::plural('member', $groups->count()) }}
+                        @endif
+                    </p>
+                @endif
+            </div>
             <x-icon-button href="{{ route('groups.create') }}" title="Add new group">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
             </x-icon-button>
