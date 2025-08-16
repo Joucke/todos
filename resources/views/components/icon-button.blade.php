@@ -39,16 +39,12 @@ $iconClass = $iconSizes[$size] ?? $iconSizes['md'];
        class="{{ $classes }}"
        @if($title) title="{{ $title }}" @endif
        {{ $attributes }}>
-        <svg class="{{ $iconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {{ $slot }}
-        </svg>
+        {{ $slot }}
     </a>
 @else
     <button class="{{ $classes }}"
             @if($title) title="{{ $title }}" @endif
             {{ $attributes }}>
-        <svg class="{{ $iconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {{ $slot }}
-        </svg>
+        {{ $slot }}
     </button>
 @endif

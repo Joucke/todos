@@ -16,18 +16,14 @@
                         </p>
                         <div class="flex items-center space-x-6 text-sm text-purple-100">
                             <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m3 5.197v-1a6 6 0 013-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                </svg>
+                                <x-icon type="group" size="lg" class="mr-2" />
                                 {{ auth()->user()->groups->count() }} {{ Str::plural('Group', auth()->user()->groups->count()) }}
                             </div>
                         </div>
                     </div>
                     <div class="hidden sm:block">
                         <div class="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
-                            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-                            </svg>
+                            <x-icon type="achievement" size="4xl" class="text-white" />
                         </div>
                     </div>
                 </div>
@@ -90,9 +86,7 @@
             <!-- No Groups State -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-12 text-center">
-                    <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m3 5.197v-1a6 6 0 013-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
+                    <x-icon type="group" size="4xl" class="mx-auto text-gray-400 mb-4" />
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No groups yet</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-6">Get started by creating your first group to organize your tasks.</p>
                     <a href="{{ route('groups.create') }}"

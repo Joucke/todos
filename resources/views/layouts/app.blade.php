@@ -13,6 +13,39 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Theme initialization script -->
+        <script>
+            // Apply theme immediately to prevent flash
+            (function() {
+                function getCookie(name) {
+                    const nameEQ = name + "=";
+                    const ca = document.cookie.split(';');
+                    for(let i = 0; i < ca.length; i++) {
+                        let c = ca[i];
+                        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                }
+
+                const theme = getCookie('theme') || 'system';
+                const root = document.documentElement;
+
+                if (theme === 'dark') {
+                    root.classList.add('dark');
+                } else if (theme === 'light') {
+                    root.classList.remove('dark');
+                } else {
+                    // System preference
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        root.classList.add('dark');
+                    } else {
+                        root.classList.remove('dark');
+                    }
+                }
+            })();
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -36,5 +69,8 @@
                 @endisset
             </main>
         </div>
+
+        <!-- Additional Scripts -->
+        @stack('scripts')
     </body>
 </html>
