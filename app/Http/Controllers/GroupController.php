@@ -27,7 +27,7 @@ class GroupController extends Controller
 
         $groups = $user->groups()
             ->with(['owner', 'taskLists', 'members'])
-            // ->where('owner_id', '!=', $user->id)
+            ->where('owner_id', '!=', $user->id)
             ->get();
 
         return view('groups.index', compact('groups', 'ownedGroups'));

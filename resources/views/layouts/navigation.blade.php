@@ -35,7 +35,7 @@
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
-                                <x-icon type="dropdown-arrow" size="md" class="fill-current" />
+                                <x-icon type="dropdown-arrow" size="md" style="thin" class="fill-current" />
                             </div>
                         </button>
                     </x-slot>

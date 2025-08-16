@@ -1,6 +1,7 @@
 @props([
     'type' => 'edit',
     'size' => 'md',
+    'style' => 'normal',
     'class' => '',
 ])
 
@@ -9,7 +10,7 @@ $icons = [
     'edit' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
     'add' => 'M12 6v6m0 0v6m0-6h6m-6 0H6',
     'leave' => 'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1',
-    'invite' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z',
+    'invite' => 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z',
     'light-mode' => 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z',
     'system-mode' => 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
     'dark-mode' => 'M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z',
@@ -22,6 +23,12 @@ $icons = [
     'dropdown-arrow' => 'M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z',
     'hamburger' => 'M4 6h16M4 12h16M4 18h16',
     'close' => 'M6 18L18 6M6 6l12 12',
+    'info' => 'M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z',
+    'chart' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+    'clock' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+    'save' => 'M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2zM7 3v6h10V3H7z',
+    'check-circle' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+    'back' => 'M10 19l-7-7m0 0l7-7m-7 7h18',
 ];
 
 $sizes = [
@@ -34,11 +41,23 @@ $sizes = [
     '4xl' => 'w-16 h-16',
 ];
 
+$styles = [
+    'normal' => '2',
+    'thin' => '1',
+];
+
+$viewBoxes = [
+    'info' => '0 0 20 20',
+    // Add other icons that need different viewBoxes here
+];
+
 $path = $icons[$type] ?? $icons['edit'];
 $sizeClass = $sizes[$size] ?? $sizes['md'];
+$strokeWidth = $styles[$style] ?? $styles['normal'];
+$viewBox = $viewBoxes[$type] ?? '0 0 24 24';
 $iconClass = trim($sizeClass . ' ' . $class);
 @endphp
 
-<svg class="{{ $iconClass }}" fill="none" stroke="currentColor" viewBox="0 0 24 24" {{ $attributes }}>
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $path }}"/>
+<svg class="{{ $iconClass }}" fill="none" stroke="currentColor" viewBox="{{ $viewBox }}" {{ $attributes }}>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="{{ $strokeWidth }}" d="{{ $path }}"/>
 </svg>

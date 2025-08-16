@@ -2,9 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ $group->name }}
-                </h2>
+                <x-breadcrumb :items="[
+                    ['title' => 'my groups', 'url' => route('groups.index'), 'icon' => 'group'],
+                    ['title' => $group->name]
+                ]" />
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     {{ $group->members->count() }} {{ Str::plural('member', $group->members->count()) }} •
                     {{ $group->taskLists->count() }} {{ Str::plural('list', $group->taskLists->count()) }}
@@ -12,7 +13,7 @@
             </div>
             <div class="flex space-x-3">
                 @can('update', $group)
-                    <x-icon-button href="{{ route('groups.task-lists.create', $group) }}" title="add new list">
+                    <x-icon-button href="{{ route('groups.task-lists.create', $group) }}" title="add a list">
                         <x-icon type="add" />
                     </x-icon-button>
                     <x-icon-button href="{{ route('groups.edit', $group) }}" title="change group settings">
@@ -27,8 +28,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Success Messages -->
             @if (session('success'))
-                <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-                    {{ session('success') }}
+                <div class="mb-6">
+                    <x-sidebar-box type="success">
+                        {{ session('success') }}
+                    </x-sidebar-box>
                 </div>
             @endif
 
@@ -53,17 +56,13 @@
                                         @can('update', $taskList)
                                             <div class="flex items-center space-x-2">
                                                 <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors duration-200">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                                    </svg>
+                                                    <x-icon type="add" size="md" class="mr-2" />
                                                     Add Task
                                                 </a>
                                                 <a href="{{ route('task-lists.edit', $taskList) }}"
                                                    class="inline-flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
                                                    title="Edit task list">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                    </svg>
+                                                    <x-icon type="edit" size="md" />
                                                 </a>
                                             </div>
                                         @endcan
@@ -97,7 +96,7 @@
                                                             @can('complete', $task)
                                                                 <form method="POST" action="{{ route('tasks.scheduled-tasks.store', $task) }}" class="inline">
                                                                     @csrf
-                                                                    <button type="submit" class="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" title="Mark Complete">
+                                                                    <button type="submit" class="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white text-sm font-medium rounded transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800" title="Mark Complete">
                                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                                         </svg>
@@ -106,9 +105,7 @@
                                                             @endcan
                                                             @can('update', $task)
                                                                 <a href="{{ route('task-lists.tasks.edit', [$taskList, $task]) }}" class="text-gray-400 hover:text-gray-600" title="Edit Task">
-                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                                    </svg>
+                                                                    <x-icon type="edit" size="md" />
                                                                 </a>
                                                             @endcan
                                                         </div>
@@ -118,10 +115,8 @@
                                         </div>
                                     @else
                                         <div class="text-center py-6 text-gray-500">
-                                            <svg class="mx-auto h-8 w-8 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                            </svg>
-                                            <p class="text-sm">No tasks yet. <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="text-blue-600 hover:text-blue-800">Add your first task</a>.</p>
+                                            <x-icon type="list" size="xl" class="mx-auto text-gray-300 mb-2" />
+                                            <p class="text-sm">No tasks yet. <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Add your first task</a>.</p>
                                         </div>
                                     @endif
                                 </div>
@@ -129,17 +124,13 @@
                         </div>
                     @else
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center py-12">
-                            <svg class="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                            </svg>
+                            <x-icon type="list" size="3xl" class="mx-auto text-gray-300 dark:text-gray-600 mb-4" />
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No task lists yet</h3>
                             <p class="text-gray-600 dark:text-gray-400 mb-6">Get started by creating your first task list to organize work.</p>
                             @can('update', $group)
-                                <a href="{{ route('groups.task-lists.create', $group) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                    </svg>
-                                    Create First List
+                                <a href="{{ route('groups.task-lists.create', $group) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                    <x-icon type="add" size="md" class="mr-1" />
+                                    Add Your First List
                                 </a>
                             @endcan
                         </div>
@@ -149,9 +140,8 @@
                 <!-- Sidebar - Group Info & Members -->
                 <div class="mt-8 lg:mt-0">
                     <div class="space-y-6">
-                        <!-- Group Members -->
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                            <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Members</h4>
+                        <!-- Members -->
+                        <x-sidebar-box type="neutral" title="Members" icon="group">
                             <div class="space-y-3">
                                 @foreach($group->members as $user)
                                     <div class="flex items-center">
@@ -172,16 +162,66 @@
                             </div>
 
                             @can('invite', $group)
-                                <div class="mt-4 pt-4 border-t border-gray-200">
-                                    <a href="{{ route('groups.invitations.index', $group) }}" class="btn-secondary w-full text-center inline-flex items-center justify-center">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                                        </svg>
+                                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                    <a href="{{ route('groups.invitations.index', $group) }}" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-900 dark:text-gray-100 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 w-full text-center inline-flex items-center justify-center">
+                                        <x-icon type="invite" size="md" class="mr-1" />
                                         Invite
                                     </a>
                                 </div>
                             @endcan
-                        </div>
+                        </x-sidebar-box>
+
+                        <!-- Statistics -->
+                        <x-sidebar-box type="neutral" title="Statistics" icon="chart">
+                            <div class="space-y-2 ml-8 mr-8">
+                                <div class="flex items-center justify-between">
+                                    <span>Members:</span>
+                                    <span class="font-medium">{{ $group->members->count() }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Task Lists:</span>
+                                    <span class="font-medium">{{ $group->taskLists->count() }}</span>
+                                </div>
+                                @php
+                                    $totalTasks = $group->taskLists->sum(fn($list) => $list->tasks?->count() ?? 0);
+                                    $completedTasks = $group->taskLists->sum(fn($list) => $list->tasks?->where('is_completed', true)->count() ?? 0);
+                                @endphp
+                                <div class="flex items-center justify-between">
+                                    <span>Total Tasks:</span>
+                                    <span class="font-medium">{{ $totalTasks }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Completed:</span>
+                                    <span class="font-medium">{{ $completedTasks }}</span>
+                                </div>
+                                @if($totalTasks > 0)
+                                <div class="pt-2 border-t border-blue-200 dark:border-blue-700">
+                                    <div class="flex items-center justify-between">
+                                        <span>Overall Progress:</span>
+                                        <span class="font-medium">{{ round(($completedTasks / $totalTasks) * 100) }}%</span>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </x-sidebar-box>
+
+                        <!-- Timeline -->
+                        <x-sidebar-box type="neutral" title="Timeline" icon="clock">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span>Created:</span>
+                                    <span>{{ $group->created_at->format('M j, Y') }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Last Updated:</span>
+                                    <span>{{ $group->updated_at->diffForHumans() }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Owner:</span>
+                                    <span>{{ $group->owner->name }}</span>
+                                </div>
+                            </div>
+                        </x-sidebar-box>
 
                         <!-- Pending Invitations -->
                         @if($group->pendingInvitations->isNotEmpty() && $group->isOwnedBy(auth()->user()))

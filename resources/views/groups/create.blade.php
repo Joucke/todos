@@ -1,30 +1,26 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Create New Group') }}
-            </h2>
-            <a href="{{ route('groups.index') }}" class="btn-secondary">
-                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-                Back to Groups
-            </a>
-        </div>
+        <x-breadcrumb :items="[
+            ['title' => 'my groups', 'url' => route('groups.index'), 'icon' => 'group'],
+            ['title' => 'add a group']
+        ]" />
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Group Details</h3>
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Create a new group to organize your tasks and collaborate with others.</p>
-                </div>
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+                <!-- Main Form -->
+                <div class="lg:col-span-3">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                        <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Group Details</h3>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Add a group to organize your tasks and collaborate with others.</p>
+                        </div>
 
-                <form method="POST" action="{{ route('groups.store') }}" class="space-y-6">
-                    @csrf
+                        <form method="POST" action="{{ route('groups.store') }}" class="space-y-6">
+                            @csrf
 
-                    <div>
+                            <div>
                         <label for="name" class="form-label">Group Name</label>
                         <input
                             id="name"
@@ -32,47 +28,41 @@
                             type="text"
                             class="form-input @error('name') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
                             value="{{ old('name') }}"
+                            autocomplete="off"
+                            data-1p-ignore
                             required
                             autofocus
                             placeholder="Enter a name for your group"
                         >
                         @error('name')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
-                        <p class="mt-2 text-xs text-gray-500">Choose a descriptive name that helps identify the purpose of this group.</p>
+                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Choose a descriptive name that helps identify the purpose of this group.</p>
                     </div>
 
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h4 class="text-sm font-medium text-blue-800">What happens next?</h4>
-                                <div class="mt-2 text-sm text-blue-700">
-                                    <ul class="list-disc list-inside space-y-1">
-                                        <li>You'll become the owner of this group</li>
-                                        <li>You can invite others via email</li>
-                                        <li>You can create task lists to organize work</li>
-                                        <li>Members can view and complete tasks</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
-                        <a href="{{ route('groups.index') }}" class="btn-secondary">Cancel</a>
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                            </svg>
-                            Create Group
+                    <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <a href="{{ route('groups.index') }}" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-900 dark:text-gray-100 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">Cancel</a>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                            <x-icon type="add" size="md" class="mr-2" />
+                            Add Group
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="mt-8 lg:mt-0">
+            <div class="space-y-6">
+            <!-- What happens next info -->
+            <x-sidebar-box type="info" title="What happens next?">
+                <ul class="list-disc list-outside ml-4 space-y-1 max-w-none">
+                    <li>You'll become the owner of this group</li>
+                    <li>You can invite others via email</li>
+                    <li>You can add task lists to organize work</li>
+                    <li>Members can view and complete tasks</li>
+                </ul>
+            </x-sidebar-box>
             </div>
         </div>
     </div>

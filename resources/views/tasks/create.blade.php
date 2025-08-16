@@ -16,7 +16,7 @@
                     </div>
                     <div>
                         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Create Task</h1>
-                        <p class="text-gray-600 dark:text-gray-400 mt-1">Add a new task to <span class="font-medium">{{ $taskList->name }}</span></p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1">Add a task to <span class="font-medium">{{ $taskList->name }}</span></p>
                         <div class="flex items-center space-x-2 mt-1 text-sm text-gray-500">
                             <span>{{ $group->name }}</span>
                             <span>•</span>

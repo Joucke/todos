@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    {{ __('My Groups') }}
+                    my groups
                 </h2>
                 @if($ownedGroups->count() > 0 || $groups->count() > 0)
                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -19,7 +19,7 @@
                     </p>
                 @endif
             </div>
-            <x-icon-button href="{{ route('groups.create') }}" title="Add new group">
+            <x-icon-button href="{{ route('groups.create') }}" title="add a group">
                 <x-icon type="add" />
             </x-icon-button>
         </div>
@@ -81,7 +81,7 @@
                     <div class="mt-6">
                         <a href="{{ route('groups.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             <x-icon type="add" size="lg" class="mr-2" />
-                            Create Your First Group
+                            Add Your First Group
                         </a>
                     </div>
                 </div>
