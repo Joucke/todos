@@ -58,25 +58,17 @@ class TaskListController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified resource.
      */
-    public function show(TaskList $taskList)
+    public function edit(TaskList $taskList)
     {
-        $this->authorize('view', $taskList);
+        $this->authorize('update', $taskList);
 
         // Load the group relationship
         $taskList->load('group', 'tasks');
         $group = $taskList->group;
 
-        return view('task-lists.show', compact('taskList', 'group'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TaskList $taskList)
-    {
-        //
+        return view('task-lists.edit', compact('taskList', 'group'));
     }
 
     /**
@@ -84,7 +76,16 @@ class TaskListController extends Controller
      */
     public function update(Request $request, TaskList $taskList)
     {
-        //
+        $this->authorize('update', $taskList);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $taskList->update($validated);
+
+        return redirect()->route('groups.show', $taskList->group)
+                       ->with('success', 'Task list updated successfully!');
     }
 
     /**
@@ -92,6 +93,14 @@ class TaskListController extends Controller
      */
     public function destroy(TaskList $taskList)
     {
-        //
+        $this->authorize('delete', $taskList);
+
+        $group = $taskList->group;
+        $taskListName = $taskList->name;
+
+        $taskList->delete();
+
+        return redirect()->route('groups.show', $group)
+                       ->with('success', "Task list '{$taskListName}' has been removed successfully!");
     }
 }

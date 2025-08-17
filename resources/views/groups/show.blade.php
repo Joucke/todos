@@ -44,24 +44,21 @@
                                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                                     <div class="flex items-center justify-between mb-6">
                                         <div class="flex-1">
-                                            <h3 class="text-lg font-semibold text-gray-900">
-                                                <a href="{{ route('task-lists.show', $taskList) }}" class="hover:text-blue-600 transition-colors duration-200">
-                                                    {{ $taskList->name }}
-                                                </a>
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                                {{ $taskList->name }}
                                             </h3>
                                             @if($taskList->description)
-                                                <p class="text-sm text-gray-600 mt-1">{{ $taskList->description }}</p>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $taskList->description }}</p>
                                             @endif
                                         </div>
                                         @can('update', $taskList)
                                             <div class="flex items-center space-x-2">
-                                                <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors duration-200">
-                                                    <x-icon type="add" size="md" class="mr-2" />
-                                                    Add Task
-                                                </a>
+                                                <x-icon-button href="{{ route('task-lists.tasks.create', $taskList) }}" title="add a task">
+                                                    <x-icon type="add" />
+                                                </x-icon-button>
                                                 <a href="{{ route('task-lists.edit', $taskList) }}"
-                                                   class="inline-flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-                                                   title="Edit task list">
+                                                   class="inline-flex items-center justify-center w-8 h-8 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors duration-200"
+                                                   title="change task list">
                                                     <x-icon type="edit" size="md" />
                                                 </a>
                                             </div>
@@ -71,11 +68,11 @@
                                     @if($taskList->tasks->isNotEmpty())
                                         <div class="space-y-3">
                                             @foreach($taskList->tasks as $task)
-                                                <div class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
+                                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
                                                     <div class="flex items-start justify-between">
                                                         <div class="flex-1">
-                                                            <h4 class="font-medium text-gray-900">{{ $task->name }}</h4>
-                                                            <div class="mt-2 flex items-center space-x-4 text-sm text-gray-600">
+                                                            <h4 class="font-medium text-gray-900 dark:text-gray-100">{{ $task->name }}</h4>
+                                                            <div class="mt-2 flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                                                                 <div class="flex items-center">
                                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -104,7 +101,7 @@
                                                                 </form>
                                                             @endcan
                                                             @can('update', $task)
-                                                                <a href="{{ route('task-lists.tasks.edit', [$taskList, $task]) }}" class="text-gray-400 hover:text-gray-600" title="Edit Task">
+                                                                <a href="{{ route('task-lists.tasks.edit', [$taskList, $task]) }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" title="Edit Task">
                                                                     <x-icon type="edit" size="md" />
                                                                 </a>
                                                             @endcan
@@ -114,9 +111,16 @@
                                             @endforeach
                                         </div>
                                     @else
-                                        <div class="text-center py-6 text-gray-500">
-                                            <x-icon type="list" size="xl" class="mx-auto text-gray-300 mb-2" />
-                                            <p class="text-sm">No tasks yet. <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">Add your first task</a>.</p>
+                                        <div class="text-center py-12">
+                                            <x-icon type="task" size="3xl" class="mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+                                            <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No tasks yet</h4>
+                                            <p class="text-gray-600 dark:text-gray-400 mb-6">Get started by adding your first task to this list.</p>
+                                            @can('create', [App\Models\Task::class, $taskList])
+                                                <a href="{{ route('task-lists.tasks.create', $taskList) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                                    <x-icon type="add" size="md" class="mr-1" />
+                                                    Add Your First Task
+                                                </a>
+                                            @endcan
                                         </div>
                                     @endif
                                 </div>

@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invitations', function (Blueprint $table) {
+        Schema::create('task_lists', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
             $table->foreignId('group_id')->constrained()->cascadeOnDelete();
-            $table->boolean('accepted')->nullable();
+            $table->string('name');
+            $table->unsignedInteger('sort_order')->nullable(); // For sorting task lists within a group
             $table->timestamps();
 
-            $table->index(['email', 'accepted']);
-            $table->index('group_id');
-            $table->unique(['email', 'group_id']);
+            $table->index(['group_id', 'sort_order']);
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invitations');
+        Schema::dropIfExists('task_lists');
     }
 };

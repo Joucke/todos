@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
         ->parameter('task-lists', 'taskList');
 
     Route::resource('task-lists', TaskListController::class)
-        ->except(['create', 'store', 'index'])
+        ->except(['create', 'store', 'index', 'show'])
         ->parameter('task-lists', 'taskList');
 
     Route::patch('groups/{group}/task-lists/sort', [TaskListController::class, 'sort'])

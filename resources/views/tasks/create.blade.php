@@ -1,232 +1,384 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <x-breadcrumb :items="[
+            ['title' => 'my groups', 'url' => route('groups.index'), 'icon' => 'group'],
+            ['title' => $group->name, 'url' => route('groups.show', $group)],
+            ['title' => $taskList->name, 'url' => route('groups.show', ['group' => $group, 'list' => $taskList->id])],
+            ['title' => 'add a task']
+        ]" />
+    </x-slot>
 
-@section('content')
-<div class="py-12">
-    <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-        <!-- Header Section -->
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-8">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-                <div class="flex items-center space-x-4">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+                <!-- Main Form -->
+                <div class="lg:col-span-3">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                        <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Task Details</h3>
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Add a task to {{ $taskList->name }} in {{ $group->name }}.</p>
                         </div>
-                    </div>
-                    <div>
-                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Create Task</h1>
-                        <p class="text-gray-600 dark:text-gray-400 mt-1">Add a task to <span class="font-medium">{{ $taskList->name }}</span></p>
-                        <div class="flex items-center space-x-2 mt-1 text-sm text-gray-500">
-                            <span>{{ $group->name }}</span>
-                            <span>•</span>
-                            <span>{{ $taskList->name }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Main Form -->
-            <div class="lg:col-span-2">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <form method="POST" action="{{ route('groups.task-lists.tasks.store', [$group, $taskList]) }}" class="space-y-6">
+                        <form method="POST" action="{{ route('task-lists.tasks.store', $taskList) }}" class="space-y-6">
                             @csrf
 
-                            <!-- Title Field -->
-                            <div class="space-y-2">
-                                <label for="title" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                    Task Title <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text"
-                                       name="title"
-                                       id="title"
-                                       value="{{ old('title') }}"
-                                       placeholder="e.g., Implement user authentication, Fix navigation bug"
-                                       class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-colors duration-200 @error('title') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
-                                       required>
-                                @error('title')
-                                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            <!-- Task Name Field -->
+                            <div>
+                                <label for="name" class="form-label">Task Name</label>
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    class="form-input @error('name') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                                    value="{{ old('name') }}"
+                                    autocomplete="off"
+                                    data-1p-ignore
+                                    required
+                                    autofocus
+                                    placeholder="Enter a name for your task"
+                                >
+                                @error('name')
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Choose a clear, actionable name that describes what needs to be done.</p>
                             </div>
 
-                            <!-- Description Field -->
-                            <div class="space-y-2">
-                                <label for="description" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                    Description
-                                </label>
-                                <textarea name="description"
-                                          id="description"
-                                          rows="4"
-                                          placeholder="Provide additional details about this task..."
-                                          class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white resize-none transition-colors duration-200 @error('description') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">{{ old('description') }}</textarea>
-                                @error('description')
-                                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            <!-- Interval Field -->
+                            <!-- Interval Field -->
+                            <div>
+                                <label class="form-label">Repeat Every</label>
+                                <div class="space-y-3 mt-2">
+                                    <!-- Preset Values -->
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach([
+                                            1 => '1d',
+                                            2 => '2d',
+                                            3 => '3d',
+                                            4 => '4d',
+                                            5 => '5d',
+                                            6 => '6d',
+                                            7 => '1w',
+                                            10 => '10d',
+                                            14 => '2w',
+                                            21 => '3w',
+                                            28 => '4w'
+                                        ] as $value => $label)
+                                            <label class="relative">
+                                                <input
+                                                    type="radio"
+                                                    name="interval_type"
+                                                    value="preset"
+                                                    data-interval="{{ $value }}"
+                                                    {{ old('interval', 1) == $value ? 'checked' : '' }}
+                                                    class="sr-only peer interval-preset"
+                                                >
+                                                <div class="px-3 py-2 text-sm font-medium rounded-lg border-2 cursor-pointer transition-all duration-200
+                                                    peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white
+                                                    border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
+                                                    hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700
+                                                    peer-checked:hover:bg-indigo-700">
+                                                    {{ $label }}
+                                                </div>
+                                            </label>
+                                        @endforeach
+                                    </div>
 
-                            <!-- Priority and Due Date Row -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Priority -->
-                                <div class="space-y-2">
-                                    <label for="priority" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        Priority
-                                    </label>
-                                    <select name="priority"
-                                            id="priority"
-                                            class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-colors duration-200 @error('priority') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
-                                        <option value="low" {{ old('priority', 'medium') == 'low' ? 'selected' : '' }}>Low Priority</option>
-                                        <option value="medium" {{ old('priority', 'medium') == 'medium' ? 'selected' : '' }}>Medium Priority</option>
-                                        <option value="high" {{ old('priority', 'medium') == 'high' ? 'selected' : '' }}>High Priority</option>
-                                    </select>
-                                    @error('priority')
-                                        <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                    @enderror
+                                    <!-- Custom Input Option -->
+                                    <div class="flex items-center space-x-3">
+                                        <label class="relative">
+                                            <input
+                                                type="radio"
+                                                name="interval_type"
+                                                value="custom"
+                                                {{ !in_array(old('interval', 1), [1,2,3,4,5,6,7,10,14,21,28]) ? 'checked' : '' }}
+                                                class="sr-only peer"
+                                                id="custom-interval-radio"
+                                            >
+                                            <div class="px-3 py-2 text-sm font-medium rounded-lg border-2 cursor-pointer transition-all duration-200
+                                                peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white
+                                                border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
+                                                hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700
+                                                peer-checked:hover:bg-indigo-700">
+                                                Custom
+                                            </div>
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="custom-interval-input"
+                                            min="1"
+                                            max="365"
+                                            class="form-input w-20 @error('interval') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                                            value="{{ !in_array(old('interval', 1), [1,2,3,4,5,6,7,10,14,21,28]) ? old('interval', '') : '' }}"
+                                            placeholder="30"
+                                        >
+                                        <span class="text-sm text-gray-600 dark:text-gray-400">days</span>
+                                    </div>
                                 </div>
 
-                                <!-- Due Date -->
-                                <div class="space-y-2">
-                                    <label for="due_date" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        Due Date
-                                    </label>
-                                    <input type="date"
-                                           name="due_date"
-                                           id="due_date"
-                                           value="{{ old('due_date') }}"
-                                           min="{{ date('Y-m-d') }}"
-                                           class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-colors duration-200 @error('due_date') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
-                                    @error('due_date')
-                                        <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                <!-- Hidden input that will be submitted -->
+                                <input type="hidden" name="interval" id="interval-hidden" value="{{ old('interval', 1) }}">
+
+                                @error('interval')
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">How often this task should be repeated.</p>
                             </div>
 
-                            <!-- Assigned To (if user can assign) -->
-                            @if($group->members->count() > 1)
-                            <div class="space-y-2">
-                                <label for="assigned_to" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                    Assign To
-                                </label>
-                                <select name="assigned_to"
-                                        id="assigned_to"
-                                        class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-colors duration-200 @error('assigned_to') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
-                                    <option value="">Unassigned</option>
-                                    @foreach($group->members as $member)
-                                        <option value="{{ $member->id }}" {{ old('assigned_to', auth()->id()) == $member->id ? 'selected' : '' }}>
-                                            {{ $member->name }} {{ $member->id == auth()->id() ? '(You)' : '' }}
-                                        </option>
+                            <!-- Days Field (only shown for weekly tasks) -->
+                            <div id="days-field" class="hidden">
+                                <label class="form-label">Days of the Week</label>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    @foreach([
+                                        'monday' => 'Mon',
+                                        'tuesday' => 'Tue',
+                                        'wednesday' => 'Wed',
+                                        'thursday' => 'Thu',
+                                        'friday' => 'Fri',
+                                        'saturday' => 'Sat',
+                                        'sunday' => 'Sun'
+                                    ] as $day => $abbrev)
+                                        <label class="relative">
+                                            <input
+                                                type="checkbox"
+                                                name="days[]"
+                                                value="{{ $day }}"
+                                                {{ in_array($day, old('days', [])) ? 'checked' : '' }}
+                                                class="sr-only peer"
+                                            >
+                                            <div class="px-4 py-2 text-sm font-medium rounded-lg border-2 cursor-pointer transition-all duration-200
+                                                peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white
+                                                border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
+                                                hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700
+                                                peer-checked:hover:bg-indigo-700">
+                                                {{ $abbrev }}
+                                            </div>
+                                        </label>
                                     @endforeach
-                                </select>
-                                @error('assigned_to')
-                                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                </div>
+                                @error('days')
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Select which days of the week this task should be scheduled.</p>
+                            </div>                            <!-- Days Field -->
+                            <div>
+                                <label class="form-label">Days of the Week</label>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    @foreach([
+                                        'monday' => 'Mon',
+                                        'tuesday' => 'Tue',
+                                        'wednesday' => 'Wed',
+                                        'thursday' => 'Thu',
+                                        'friday' => 'Fri',
+                                        'saturday' => 'Sat',
+                                        'sunday' => 'Sun'
+                                    ] as $day => $abbrev)
+                                        <label class="relative">
+                                            <input
+                                                type="checkbox"
+                                                name="days[]"
+                                                value="{{ $day }}"
+                                                {{ in_array($day, old('days', [])) ? 'checked' : '' }}
+                                                class="sr-only peer"
+                                            >
+                                            <div class="px-4 py-2 text-sm font-medium rounded-lg border-2 cursor-pointer transition-all duration-200
+                                                peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white
+                                                border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
+                                                hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700
+                                                peer-checked:hover:bg-indigo-700">
+                                                {{ $abbrev }}
+                                            </div>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                @error('days')
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Select which days of the week this task should be scheduled.</p>
                             </div>
-                            @endif
 
-                            <!-- Tags -->
-                            <div class="space-y-2">
-                                <label for="tags" class="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                                    Tags
+                            <!-- Optional Field -->
+                            <div class="flex items-center space-x-3">
+                                <input
+                                    type="checkbox"
+                                    id="optional"
+                                    name="optional"
+                                    value="1"
+                                    {{ old('optional') ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-700"
+                                >
+                                <label for="optional" class="text-sm text-gray-700 dark:text-gray-300">
+                                    This task is optional
                                 </label>
-                                <input type="text"
-                                       name="tags"
-                                       id="tags"
-                                       value="{{ old('tags') }}"
-                                       placeholder="frontend, bug, urgent (separated by commas)"
-                                       class="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white transition-colors duration-200 @error('tags') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Separate multiple tags with commas</p>
-                                @error('tags')
-                                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
+                            </div>
+
+                            <!-- Start and End Date Fields -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Start Date Field -->
+                                <div>
+                                    <label for="starts_at" class="form-label">Start Date (optional)</label>
+                                    <input
+                                        id="starts_at"
+                                        name="starts_at"
+                                        type="date"
+                                        class="form-input @error('starts_at') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        value="{{ old('starts_at') }}"
+                                    >
+                                    @error('starts_at')
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
+                                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">When this task should start being scheduled.</p>
+                                </div>
+
+                                <!-- End Date Field -->
+                                <div>
+                                    <label for="ends_at" class="form-label">End Date (optional)</label>
+                                    <input
+                                        id="ends_at"
+                                        name="ends_at"
+                                        type="date"
+                                        class="form-input @error('ends_at') border-red-500 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        value="{{ old('ends_at') }}"
+                                    >
+                                    @error('ends_at')
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
+                                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">When this task should stop being scheduled.</p>
+                                </div>
                             </div>
 
                             <!-- Action Buttons -->
                             <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-                                <a href="{{ route('task-lists.show', $taskList) }}"
+                                <a href="{{ route('groups.show', ['group' => $taskList->group, 'list' => $taskList->id]) }}"
                                    class="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
                                     Cancel
                                 </a>
                                 <button type="submit"
                                         class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200">
-                                    Create Task
+                                    Add Task
                                 </button>
                             </div>
                         </form>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const hiddenInterval = document.getElementById('interval-hidden');
+                                const customInput = document.getElementById('custom-interval-input');
+                                const customRadio = document.getElementById('custom-interval-radio');
+                                const presetRadios = document.querySelectorAll('.interval-preset');
+                                const daysField = document.getElementById('days-field');
+
+                                // Function to toggle days field visibility
+                                function toggleDaysField(intervalValue) {
+                                    if (parseInt(intervalValue) === 7) {
+                                        daysField.classList.remove('hidden');
+                                    } else {
+                                        daysField.classList.add('hidden');
+                                        // Clear all day selections when hiding
+                                        const dayCheckboxes = document.querySelectorAll('input[name="days[]"]');
+                                        dayCheckboxes.forEach(checkbox => {
+                                            checkbox.checked = false;
+                                        });
+                                    }
+                                }
+
+                                // Handle preset button clicks
+                                presetRadios.forEach(radio => {
+                                    radio.addEventListener('change', function() {
+                                        if (this.checked) {
+                                            const intervalValue = this.getAttribute('data-interval');
+                                            hiddenInterval.value = intervalValue;
+                                            customInput.value = '';
+
+                                            toggleDaysField(intervalValue);
+
+                                            // Auto-select all days for daily tasks
+                                            if (parseInt(intervalValue) === 1) {
+                                                const dayCheckboxes = document.querySelectorAll('input[name="days[]"]');
+                                                dayCheckboxes.forEach(checkbox => {
+                                                    checkbox.checked = true;
+                                                });
+                                            }
+                                        }
+                                    });
+                                });
+
+                                // Handle custom input
+                                customInput.addEventListener('input', function() {
+                                    if (this.value) {
+                                        customRadio.checked = true;
+                                        hiddenInterval.value = this.value;
+
+                                        toggleDaysField(this.value);
+
+                                        // Auto-select all days for daily tasks
+                                        if (parseInt(this.value) === 1) {
+                                            const dayCheckboxes = document.querySelectorAll('input[name="days[]"]');
+                                            dayCheckboxes.forEach(checkbox => {
+                                                checkbox.checked = true;
+                                            });
+                                        }
+                                    }
+                                });
+
+                                // Focus custom input when custom radio is clicked
+                                customRadio.addEventListener('change', function() {
+                                    if (this.checked) {
+                                        customInput.focus();
+                                        if (customInput.value) {
+                                            hiddenInterval.value = customInput.value;
+                                            toggleDaysField(customInput.value);
+                                        }
+                                    }
+                                });
+
+                                // Initialize on page load
+                                const currentValue = hiddenInterval.value;
+                                toggleDaysField(currentValue);
+
+                                if (currentValue && parseInt(currentValue) === 1) {
+                                    const dayCheckboxes = document.querySelectorAll('input[name="days[]"]');
+                                    dayCheckboxes.forEach(checkbox => {
+                                        checkbox.checked = true;
+                                    });
+                                }
+                            });
+                        </script>
                     </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Task List Context -->
+                    <x-sidebar-box type="neutral" title="Adding to {{ $taskList->name }}" icon="list">
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Group:</strong> {{ $group->name }}</p>
+                            <p><strong>Task List:</strong> {{ $taskList->name }}</p>
+                            @if($taskList->tasks->count() > 0)
+                                <div class="border-t border-gray-200 dark:border-gray-600 mt-3 pt-3">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Existing tasks:</p>
+                                    @foreach($taskList->tasks->take(3) as $task)
+                                        <div class="text-xs text-gray-700 dark:text-gray-300">{{ $task->name }}</div>
+                                    @endforeach
+                                    @if($taskList->tasks->count() > 3)
+                                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                            and {{ $taskList->tasks->count() - 3 }} more...
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+                    </x-sidebar-box>
+
+                    <!-- Task Tips -->
+                    <x-sidebar-box type="info" title="Task Tips" icon="lightbulb">
+                        <ul class="text-sm space-y-1">
+                            <li>• Use clear, actionable titles</li>
+                            <li>• Set realistic intervals and days</li>
+                            <li>• Mark optional tasks appropriately</li>
+                            <li>• Set start/end dates for time-bound tasks</li>
+                        </ul>
+                    </x-sidebar-box>
                 </div>
             </div>
-
-            <!-- Info Panel -->
-            <div class="space-y-6">
-                <!-- Tips Card -->
-                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-                    <div class="flex items-start space-x-3">
-                        <div class="flex-shrink-0">
-                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">Task Tips</h3>
-                            <ul class="text-xs text-blue-800 dark:text-blue-200 space-y-1">
-                                <li>• Use clear, actionable titles</li>
-                                <li>• Set realistic due dates</li>
-                                <li>• Add detailed descriptions for complex tasks</li>
-                                <li>• Use tags for better organization</li>
-                                <li>• Assign tasks to specific team members</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Priority Guide -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center">
-                        <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h4a1 1 0 011 1v2m-5 3v12a1 1 0 001 1h4a1 1 0 001-1V7m-5 0h6m-6 0H5m0 0v12a1 1 0 001 1h1m-2-13h2"></path>
-                        </svg>
-                        Priority Guide
-                    </h3>
-                    <div class="space-y-3 text-xs">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                            <span class="text-gray-700 dark:text-gray-300"><strong>High:</strong> Urgent, blocks other work</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                            <span class="text-gray-700 dark:text-gray-300"><strong>Medium:</strong> Important, scheduled work</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <span class="text-gray-700 dark:text-gray-300"><strong>Low:</strong> Nice to have, backlog items</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Context Info -->
-                <div class="bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
-                    <div class="flex items-start space-x-3">
-                        <div class="flex-shrink-0">
-                            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-medium text-purple-900 dark:text-purple-100 mb-2">Adding to</h3>
-                            <div class="space-y-1 text-xs text-purple-800 dark:text-purple-200">
-                                <p><strong>Group:</strong> {{ $group->name }}</p>
-                                <p><strong>Task List:</strong> {{ $taskList->name }}</p>
-                                @if($taskList->description)
-                                <p class="mt-2 italic">{{ Str::limit($taskList->description, 80) }}</p>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
-@endsection
+</x-app-layout>
